@@ -57,7 +57,7 @@ case $ARCH in
     i686) ARCH="386";;
     i386) ARCH="386";;
 esac
-wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - &>/dev/null | tar -xz &>/dev/null
+wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz > /dev/null
 mv zitadel-linux-$ARCH/zitadel /usr/local/bin
 rm -rf zitadel-linux-$ARCH
 msg_ok "Installed Zitadel"
