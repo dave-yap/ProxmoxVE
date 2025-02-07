@@ -135,12 +135,12 @@ systemctl enable -q zitadel.service
 msg_ok "Created Services"
 
 msg_info "Start up Zitadel initial setup"
-zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml
-useradd zitadel
+zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &
 ZITADEL_PID=$!
 sleep 30
 kill -SIGINT $ZITADEL_PID
 wait $ZITADEL_PID
+useradd zitadel
 msg_ok "Zitadel initialized"
 
 msg_info "Set ExternalDomain to current IP and restart Zitadel"
