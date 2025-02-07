@@ -135,8 +135,8 @@ EOF
 systemctl enable -q zitadel.service
 msg_ok "Created Services"
 
-msg_info "Start up Zitadel initial setup"
-zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &>/dev/null
+msg_info "Zitadel initial setup"
+zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml
 ZITADEL_PID=$!
 sleep 30
 kill $ZITADEL_PID
