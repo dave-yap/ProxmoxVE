@@ -199,8 +199,12 @@ NoNewPrivileges=true
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable -q --now zitadel.service
+systemctl enable -q zitadel.service
 msg_ok "Created Services"
+
+msg_info "Start up Zitadel initial setup"
+zitadel start-from-init --masterkey "$(cat /opt/zitadel/.masterkey)" --tlsMode "$(cat /opt/zitadel/.tlsmode)" --config "$(cat /opt/zitadel/.config)"
+msg_ok "Zitadel started"
 
 motd_ssh
 customize
