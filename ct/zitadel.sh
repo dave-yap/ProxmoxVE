@@ -32,7 +32,7 @@ function update_script() {
         msg_error "No ${APP} Installation Found!"
         exit
     fi
-    LATEST=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
+    RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
     ARCH=$(uname -m)
     case $ARCH in
         armv5*) ARCH="armv5";;
