@@ -58,6 +58,7 @@ rm -rf zitadel-linux-$ARCH
 msg_ok "Installed Zitadel"
 
 msg_info "Setting up Zitadel Environments"
+mkdir -p /opt/zitadel
 echo "/opt/zitadel/config.yaml" > "/opt/zitadel/.config"
 echo "disabled" > "/opt/zitadel/.tlsmode"
 echo "$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c32)" > "/opt/zitadel/.masterkey"
