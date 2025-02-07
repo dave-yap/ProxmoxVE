@@ -53,7 +53,7 @@ function update_script() {
         zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true &>/dev/null
         systemctl start zitadel.service
         echo "v${LATEST}" > /opt/zitadel_version.txt
-        msg_ok "Updated ${APP} to v${LATEST}"
+        msg_ok "Updated ${APP} to v${RELEASE}"
     else
         msg_ok "No update required. ${APP} is already at v${LATEST}"
     fi
