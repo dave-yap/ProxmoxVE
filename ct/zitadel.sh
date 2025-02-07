@@ -49,13 +49,11 @@ function update_script() {
             i686) ARCH="386";;
             i386) ARCH="386";;
         esac
-        {
-            wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
-        } > /dev/null
+        wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
         systemctl stop zitadel.service
         sudo mv zitadel-linux-$ARCH/zitadel /usr/local/bin
         rm -rf zitadel-linux-$ARCH
-        zitadel setup --masterkeyFile /opt/${APP}/.masterkey --config /opt/${APP}/config.yaml --init-projections=true > /dev/null
+        zitadel setup --masterkeyFile /opt/${APP}/.masterkey --config /opt/${APP}/config.yaml --init-projections=true &>/dev/null
         systemctl start zitadel.service
         echo "v${current_version}" > /opt/${APP}_version.txt
         msg_ok "Updated ${APP} to v${current_version}"
