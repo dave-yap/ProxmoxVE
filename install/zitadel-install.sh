@@ -58,7 +58,7 @@ case $ARCH in
     i386) ARCH="386";;
 esac
 $STD wget -nv -c https://github.com/zitadel/zitadel/releases/download/v2.64.0/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
-#wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
+#$STD wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
 mv zitadel-linux-$ARCH/zitadel /usr/local/bin
 rm -rf zitadel-linux-$ARCH
 msg_ok "Installed Zitadel"
@@ -137,9 +137,8 @@ msg_ok "Created Services"
 
 msg_info "Zitadel initial setup"
 zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &>/dev/null &
-ZITADEL_PID=$(lsof -i | awk '/zitadel/ {print $2}' | head -n1)
-sleep 30
-kill $ZITADEL_PID
+sleep 60
+kill $(lsof -i | awk '/zitadel/ {print $2}' | head -n1)
 useradd zitadel
 zitadel -v > /opt/zitadel_version.txt
 msg_ok "Zitadel initialized"
