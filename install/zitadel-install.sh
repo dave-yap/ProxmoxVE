@@ -17,7 +17,8 @@ $STD apt-get install -y \
     curl \
     ca-certificates \
     wget \
-    sed
+    sed \
+    sudo
 msg_ok "Installed Dependecies"
 
 msg_info "Installing Postgresql"
