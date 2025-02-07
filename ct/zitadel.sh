@@ -33,7 +33,6 @@ function update_script() {
         msg_error "No ${APP} Installation Found!"
         exit
     fi
-    current_version=$(zitadel -v | grep -oP '\d+\.\d+\.\d+')
     latest_version=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
     if [[ "${latest_version}" != "$(cat /opt/zitadel_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/zitadel_version.txt ]]; then
         msg_info "Updating ${APP} (Patience)"
@@ -55,8 +54,8 @@ function update_script() {
         rm -rf zitadel-linux-$ARCH
         zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true &>/dev/null
         systemctl start zitadel.service
-        echo "v${current_version}" > /opt/zitadel_version.txt
-        msg_ok "Updated ${APP} to v${current_version}"
+        echo "v${latest_version}" > /opt/zitadel_version.txt
+        msg_ok "Updated ${APP} to v${latest_version}"
     else
         msg_ok "No update required. ${APP} is already at v${current_version}"
     fi
