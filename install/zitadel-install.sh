@@ -63,9 +63,9 @@ echo "/opt/zitadel/config.yaml" > "/opt/zitadel/.config"
 echo "disabled" > "/opt/zitadel/.tlsmode"
 echo "$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c32)" > "/opt/zitadel/.masterkey"
 {
-    echo "Config location: $(cat "/opt/zitadel/.config)"
-    echo "TLS Mode: $(cat "/opt/zitadel/.tlsmode)"
-    echo "Masterkey: $(cat "/opt/zitadel/.masterkey)"
+    echo "Config location: $(cat "/opt/zitadel/.config")"
+    echo "TLS Mode: $(cat "/opt/zitadel/.tlsmode")"
+    echo "Masterkey: $(cat "/opt/zitadel/.masterkey")"
 } >> ~/zitadel.creds
 #wget -c https://raw.githubusercontent.com/zitadel/zitadel/refs/heads/main/cmd/defaults.yaml -O /opt/zitadel/config.yaml
 #sed -i '0,/ExternalDomain: localhost/s//ExternalDomain: ${IP}/' /opt/zitadel/config.yaml
