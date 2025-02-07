@@ -60,11 +60,9 @@ msg_ok "Installed Zitadel"
 msg_info "Setting up Zitadel Environments"
 mkdir -p /opt/zitadel
 echo "/opt/zitadel/config.yaml" > "/opt/zitadel/.config"
-echo "disabled" > "/opt/zitadel/.tlsmode"
 echo "$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c32)" > "/opt/zitadel/.masterkey"
 {
     echo "Config location: $(cat "/opt/zitadel/.config")"
-    echo "TLS Mode: $(cat "/opt/zitadel/.tlsmode")"
     echo "Masterkey: $(cat "/opt/zitadel/.masterkey")"
 } >> ~/zitadel.creds
 #wget -c https://raw.githubusercontent.com/zitadel/zitadel/refs/heads/main/cmd/defaults.yaml -O /opt/zitadel/config.yaml
@@ -76,99 +74,38 @@ echo "$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c32)" > "/opt/zitad
 #sed -i '2,/Password: /s//Password: zitadel/'
 #sed -i '2,/Mode: /s//Mode: disable/'
 cat <<EOF >/opt/zitadel/config.yaml
-Port: 8080 # ZITADEL_PORT
-# ExternalPort is the port on which end users access ZITADEL.
-# It can differ from Port e.g. if a reverse proxy forwards the traffic to ZITADEL
-# Read more about external access: https://zitadel.com/docs/self-hosting/manage/custom-domain
-ExternalPort: 8080 # ZITADEL_EXTERNALPORT
-# ExternalDomain is the domain on which end users access ZITADEL.
-# Read more about external access: https://zitadel.com/docs/self-hosting/manage/custom-domain
-ExternalDomain: localhost # ZITADEL_EXTERNALDOMAIN
-# ExternalSecure specifies if ZITADEL is exposed externally using HTTPS or HTTP.
-# Read more about external access: https://zitadel.com/docs/self-hosting/manage/custom-domain
-ExternalSecure: false # ZITADEL_EXTERNALSECURE
+Port: 8080
+ExternalPort: 8080
+ExternalDomain: localhost
+ExternalSecure: false
 TLS:
-  # If enabled, ZITADEL will serve all traffic over TLS (HTTPS and gRPC)
-  # you must then also provide a private key and certificate to be used for the connection
-  # either directly or by a path to the corresponding file
-  Enabled: false # ZITADEL_TLS_ENABLED
-  # Path to the private key of the TLS certificate, will be loaded into the key
-  # and overwrite any existing value
-  # E.g. /path/to/key/file.pem
-  KeyPath: "" # ZITADEL_TLS_KEYPATH
-  # Private key of the TLS certificate (KeyPath has a higher priority than Key)
-  # base64 encoded content of a pem file
-  Key: "" # ZITADEL_TLS_KEY
-  # Path to the certificate for the TLS connection, will be loaded into the Cert
-  # and overwrite any existing value
-  # E.g. /path/to/cert/file.pem
-  CertPath: "" # ZITADEL_TLS_CERTPATH
-  # Certificate for the TLS connection (CertPath will this overwrite if specified)
-  # base64 encoded content of a pem file
-  Cert: "" # ZITADEL_TLS_CERT
+  Enabled: false
+  KeyPath: ""
+  Key: ""
+  CertPath: ""
+  Cert: ""
 
-Database: #Using Postgresql instead
-  # CockroachDB is the default database of ZITADEL
-  #cockroach:
-    #Host: localhost # ZITADEL_DATABASE_COCKROACH_HOST
-    #Port: 26257 # ZITADEL_DATABASE_COCKROACH_PORT
-    #Database: zitadel # ZITADEL_DATABASE_COCKROACH_DATABASE
-    #MaxOpenConns: 5 # ZITADEL_DATABASE_COCKROACH_MAXOPENCONNS
-    #MaxIdleConns: 2 # ZITADEL_DATABASE_COCKROACH_MAXIDLECONNS
-    #MaxConnLifetime: 30m # ZITADEL_DATABASE_COCKROACH_MAXCONNLIFETIME
-    #MaxConnIdleTime: 5m # ZITADEL_DATABASE_COCKROACH_MAXCONNIDLETIME
-    #Options: "" # ZITADEL_DATABASE_COCKROACH_OPTIONS
-    #User:
-      #Username: zitadel # ZITADEL_DATABASE_COCKROACH_USER_USERNAME
-      #Password: "" # ZITADEL_DATABASE_COCKROACH_USER_PASSWORD
-      #SSL:
-        #Mode: disable # ZITADEL_DATABASE_COCKROACH_USER_SSL_MODE
-        #RootCert: "" # ZITADEL_DATABASE_COCKROACH_USER_SSL_ROOTCERT
-        #Cert: "" # ZITADEL_DATABASE_COCKROACH_USER_SSL_CERT
-        #Key: "" # ZITADEL_DATABASE_COCKROACH_USER_SSL_KEY
-    #Admin:
-      # By default, ExistingDatabase is not specified in the connection string
-      # If the connection resolves to a database that is not existing in your system, configure an existing one here
-      # It is used in zitadel init to connect to cockroach and create a dedicated database for ZITADEL.
-      #ExistingDatabase: # ZITADEL_DATABASE_COCKROACH_ADMIN_EXISTINGDATABASE
-      #Username: root # ZITADEL_DATABASE_COCKROACH_ADMIN_USERNAME
-      #Password: "" # ZITADEL_DATABASE_COCKROACH_ADMIN_PASSWORD
-      #SSL:
-        #Mode: disable # ZITADEL_DATABASE_COCKROACH_ADMIN_SSL_MODE
-        #RootCert: "" # ZITADEL_DATABASE_COCKROACH_ADMIN_SSL_ROOTCERT
-        #Cert: "" # ZITADEL_DATABASE_COCKROACH_ADMIN_SSL_CERT
-        #Key: "" # ZITADEL_DATABASE_COCKROACH_ADMIN_SSL_KEY
-  # Postgres is used as soon as a value is set
-  # The values describe the possible fields to set values
+Database:
   postgres:
-    Host: localhost # ZITADEL_DATABASE_POSTGRES_HOST
-    Port: 5432 # ZITADEL_DATABASE_POSTGRES_PORT
-    Database: zitadel # ZITADEL_DATABASE_POSTGRES_DATABASE
-    #MaxOpenConns: # ZITADEL_DATABASE_POSTGRES_MAXOPENCONNS
-    #MaxIdleConns: # ZITADEL_DATABASE_POSTGRES_MAXIDLECONNS
-    #MaxConnLifetime: # ZITADEL_DATABASE_POSTGRES_MAXCONNLIFETIME
-    #MaxConnIdleTime: # ZITADEL_DATABASE_POSTGRES_MAXCONNIDLETIME
-    #Options: # ZITADEL_DATABASE_POSTGRES_OPTIONS
+    Host: localhost
+    Port: 5432
+    Database: zitadel
     User:
-      Username: zitadel # ZITADEL_DATABASE_POSTGRES_USER_USERNAME
-      Password: zitadel # ZITADEL_DATABASE_POSTGRES_USER_PASSWORD
+      Username: zitadel
+      Password: zitadel
       SSL:
-        Mode: disable # ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE
-        RootCert: "" # ZITADEL_DATABASE_POSTGRES_USER_SSL_ROOTCERT
-        Cert: "" # ZITADEL_DATABASE_POSTGRES_USER_SSL_CERT
-        Key: "" # ZITADEL_DATABASE_POSTGRES_USER_SSL_KEY
+        Mode: disable
+        RootCert: ""
+        Cert: ""
+        Key: ""
     Admin:
-      # The default ExistingDatabase is postgres
-      # If your db system doesn't have a database named postgres, configure an existing database here
-      # It is used in zitadel init to connect to postgres and create a dedicated database for ZITADEL.
-      #ExistingDatabase: # ZITADEL_DATABASE_POSTGRES_ADMIN_EXISTINGDATABASE
-      Username: root # ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME
-      Password: postgres # ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD
+      Username: root
+      Password: postgres
       SSL:
-        Mode: disable # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE
-        RootCert: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_ROOTCERT
-        Cert: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_CERT
-        Key: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_KEY
+        Mode: disable
+        RootCert: ""
+        Cert: ""
+        Key: ""
 EOF
 IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 sed -i "0,/localhost/s/localhost/${IP}/" /opt/zitadel/config.yaml
@@ -185,7 +122,7 @@ Wants=postgresql.service
 Type=simple
 User=zitadel
 Group=zitadel
-ExecStart=/usr/local/bin/zitadel start --masterkey "$(cat /opt/zitadel/.masterkey)" --tlsMode "$(cat /opt/zitadel/.tlsmode)" --config "$(cat /opt/zitadel/.config)"
+ExecStart=/usr/local/bin/zitadel start --masterkey "$(cat /opt/zitadel/.masterkey)" --config "$(cat /opt/zitadel/.config)"
 Restart=always
 RestartSec=5
 TimeoutStartSec=0
@@ -203,7 +140,7 @@ systemctl enable -q zitadel.service
 msg_ok "Created Services"
 
 msg_info "Start up Zitadel initial setup"
-zitadel start-from-init --masterkey "$(cat /opt/zitadel/.masterkey)" --tlsMode "$(cat /opt/zitadel/.tlsmode)" --config "$(cat /opt/zitadel/.config)"
+zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml
 msg_ok "Zitadel started"
 
 motd_ssh
