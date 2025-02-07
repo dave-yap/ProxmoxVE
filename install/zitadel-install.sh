@@ -104,8 +104,6 @@ Database:
         Cert: ""
         Key: ""
 EOF
-IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
-sed -i "0,/localhost/s/localhost/${IP}/" /opt/zitadel/config.yaml
 msg_ok "Installed Zitadel Enviroments"
 
 msg_info "Creating Services"
@@ -137,8 +135,17 @@ systemctl enable -q zitadel.service
 msg_ok "Created Services"
 
 msg_info "Start up Zitadel initial setup"
-zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml
-msg_ok "Zitadel started"
+zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &
+ZITADEL_PID=$!
+sleep 30
+kill -SIGINT $ZITADEL_PID
+msg_ok "Zitadel initialized"
+
+msg_info "Set ExternalDomain to current IP and restart Zitadel"
+IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
+sed -i "0,/localhost/s/localhost/${IP}/" /opt/zitadel/config.yaml
+systemctl restart -q zitadel.service
+msg_ok "Zitadel restarted with ExternalDomain set to current IP"
 
 motd_ssh
 customize
