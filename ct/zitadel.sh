@@ -55,7 +55,7 @@ function update_script() {
         echo "v${LATEST}" > /opt/zitadel_version.txt
         msg_ok "Updated ${APP} to v${RELEASE}"
     else
-        msg_ok "No update required. ${APP} is already at v${LATEST}"
+        msg_ok "No update required. ${APP} is already at v${RELEASE}"
     fi
     exit
 }
