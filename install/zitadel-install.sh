@@ -23,7 +23,7 @@ msg_ok "Installed Dependecies"
 
 msg_info "Installing Postgresql"
 $STD apt-get install -y postgresql postgresql-common
-sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh <<< return
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh <<< return &>/dev/null
 DB_NAME="zitadel"
 DB_USER="zitadel"
 DB_PASS="zitadel"
@@ -57,7 +57,7 @@ case $ARCH in
     i686) ARCH="386";;
     i386) ARCH="386";;
 esac
-wget -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
+wget -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
 mv zitadel-linux-$ARCH/zitadel /usr/local/bin
 rm -rf zitadel-linux-$ARCH
 msg_ok "Installed Zitadel"
