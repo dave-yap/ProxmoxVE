@@ -69,14 +69,6 @@ echo "$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c32)" > "/opt/zitad
     echo "Config location: $(cat "/opt/zitadel/.config")"
     echo "Masterkey: $(cat "/opt/zitadel/.masterkey")"
 } >> ~/zitadel.creds
-#wget -c https://raw.githubusercontent.com/zitadel/zitadel/refs/heads/main/cmd/defaults.yaml -O /opt/zitadel/config.yaml
-#sed -i '0,/ExternalDomain: localhost/s//ExternalDomain: ${IP}/' /opt/zitadel/config.yaml
-#sed -i '0,/Enabled: True/s//Enabled: False/' /opt/zitadel/config.yaml
-#sed -i '1,/Host: /s//Host: localhost/'
-#sed -i '1,/Port: /s//Port: 5432/'
-#sed -i '2,/Username: /s//Username: zitadel/'
-#sed -i '2,/Password: /s//Password: zitadel/'
-#sed -i '2,/Mode: /s//Mode: disable/'
 cat <<EOF >/opt/zitadel/config.yaml
 Port: 8080
 ExternalPort: 8080
