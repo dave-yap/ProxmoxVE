@@ -25,6 +25,12 @@ $STD apt-get install -y postgresql postgresql-contrib
 DB_NAME="zitadel"
 DB_USER="zitadel"
 DB_PASS="$(openssl rand -base64 18 | cut -c1-13)"
+{
+    echo "Application Credentials"
+    echo "DB_NAME: $DB_NAME"
+    echo "DB_USER: $DB_USER"
+    echo "DB_PASS: $DB_PASS"
+} >> ~/${APP}.creds
 $STD sudo systemctl enable postgresql
 $STD sudo systemctl start postgresql
 #$STD sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;"
@@ -56,6 +62,11 @@ msg_info "Setting up Zitadel Environments"
 echo "/opt/${APP}/config.yaml" > "/opt/${APP}/.config"
 echo "disabled" > "/opt/${APP}/.tlsmode"
 echo "$(openssl rand -base64 32)" > "/opt/${APP}/.masterkey"
+{
+    echo "Config location: $(cat "/opt/${APP}/.config)"
+    echo "TLS Mode: $(cat "/opt/${APP}/.tlsmode)"
+    echo "Masterkey: $(cat "/opt/${APP}/.masterkey)"
+} >> ~/${APP}.creds
 #wget -c https://raw.githubusercontent.com/zitadel/zitadel/refs/heads/main/cmd/defaults.yaml -O /opt/${APP}/config.yaml
 #sed -i '0,/ExternalDomain: localhost/s//ExternalDomain: ${IP}/' /opt/${APP}/config.yaml
 #sed -i '0,/Enabled: True/s//Enabled: False/' /opt/${APP}/config.yaml
