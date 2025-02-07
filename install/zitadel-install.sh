@@ -62,7 +62,7 @@ msg_ok "Installed Zitadel"
 msg_info "Setting up Zitadel Environments"
 echo "/opt/${APP}/config.yaml" > "/opt/${APP}/.config"
 echo "disabled" > "/opt/${APP}/.tlsmode"
-echo "$(openssl rand -base64 32)" > "/opt/${APP}/.masterkey"
+echo "$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c32)" > "/opt/${APP}/.masterkey"
 {
     echo "Config location: $(cat "/opt/${APP}/.config)"
     echo "TLS Mode: $(cat "/opt/${APP}/.tlsmode)"
@@ -76,8 +76,6 @@ echo "$(openssl rand -base64 32)" > "/opt/${APP}/.masterkey"
 #sed -i '2,/Username: /s//Username: zitadel/'
 #sed -i '2,/Password: /s//Password: zitadel/'
 #sed -i '2,/Mode: /s//Mode: disable/'
-#sed -i ''
-#sed -i '3,/Username: '
 cat <<EOF >/opt/${APP}/config.yaml
 Port: 8080 # ZITADEL_PORT
 # ExternalPort is the port on which end users access ZITADEL.
