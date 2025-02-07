@@ -60,7 +60,7 @@ esac
 {
     wget -q -c https://github.com/zitadel/zitadel/releases/download/v2.69.0/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
     #wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
-} &>/dev/null
+} > /dev/null
 mv zitadel-linux-$ARCH/zitadel /usr/local/bin
 rm -rf zitadel-linux-$ARCH
 msg_ok "Installed Zitadel"
@@ -138,7 +138,7 @@ systemctl enable -q zitadel.service
 msg_ok "Created Services"
 
 msg_info "Start up Zitadel initial setup"
-zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &>/dev/null &
+zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml > /dev/null
 ZITADEL_PID=$!
 sleep 30
 if lsof -i :8080 | grep zitadel; then
@@ -152,7 +152,7 @@ msg_info "Set ExternalDomain to current IP and restart Zitadel"
 IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 sed -i "0,/localhost/s/localhost/${IP}/" /opt/zitadel/config.yaml
 systemctl stop -q zitadel.service
-zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &>/dev/null &
+zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml > /dev/null 
 systemctl restart -q zitadel.service
 msg_ok "Zitadel restarted with ExternalDomain set to current IP"
 
