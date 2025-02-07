@@ -57,11 +57,8 @@ case $ARCH in
     i686) ARCH="386";;
     i386) ARCH="386";;
 esac
-wget -q -c https://github.com/zitadel/zitadel/releases/download/v2.64.0/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
-#wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - zitadel-linux-$ARCH.tar.gz &>/dev/null
-#tar -xzf zitadel-linux-$ARCH.tar.gz
+wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
 mv zitadel-linux-$ARCH/zitadel /usr/local/bin
-rm -rf zitadel-linux-$ARCH
 echo -e "$(zitadel -v | grep -oP '\d+\.\d+\.\d+')" > /opt/zitadel_version.txt 
 msg_ok "Installed Zitadel"
 
@@ -165,7 +162,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/zitadel/zitadel-linux-$ARCH
+rm -rf zitadel-linux-$ARCH
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
