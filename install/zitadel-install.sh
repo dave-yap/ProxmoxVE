@@ -45,7 +45,7 @@ systemctl restart -q postgresql
 msg_ok "Installed PostgreSQL"
 
 msg_info "Installing Zitadel"
-LATEST=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
+LATEST=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
 ARCH=$(uname -m)
 case $ARCH in
     armv5*) ARCH="armv5";;
