@@ -1062,7 +1062,7 @@ build_container() {
   "
   # This executes create_lxc.sh and creates the container and .conf file
   #bash -c "$(wget -qLO - https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/create_lxc.sh)" || exit $?
-  bash -c "$(wget -qLO - https://raw.githubusercontent.com/dave-yap/ProxmoxVE/refs/heads/test/ct/create_lxc.sh" || exit $?
+  bash -c "$(wget -qLO - https://raw.githubusercontent.com/dave-yap/ProxmoxVE/refs/heads/test/ct/create_lxc.sh)" || exit $?
 
   LXC_CONFIG=/etc/pve/lxc/${CTID}.conf
   if [ "$CT_TYPE" == "0" ]; then
