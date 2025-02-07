@@ -141,34 +141,34 @@ Database: #Using Postgresql instead
   # Postgres is used as soon as a value is set
   # The values describe the possible fields to set values
   postgres:
-    Host: localhost# ZITADEL_DATABASE_POSTGRES_HOST
-    Port: 5432# ZITADEL_DATABASE_POSTGRES_PORT
-    Database: zitadel# ZITADEL_DATABASE_POSTGRES_DATABASE
+    Host: localhost # ZITADEL_DATABASE_POSTGRES_HOST
+    Port: 5432 # ZITADEL_DATABASE_POSTGRES_PORT
+    Database: zitadel # ZITADEL_DATABASE_POSTGRES_DATABASE
     #MaxOpenConns: # ZITADEL_DATABASE_POSTGRES_MAXOPENCONNS
     #MaxIdleConns: # ZITADEL_DATABASE_POSTGRES_MAXIDLECONNS
     #MaxConnLifetime: # ZITADEL_DATABASE_POSTGRES_MAXCONNLIFETIME
     #MaxConnIdleTime: # ZITADEL_DATABASE_POSTGRES_MAXCONNIDLETIME
     Options: # ZITADEL_DATABASE_POSTGRES_OPTIONS
     User:
-      Username: zitadel# ZITADEL_DATABASE_POSTGRES_USER_USERNAME
-      Password: zitadel# ZITADEL_DATABASE_POSTGRES_USER_PASSWORD
+      Username: zitadel # ZITADEL_DATABASE_POSTGRES_USER_USERNAME
+      Password: zitadel # ZITADEL_DATABASE_POSTGRES_USER_PASSWORD
       SSL:
-        Mode: disable# ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE
-        RootCert: ""# ZITADEL_DATABASE_POSTGRES_USER_SSL_ROOTCERT
-        Cert: ""# ZITADEL_DATABASE_POSTGRES_USER_SSL_CERT
-        Key: ""# ZITADEL_DATABASE_POSTGRES_USER_SSL_KEY
+        Mode: disable # ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE
+        RootCert: "" # ZITADEL_DATABASE_POSTGRES_USER_SSL_ROOTCERT
+        Cert: "" # ZITADEL_DATABASE_POSTGRES_USER_SSL_CERT
+        Key: "" # ZITADEL_DATABASE_POSTGRES_USER_SSL_KEY
     Admin:
       # The default ExistingDatabase is postgres
       # If your db system doesn't have a database named postgres, configure an existing database here
       # It is used in zitadel init to connect to postgres and create a dedicated database for ZITADEL.
-      ExistingDatabase: zitadel# ZITADEL_DATABASE_POSTGRES_ADMIN_EXISTINGDATABASE
-      Username: zitadel# ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME
-      Password: zitadel# ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD
+      ExistingDatabase: zitadel # ZITADEL_DATABASE_POSTGRES_ADMIN_EXISTINGDATABASE
+      Username: zitadel # ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME
+      Password: zitadel # ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD
       SSL:
-        Mode: disable# ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE
-        RootCert: ""# ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_ROOTCERT
-        Cert: ""# ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_CERT
-        Key: ""# ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_KEY
+        Mode: disable # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE
+        RootCert: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_ROOTCERT
+        Cert: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_CERT
+        Key: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_KEY
 EOF
 #sed -i '0,localhost//s/\${IP}/' /opt/zitadel/config.yaml
 msg_info "Change the ExternalDomain value to your domain/hostname/IP"
