@@ -34,8 +34,8 @@ function update_script() {
         exit
     fi
     current_version=$(zitadel -v | grep -oP '\d+\.\d+\.\d+')
-    if [[ "${current_version} != "$(cat /opt/${APP}_version.txt" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
-        msg_info 'Updating ${APP} (Patience)'
+    if [[ "${current_version}" != "$(cat /opt/${APP}_version.txt" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
+        msg_info "Updating ${APP} (Patience)"
         LATEST=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
         ARCH=$(uname -m)
         case $ARCH in
@@ -49,7 +49,7 @@ function update_script() {
             i386) ARCH="386";;
         esac
         wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O -
-        tar -xz zitadel-linux-$ARCH.tar.gz
+        tar -xzf zitadel-linux-$ARCH.tar.gz
         systemctl stop zitadel.service
         sudo mv zitadel-linux-$ARCH/zitadel /usr/local/bin
         rm -rf zitadel-linux-$ARCH
@@ -58,7 +58,7 @@ function update_script() {
         CONFIG=$(cat /opt/${APP}/.config)
         zitadel setup --masterkey ${MASTERKEY} --tlsMode ${TLSMODE} --config ${CONFIG} --init-projections=true
         systemctl start zitadel.service
-        echo "v$(current_version)" > /opt/${APP}_version.txt
+        echo "v${current_version}" > /opt/${APP}_version.txt
         msg_ok "Updated ${APP} to v${current_version}"
     else
         msg_ok "No update required. ${APP} is already at v${current_version}"
