@@ -65,7 +65,7 @@ msg_ok "Installed Zitadel"
 msg_info "Setting up Zitadel Environments"
 mkdir -p /opt/zitadel
 echo "/opt/zitadel/config.yaml" > "/opt/zitadel/.config"
-echo "$(openssl rand -base64 64 | tr -dc 'a-zA-Z0-9' | head -c32)" > "/opt/zitadel/.masterkey"
+head -c 32 < <(openssl rand -base64 48 | tr -dc 'a-zA-Z0-9') > "/opt/zitadel/.masterkey"
 {
     echo "Config location: $(cat "/opt/zitadel/.config")"
     echo "Masterkey: $(cat "/opt/zitadel/.masterkey")"
