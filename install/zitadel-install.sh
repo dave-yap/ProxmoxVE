@@ -139,7 +139,6 @@ zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zi
 ZITADEL_PID=$!
 sleep 30
 kill -SIGINT $ZITADEL_PID
-wait $ZITADEL_PID
 useradd zitadel
 msg_ok "Zitadel initialized"
 
