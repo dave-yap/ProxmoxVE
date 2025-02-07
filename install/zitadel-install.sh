@@ -86,26 +86,26 @@ ExternalPort: 8080 # ZITADEL_EXTERNALPORT
 ExternalDomain: localhost # ZITADEL_EXTERNALDOMAIN
 # ExternalSecure specifies if ZITADEL is exposed externally using HTTPS or HTTP.
 # Read more about external access: https://zitadel.com/docs/self-hosting/manage/custom-domain
-ExternalSecure: true # ZITADEL_EXTERNALSECURE
+ExternalSecure: false # ZITADEL_EXTERNALSECURE
 TLS:
   # If enabled, ZITADEL will serve all traffic over TLS (HTTPS and gRPC)
   # you must then also provide a private key and certificate to be used for the connection
   # either directly or by a path to the corresponding file
-  Enabled: true # ZITADEL_TLS_ENABLED
+  Enabled: false # ZITADEL_TLS_ENABLED
   # Path to the private key of the TLS certificate, will be loaded into the key
   # and overwrite any existing value
   # E.g. /path/to/key/file.pem
-  KeyPath: # ZITADEL_TLS_KEYPATH
+  KeyPath: "" # ZITADEL_TLS_KEYPATH
   # Private key of the TLS certificate (KeyPath has a higher priority than Key)
   # base64 encoded content of a pem file
-  Key: # ZITADEL_TLS_KEY
+  Key: "" # ZITADEL_TLS_KEY
   # Path to the certificate for the TLS connection, will be loaded into the Cert
   # and overwrite any existing value
   # E.g. /path/to/cert/file.pem
-  CertPath: # ZITADEL_TLS_CERTPATH
+  CertPath: "" # ZITADEL_TLS_CERTPATH
   # Certificate for the TLS connection (CertPath will this overwrite if specified)
   # base64 encoded content of a pem file
-  Cert: # ZITADEL_TLS_CERT
+  Cert: "" # ZITADEL_TLS_CERT
 
 Database: #Using Postgresql instead
   # CockroachDB is the default database of ZITADEL
@@ -148,7 +148,7 @@ Database: #Using Postgresql instead
     #MaxIdleConns: # ZITADEL_DATABASE_POSTGRES_MAXIDLECONNS
     #MaxConnLifetime: # ZITADEL_DATABASE_POSTGRES_MAXCONNLIFETIME
     #MaxConnIdleTime: # ZITADEL_DATABASE_POSTGRES_MAXCONNIDLETIME
-    Options: # ZITADEL_DATABASE_POSTGRES_OPTIONS
+    #Options: # ZITADEL_DATABASE_POSTGRES_OPTIONS
     User:
       Username: zitadel # ZITADEL_DATABASE_POSTGRES_USER_USERNAME
       Password: zitadel # ZITADEL_DATABASE_POSTGRES_USER_PASSWORD
@@ -161,9 +161,9 @@ Database: #Using Postgresql instead
       # The default ExistingDatabase is postgres
       # If your db system doesn't have a database named postgres, configure an existing database here
       # It is used in zitadel init to connect to postgres and create a dedicated database for ZITADEL.
-      ExistingDatabase: zitadel # ZITADEL_DATABASE_POSTGRES_ADMIN_EXISTINGDATABASE
-      Username: zitadel # ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME
-      Password: zitadel # ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD
+      #ExistingDatabase: # ZITADEL_DATABASE_POSTGRES_ADMIN_EXISTINGDATABASE
+      Username: root # ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME
+      Password: postgres # ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD
       SSL:
         Mode: disable # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE
         RootCert: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_ROOTCERT
