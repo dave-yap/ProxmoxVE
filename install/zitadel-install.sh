@@ -27,20 +27,21 @@ sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh <<< return
 DB_NAME="zitadel"
 DB_USER="zitadel"
 DB_PASS="zitadel"
+DB_ADMIN_USER="root"
+DB_ADMIN_PASS="postgres"
 {
     echo "Application Credentials"
     echo "DB_NAME: $DB_NAME"
     echo "DB_USER: $DB_USER"
     echo "DB_PASS: $DB_PASS"
+    echo "DB_ADMIN_USER: $DB_ADMIN_USER"
+    echo "DB_ADMIN_PASS: $DB_ADMIN_PASS"
 } >> ~/zitadel.creds
 systemctl enable -q --now postgresql
-#su - postgres
-#cd
-#psql -c "CREATE DATABASE $DB_NAME;"
-#psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';"
-#psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;"
-#psql -c "ALTER USER $DB_USER WITH SUPERUSER;"
-#logout
+sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';"
+sudo -u postgres psql -c "CREATE USER $DB_ADMIN_USER WITH PASSWORD '$DB_ADMIN_PASS' SUPERUSER;"
+sudo -u postgres psql -c "CREATE DATABASE $DB_NAME OWNER $DB_ADMIN_USER;"
+systemctl restart -q postgresql
 msg_ok "Installed PostgreSQL"
 
 msg_info "Installing Zitadel"
