@@ -21,7 +21,8 @@ $STD apt-get install -y \
 msg_ok "Installed Dependecies"
 
 msg_info "Installing Postgresql"
-$STD apt-get install -y postgresql postgresql-contrib
+$STD apt-get install -y postgresql postgresql-common
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
 DB_NAME="zitadel"
 DB_USER="zitadel"
 DB_PASS="zitadel"
