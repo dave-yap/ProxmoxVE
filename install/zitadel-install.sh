@@ -30,7 +30,7 @@ DB_PASS="$(openssl rand -base64 18 | cut -c1-13)"
     echo "DB_NAME: $DB_NAME"
     echo "DB_USER: $DB_USER"
     echo "DB_PASS: $DB_PASS"
-} >> ~/${APP}.creds
+} >> ~/zitadel.creds
 $STD sudo systemctl enable postgresql
 $STD sudo systemctl start postgresql
 #$STD sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;"
@@ -60,23 +60,23 @@ rm -rf zitadel-linux-$ARCH
 msg_ok "Installed Zitadel"
 
 msg_info "Setting up Zitadel Environments"
-echo "/opt/${APP}/config.yaml" > "/opt/${APP}/.config"
-echo "disabled" > "/opt/${APP}/.tlsmode"
-echo "$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c32)" > "/opt/${APP}/.masterkey"
+echo "/opt/zitadel/config.yaml" > "/opt/zitadel/.config"
+echo "disabled" > "/opt/zitadel/.tlsmode"
+echo "$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c32)" > "/opt/zitadel/.masterkey"
 {
-    echo "Config location: $(cat "/opt/${APP}/.config)"
-    echo "TLS Mode: $(cat "/opt/${APP}/.tlsmode)"
-    echo "Masterkey: $(cat "/opt/${APP}/.masterkey)"
-} >> ~/${APP}.creds
-#wget -c https://raw.githubusercontent.com/zitadel/zitadel/refs/heads/main/cmd/defaults.yaml -O /opt/${APP}/config.yaml
-#sed -i '0,/ExternalDomain: localhost/s//ExternalDomain: ${IP}/' /opt/${APP}/config.yaml
-#sed -i '0,/Enabled: True/s//Enabled: False/' /opt/${APP}/config.yaml
+    echo "Config location: $(cat "/opt/zitadel/.config)"
+    echo "TLS Mode: $(cat "/opt/zitadel/.tlsmode)"
+    echo "Masterkey: $(cat "/opt/zitadel/.masterkey)"
+} >> ~/zitadel.creds
+#wget -c https://raw.githubusercontent.com/zitadel/zitadel/refs/heads/main/cmd/defaults.yaml -O /opt/zitadel/config.yaml
+#sed -i '0,/ExternalDomain: localhost/s//ExternalDomain: ${IP}/' /opt/zitadel/config.yaml
+#sed -i '0,/Enabled: True/s//Enabled: False/' /opt/zitadel/config.yaml
 #sed -i '1,/Host: /s//Host: localhost/'
 #sed -i '1,/Port: /s//Port: 5432/'
 #sed -i '2,/Username: /s//Username: zitadel/'
 #sed -i '2,/Password: /s//Password: zitadel/'
 #sed -i '2,/Mode: /s//Mode: disable/'
-cat <<EOF >/opt/${APP}/config.yaml
+cat <<EOF >/opt/zitadel/config.yaml
 Port: 8080 # ZITADEL_PORT
 # ExternalPort is the port on which end users access ZITADEL.
 # It can differ from Port e.g. if a reverse proxy forwards the traffic to ZITADEL
@@ -171,7 +171,7 @@ Database: #Using Postgresql instead
         Cert: ""# ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_CERT
         Key: ""# ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_KEY
 EOF
-sed -i '0,localhost//s/\${IP}/' /opt/${APP}/config.yaml
+#sed -i '0,localhost//s/\${IP}/' /opt/zitadel/config.yaml
 msg_info "Change the ExternalDomain value to your domain/hostname/IP"
 msg_ok "Installed Zitadel Enviroments"
 
@@ -186,7 +186,7 @@ Wants=postgresql.service
 Type=simple
 User=zitadel
 Group=zitadel
-ExecStart=/usr/local/bin/zitadel start --masterkey "$(cat /opt/${APP}/.masterkey)" --tlsMode "$(cat /opt/${APP}/.tlsmode)" --config "$(cat /opt/${APP}/.config)"
+ExecStart=/usr/local/bin/zitadel start --masterkey "$(cat /opt/zitadel/.masterkey)" --tlsMode "$(cat /opt/zitadel/.tlsmode)" --config "$(cat /opt/zitadel/.config)"
 Restart=always
 RestartSec=5
 TimeoutStartSec=0
@@ -207,7 +207,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf /opt/${APP}/zitadel-linux-$ARCH
+rm -rf /opt/zitadel/zitadel-linux-$ARCH
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
