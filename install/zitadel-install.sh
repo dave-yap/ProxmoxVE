@@ -145,19 +145,13 @@ msg_ok "Zitadel initialized"
 msg_info "Set ExternalDomain to current IP and restart Zitadel"
 IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 sed -i "0,/localhost/s/localhost/${IP}/" /opt/zitadel/config.yaml
-zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &
-ZITADEL_PID=$!
-sleep 30
-kill $ZITADEL_PID
+timeout --kill-after=5s 30s zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &
 systemctl restart -q zitadel.service
 msg_ok "Zitadel restarted with ExternalDomain set to current IP"
 
 msg_info "Create zitadel-rerun.sh"
 cat <<EOF >~/zitadel-rerun.sh
-zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &
-ZITADEL_PID=$!
-sleep 15
-kill $ZITADEL_PID
+timeout --kill-after=5s 15s zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &
 systemctl restart zitadel.service
 EOF
 msg_ok "Bash script for rerunning Zitadel after changing Zitadel config.yaml"
