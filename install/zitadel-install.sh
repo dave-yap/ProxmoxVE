@@ -74,7 +74,7 @@ cat <<EOF >/opt/zitadel/config.yaml
 Port: 8080
 ExternalPort: 8080
 ExternalDomain: localhost
-ExternalSecure: false
+ExternalSecure: true
 TLS:
   Enabled: false
   KeyPath: ""
@@ -145,6 +145,10 @@ msg_ok "Zitadel initialized"
 msg_info "Set ExternalDomain to current IP and restart Zitadel"
 IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 sed -i "0,/localhost/s/localhost/${IP}/" /opt/zitadel/config.yaml
+zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true &
+ZITADEL_PID=$!
+sleep 15
+kill -SIGINT $ZITADEL_PID
 systemctl restart -q zitadel.service
 msg_ok "Zitadel restarted with ExternalDomain set to current IP"
 
