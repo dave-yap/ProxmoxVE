@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+#source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
+source <(curl -s https://raw.githubusercontent.com/dave-yap/ProxmoxVE/refs/heads/test/misc/build.func)
 # Copyright (c) 2021-2025 tteck
 # Author: dave-yap (dave-yap)
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
@@ -47,8 +48,8 @@ function update_script() {
             i686) ARCH="386";;
             i386) ARCH="386";;
         esac
-        wget -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O /opt/${APP}/zitadel-linux-$ARCH.tar.gz 
-        tar -xzf /opt/zitadel/zitadel-linux-$ARCH.tar.gz
+        wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O -
+        tar -xz zitadel-linux-$ARCH.tar.gz
         systemctl stop zitadel.service
         sudo mv zitadel-linux-$ARCH/zitadel /usr/local/bin
         rm -rf zitadel-linux-$ARCH
