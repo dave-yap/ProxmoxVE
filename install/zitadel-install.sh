@@ -140,6 +140,7 @@ ZITADEL_PID=$!
 sleep 30
 kill $ZITADEL_PID
 useradd zitadel
+zitadel -v > /opt/zitadel_version.txt
 msg_ok "Zitadel initialized"
 
 msg_info "Set ExternalDomain to current IP and restart Zitadel"
