@@ -24,7 +24,7 @@ msg_info "Installing Postgresql"
 $STD apt-get install -y postgresql postgresql-contrib
 DB_NAME="zitadel"
 DB_USER="zitadel"
-DB_PASS="$(openssl rand -base64 18 | cut -c1-13)"
+DB_PASS="zitadel"
 {
     echo "Application Credentials"
     echo "DB_NAME: $DB_NAME"
@@ -170,7 +170,7 @@ Database: #Using Postgresql instead
         Cert: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_CERT
         Key: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_KEY
 EOF
-#sed -i '0,localhost//s/\${IP}/' /opt/zitadel/config.yaml
+sed -i "0,/localhost/s/localhost/${IP}/" /opt/zitadel/config.yaml
 msg_info "Change the ExternalDomain value to your domain/hostname/IP"
 msg_ok "Installed Zitadel Enviroments"
 
