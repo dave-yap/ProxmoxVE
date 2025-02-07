@@ -45,7 +45,7 @@ systemctl restart -q postgresql
 msg_ok "Installed PostgreSQL"
 
 msg_info "Installing Zitadel"
-LATEST=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
+LATEST=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
 ARCH=$(uname -m)
 case $ARCH in
     armv5*) ARCH="armv5";;
@@ -57,10 +57,9 @@ case $ARCH in
     i686) ARCH="386";;
     i386) ARCH="386";;
 esac
-$STD wget -q -c https://github.com/zitadel/zitadel/releases/download/v2.64.0/zitadel-linux-$ARCH.tar.gz -O zitadel-linux-$ARCH.tar.gz &>/dev/null
-$STD tar -xzf zitadel-linux-$ARCH.tar.gz &>/dev/null
+wget -q -c https://github.com/zitadel/zitadel/releases/download/v2.64.0/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
 #wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - zitadel-linux-$ARCH.tar.gz &>/dev/null
-#tar -xzf zitadel-linux-$ARCH.tar.gz &>/dev/null
+#tar -xzf zitadel-linux-$ARCH.tar.gz
 mv zitadel-linux-$ARCH/zitadel /usr/local/bin
 rm -rf zitadel-linux-$ARCH
 msg_ok "Installed Zitadel"
