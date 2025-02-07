@@ -34,9 +34,10 @@ function update_script() {
         exit
     fi
     current_version=$(zitadel -v | grep -oP '\d+\.\d+\.\d+')
-    if [[ "${current_version}" != "$(cat /opt/zitadel_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/zitadel_version.txt ]]; then
+    latest_version=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
+    if [[ "${latest_version}" != "$(cat /opt/zitadel_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/zitadel_version.txt ]]; then
         msg_info "Updating ${APP} (Patience)"
-        LATEST=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
+        LATEST=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
         ARCH=$(uname -m)
         case $ARCH in
             armv5*) ARCH="armv5";;
