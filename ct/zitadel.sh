@@ -7,7 +7,7 @@ source <(curl -s https://raw.githubusercontent.com/dave-yap/ProxmoxVE/refs/heads
 # Source: https://zitadel.com/
 
 # App Default Values
-APP="Zitadel"
+APP="zitadel"
 var_tags="identity-provider"
 var_cpu="1"
 var_ram="1024"
@@ -34,7 +34,7 @@ function update_script() {
         exit
     fi
     current_version=$(zitadel -v | grep -oP '\d+\.\d+\.\d+')
-    if [[ "${current_version}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
+    if [[ "${current_version}" != "$(cat /opt/${APP}_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
         msg_info "Updating ${APP} (Patience)"
         LATEST=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
         ARCH=$(uname -m)
