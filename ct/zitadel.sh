@@ -48,8 +48,7 @@ function update_script() {
             i686) ARCH="386";;
             i386) ARCH="386";;
         esac
-        wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O -
-        tar -xzf zitadel-linux-$ARCH.tar.gz
+        wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
         systemctl stop zitadel.service
         sudo mv zitadel-linux-$ARCH/zitadel /usr/local/bin
         rm -rf zitadel-linux-$ARCH
