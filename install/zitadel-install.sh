@@ -38,9 +38,9 @@ DB_ADMIN_PASS="postgres"
     echo "DB_ADMIN_PASS: $DB_ADMIN_PASS"
 } >> ~/zitadel.creds
 systemctl enable -q --now postgresql
-sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';"
-sudo -u postgres psql -c "CREATE USER $DB_ADMIN_USER WITH PASSWORD '$DB_ADMIN_PASS' SUPERUSER;"
-sudo -u postgres psql -c "CREATE DATABASE $DB_NAME OWNER $DB_ADMIN_USER;"
+sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';" &>/dev/null
+sudo -u postgres psql -c "CREATE USER $DB_ADMIN_USER WITH PASSWORD '$DB_ADMIN_PASS' SUPERUSER;" &>/dev/null
+sudo -u postgres psql -c "CREATE DATABASE $DB_NAME OWNER $DB_ADMIN_USER;" &>/dev/null
 systemctl restart -q postgresql
 msg_ok "Installed PostgreSQL"
 
@@ -57,7 +57,7 @@ case $ARCH in
     i686) ARCH="386";;
     i386) ARCH="386";;
 esac
-wget -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
+wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
 mv zitadel-linux-$ARCH/zitadel /usr/local/bin
 rm -rf zitadel-linux-$ARCH
 msg_ok "Installed Zitadel"
@@ -74,7 +74,7 @@ cat <<EOF >/opt/zitadel/config.yaml
 Port: 8080
 ExternalPort: 8080
 ExternalDomain: localhost
-ExternalSecure: true
+ExternalSecure: false
 TLS:
   Enabled: false
   KeyPath: ""
@@ -148,7 +148,7 @@ msg_ok "Zitadel restarted with ExternalDomain set to current IP"
 
 msg_info "Create zitadel-rerun.sh"
 cat <<EOF >~/zitadel-rerun.sh
-zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &
+timeout --kill-after=5s 15s zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml
 systemctl restart zitadel.service
 EOF
 msg_ok "Bash script for rerunning Zitadel after changing Zitadel config.yaml"
