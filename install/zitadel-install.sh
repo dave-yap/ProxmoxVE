@@ -141,7 +141,9 @@ msg_info "Start up Zitadel initial setup"
 zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &>/dev/null &
 ZITADEL_PID=$!
 sleep 30
-kill $ZITADEL_PID
+if lsof -i :8080 | grep zitadel; then
+    kill $ZITADEL_PID
+fi
 useradd zitadel
 zitadel -v > /opt/zitadel_version.txt
 msg_ok "Zitadel initialized"
