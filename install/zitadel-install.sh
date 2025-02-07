@@ -26,9 +26,9 @@ $STD apt-get install -y postgresql postgresql-common
 sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh <<< return &>/dev/null
 DB_NAME="zitadel"
 DB_USER="zitadel"
-DB_PASS="zitadel"
+DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 DB_ADMIN_USER="root"
-DB_ADMIN_PASS="postgres"
+DB_ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 {
     echo "Application Credentials"
     echo "DB_NAME: $DB_NAME"
@@ -86,18 +86,18 @@ Database:
   postgres:
     Host: localhost
     Port: 5432
-    Database: zitadel
+    Database: ${DB_NAME}
     User:
-      Username: zitadel
-      Password: zitadel
+      Username: ${DB_USER}
+      Password: ${DB_PASS}
       SSL:
         Mode: disable
         RootCert: ""
         Cert: ""
         Key: ""
     Admin:
-      Username: root
-      Password: postgres
+      Username: ${DB_ADMIN_USER}
+      Password: ${DB_ADMIN_PASS}
       SSL:
         Mode: disable
         RootCert: ""
