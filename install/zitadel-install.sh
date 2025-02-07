@@ -170,6 +170,7 @@ Database: #Using Postgresql instead
         Cert: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_CERT
         Key: "" # ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_KEY
 EOF
+IP = (ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 sed -i "0,/localhost/s/localhost/${IP}/" /opt/zitadel/config.yaml
 msg_info "Change the ExternalDomain value to your domain/hostname/IP"
 msg_ok "Installed Zitadel Enviroments"

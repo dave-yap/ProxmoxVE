@@ -36,11 +36,7 @@
             "type": "info"
         },
         {
-            "text": "The very first account created will be automatically set up as an administrator account.",
-            "type": "info"
-        },
-        {
-            "text": "Zitadel can only be accessed via `http://localhost:8080` unless the ExternalDomain variable is changed to IP and service is restarted.",
+            "text": "Change the ExternalDomain value in `/opt/zitadel/config.yaml` to your domain/hostname/IP and restart the service",
             "type": "info"
         }
     ]
