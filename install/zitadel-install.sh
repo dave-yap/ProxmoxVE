@@ -117,7 +117,7 @@ Wants=postgresql.service
 Type=simple
 User=zitadel
 Group=zitadel
-ExecStart=/usr/local/bin/zitadel start --masterkey "$(cat /opt/zitadel/.masterkey)" --config "$(cat /opt/zitadel/.config)"
+ExecStart=/usr/local/bin/zitadel start --masterkeyFile "/opt/zitadel/.masterkey" --config "/opt/zitadel/config.yaml"
 Restart=always
 RestartSec=5
 TimeoutStartSec=0
@@ -135,10 +135,12 @@ systemctl enable -q zitadel.service
 msg_ok "Created Services"
 
 msg_info "Start up Zitadel initial setup"
-zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &
+zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml
+useradd zitadel
 ZITADEL_PID=$!
 sleep 30
 kill -SIGINT $ZITADEL_PID
+wait $ZITADEL_PID
 msg_ok "Zitadel initialized"
 
 msg_info "Set ExternalDomain to current IP and restart Zitadel"

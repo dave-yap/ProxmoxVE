@@ -52,7 +52,7 @@ function update_script() {
         systemctl stop zitadel.service
         sudo mv zitadel-linux-$ARCH/zitadel /usr/local/bin
         rm -rf zitadel-linux-$ARCH
-        zitadel setup --masterkeyFile /opt/${APP}/config.yaml --config /opt/${APP}/config.yaml --init-projections=true
+        zitadel setup --masterkeyFile /opt/${APP}/.masterkey --config /opt/${APP}/config.yaml --init-projections=true
         systemctl start zitadel.service
         echo "v${current_version}" > /opt/${APP}_version.txt
         msg_ok "Updated ${APP} to v${current_version}"
