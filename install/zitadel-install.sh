@@ -32,11 +32,10 @@ DB_PASS="zitadel"
     echo "DB_PASS: $DB_PASS"
 } >> ~/zitadel.creds
 systemctl enable -q --now postgresql
-#$STD sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;"
-#$STD sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';"
-#$STD sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;"
-#$STD sudo -u postgres psql -c "ALTER DATABASE $DB_NAME OWNER TO $DB_USER;"
-#$STD sudo -u postgres psql -c "ALTER USER $DB_USER WITH SUPERUSER;"
+sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;"
+sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;"
+sudo -u postgres psql -c "ALTER USER $DB_USER WITH SUPERUSER;"
 msg_ok "Installed PostgreSQL"
 
 msg_info "Installing Zitadel"
