@@ -44,7 +44,7 @@ function update_script() {
         i686) ARCH="386";;
         i386) ARCH="386";;
     esac
-    if [[ "${LATEST}" != "$(cat /opt/zitadel_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/zitadel_version.txt ]]; then
+    if [[ "${RELEASE}" != "$(cat /opt/zitadel_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/zitadel_version.txt ]]; then
         msg_info "Updating ${APP} (Patience)"
         wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
         systemctl stop zitadel.service
