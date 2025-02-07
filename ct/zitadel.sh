@@ -9,9 +9,9 @@ source <(curl -s https://raw.githubusercontent.com/dave-yap/ProxmoxVE/refs/heads
 # App Default Values
 APP="Zitadel"
 var_tags="identity-provider"
-var_cpu="2"
-var_ram="2048"
-var_disk="12"
+var_cpu="1"
+var_ram="1024"
+var_disk="8"
 var_os="debian"
 var_version="12"
 var_unprivileged="1"
