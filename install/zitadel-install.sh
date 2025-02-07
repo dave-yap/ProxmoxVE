@@ -31,7 +31,7 @@ DB_PASS="$(openssl rand -base64 18 | cut -c1-13)"
     echo "DB_USER: $DB_USER"
     echo "DB_PASS: $DB_PASS"
 } >> ~/zitadel.creds
-sudo systemctl enable -q --now postgresql
+systemctl enable -q --now postgresql
 #$STD sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;"
 #$STD sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';"
 #$STD sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;"
@@ -199,7 +199,7 @@ NoNewPrivileges=true
 [Install]
 WantedBy=multi-user.target
 EOF
-sudo systemctl enable -q --now zitadel.service
+systemctl enable -q --now zitadel.service
 msg_ok "Created Services"
 
 motd_ssh
