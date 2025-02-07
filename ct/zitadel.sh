@@ -7,7 +7,7 @@ source <(curl -s https://raw.githubusercontent.com/dave-yap/ProxmoxVE/refs/heads
 # Source: https://zitadel.com/
 
 # App Default Values
-APP="zitadel"
+APP="Zitadel"
 var_tags="identity-provider"
 var_cpu="1"
 var_ram="1024"
@@ -34,7 +34,7 @@ function update_script() {
         exit
     fi
     current_version=$(zitadel -v | grep -oP '\d+\.\d+\.\d+')
-    if [[ "${current_version}" != "$(cat /opt/${APP}_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
+    if [[ "${current_version}" != "$(cat /opt/zitadel_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/zitadel_version.txt ]]; then
         msg_info "Updating ${APP} (Patience)"
         LATEST=$(curl -i https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
         ARCH=$(uname -m)
@@ -48,11 +48,13 @@ function update_script() {
             i686) ARCH="386";;
             i386) ARCH="386";;
         esac
-        wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
+        {
+            wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz
+        } > /dev/null
         systemctl stop zitadel.service
         sudo mv zitadel-linux-$ARCH/zitadel /usr/local/bin
         rm -rf zitadel-linux-$ARCH
-        zitadel setup --masterkeyFile /opt/${APP}/.masterkey --config /opt/${APP}/config.yaml --init-projections=true
+        zitadel setup --masterkeyFile /opt/${APP}/.masterkey --config /opt/${APP}/config.yaml --init-projections=true > /dev/null
         systemctl start zitadel.service
         echo "v${current_version}" > /opt/${APP}_version.txt
         msg_ok "Updated ${APP} to v${current_version}"
