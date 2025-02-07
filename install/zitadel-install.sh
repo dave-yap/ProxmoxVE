@@ -62,6 +62,7 @@ wget -q -c https://github.com/zitadel/zitadel/releases/download/v2.64.0/zitadel-
 #tar -xzf zitadel-linux-$ARCH.tar.gz
 mv zitadel-linux-$ARCH/zitadel /usr/local/bin
 rm -rf zitadel-linux-$ARCH
+echo -e "$(zitadel -v | grep -oP '\d+\.\d+\.\d+')" > /opt/zitadel_version.txt 
 msg_ok "Installed Zitadel"
 
 msg_info "Setting up Zitadel Environments"
