@@ -15,10 +15,11 @@ update_os
 msg_info "Installing Dependencies (Patience)"
 $STD apt-get install -y \
     curl \
+    sudo\
+    mc \
     ca-certificates \
     wget \
-    sed \
-    sudo
+    sed
 msg_ok "Installed Dependecies"
 
 msg_info "Installing Postgresql"
@@ -46,9 +47,8 @@ msg_ok "Installed PostgreSQL"
 
 msg_info "Installing Zitadel"
 RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
-ARCH=amd64
-wget -q -c https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
-mv zitadel-linux-$ARCH/zitadel /usr/local/bin
+wget -q -c https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-amd64.tar.gz -O - | tar -xz &>/dev/null
+mv zitadel-linux-amd64/zitadel /usr/local/bin
 echo -e "$(zitadel -v | grep -oP '\d+\.\d+\.\d+')" > /opt/zitadel_version.txt 
 msg_ok "Installed Zitadel"
 
@@ -152,7 +152,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf zitadel-linux-$ARCH
+rm -rf zitadel-linux-amd64
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"

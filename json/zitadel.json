@@ -18,9 +18,9 @@
             "type": "default",
             "script": "ct/zitadel.sh",
             "resources": {
-                "cpu": 2,
-                "ram": 2048,
-                "hdd": 12,
+                "cpu": 1,
+                "ram": 1024,
+                "hdd": 8,
                 "os": "debian",
                 "version": "12"
             }

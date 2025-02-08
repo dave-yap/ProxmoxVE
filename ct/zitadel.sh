@@ -33,13 +33,12 @@ function update_script() {
         exit
     fi
     RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
-    ARCH=amd64
     if [[ "${RELEASE}" != "$(cat /opt/zitadel_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/zitadel_version.txt ]]; then
         msg_info "Updating ${APP} (Patience)"
-        wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
+        wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-amd64.tar.gz -O - | tar -xz &>/dev/null
         systemctl stop zitadel.service
-        sudo mv zitadel-linux-$ARCH/zitadel /usr/local/bin
-        rm -rf zitadel-linux-$ARCH
+        sudo mv zitadel-linux-amd64/zitadel /usr/local/bin
+        rm -rf zitadel-linux-amd64
         zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true &>/dev/null
         systemctl start zitadel.service
         echo "v${RELEASE}" > /opt/zitadel_version.txt
