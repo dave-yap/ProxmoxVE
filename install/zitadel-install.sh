@@ -46,17 +46,7 @@ msg_ok "Installed PostgreSQL"
 
 msg_info "Installing Zitadel"
 RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
-ARCH=$(uname -m)
-case $ARCH in
-    armv5*) ARCH="armv5";;
-    armv6*) ARCH="armv6";;
-    armv7*) ARCH="arm";;
-    aarch64) ARCH="arm64";;
-    x86) ARCH="386";;
-    x86_64) ARCH="amd64";;
-    i686) ARCH="386";;
-    i386) ARCH="386";;
-esac
+ARCH=amd64
 wget -q -c https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
 mv zitadel-linux-$ARCH/zitadel /usr/local/bin
 echo -e "$(zitadel -v | grep -oP '\d+\.\d+\.\d+')" > /opt/zitadel_version.txt 

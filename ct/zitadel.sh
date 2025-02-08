@@ -33,17 +33,7 @@ function update_script() {
         exit
     fi
     RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
-    ARCH=$(uname -m)
-    case $ARCH in
-        armv5*) ARCH="armv5";;
-        armv6*) ARCH="armv6";;
-        armv7*) ARCH="arm";;
-        aarch64) ARCH="arm64";;
-        x86) ARCH="386";;
-        x86_64) ARCH="amd64";;
-        i686) ARCH="386";;
-        i386) ARCH="386";;
-    esac
+    ARCH=amd64
     if [[ "${RELEASE}" != "$(cat /opt/zitadel_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/zitadel_version.txt ]]; then
         msg_info "Updating ${APP} (Patience)"
         wget -qc https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
