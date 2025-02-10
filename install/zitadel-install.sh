@@ -15,20 +15,23 @@ update_os
 msg_info "Installing Dependencies (Patience)"
 $STD apt-get install -y \
     curl \
+    sudo \
+    mc \
     ca-certificates \
-    wget \
-    sed \
-    sudo
+    wget
 msg_ok "Installed Dependecies"
 
 msg_info "Installing Postgresql"
 $STD apt-get install -y postgresql postgresql-common
-sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh <<< return &>/dev/null
 DB_NAME="zitadel"
 DB_USER="zitadel"
-DB_PASS="zitadel"
+DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 DB_ADMIN_USER="root"
-DB_ADMIN_PASS="postgres"
+DB_ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
+systemctl start postgresql
+$STD sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';"
+$STD sudo -u postgres psql -c "CREATE USER $DB_ADMIN_USER WITH PASSWORD '$DB_ADMIN_PASS' SUPERUSER;"
+$STD sudo -u postgres psql -c "CREATE DATABASE $DB_NAME OWNER $DB_ADMIN_USER;"
 {
     echo "Application Credentials"
     echo "DB_NAME: $DB_NAME"
@@ -37,29 +40,13 @@ DB_ADMIN_PASS="postgres"
     echo "DB_ADMIN_USER: $DB_ADMIN_USER"
     echo "DB_ADMIN_PASS: $DB_ADMIN_PASS"
 } >> ~/zitadel.creds
-systemctl enable -q --now postgresql
-sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';" &>/dev/null
-sudo -u postgres psql -c "CREATE USER $DB_ADMIN_USER WITH PASSWORD '$DB_ADMIN_PASS' SUPERUSER;" &>/dev/null
-sudo -u postgres psql -c "CREATE DATABASE $DB_NAME OWNER $DB_ADMIN_USER;" &>/dev/null
-systemctl restart -q postgresql
 msg_ok "Installed PostgreSQL"
 
 msg_info "Installing Zitadel"
-LATEST=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r') &>/dev/null
-ARCH=$(uname -m)
-case $ARCH in
-    armv5*) ARCH="armv5";;
-    armv6*) ARCH="armv6";;
-    armv7*) ARCH="arm";;
-    aarch64) ARCH="arm64";;
-    x86) ARCH="386";;
-    x86_64) ARCH="amd64";;
-    i686) ARCH="386";;
-    i386) ARCH="386";;
-esac
-wget -q -c https://github.com/zitadel/zitadel/releases/download/$LATEST/zitadel-linux-$ARCH.tar.gz -O - | tar -xz &>/dev/null
-mv zitadel-linux-$ARCH/zitadel /usr/local/bin
-echo -e "$(zitadel -v | grep -oP '\d+\.\d+\.\d+')" > /opt/zitadel_version.txt 
+RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
+wget -qc https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-amd64.tar.gz -O - | tar -xz
+mv zitadel-linux-amd64/zitadel /usr/local/bin
+echo -e "$(zitadel -v)" > /opt/${APP}_version.txt 
 msg_ok "Installed Zitadel"
 
 msg_info "Setting up Zitadel Environments"
@@ -86,18 +73,18 @@ Database:
   postgres:
     Host: localhost
     Port: 5432
-    Database: zitadel
+    Database: ${DB_NAME}
     User:
-      Username: zitadel
-      Password: zitadel
+      Username: ${DB_USER}
+      Password: ${DB_PASS}
       SSL:
         Mode: disable
         RootCert: ""
         Cert: ""
         Key: ""
     Admin:
-      Username: root
-      Password: postgres
+      Username: ${DB_ADMIN_USER}
+      Password: ${DB_ADMIN_PASS}
       SSL:
         Mode: disable
         RootCert: ""
@@ -139,7 +126,6 @@ zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zi
 sleep 60
 kill $(lsof -i | awk '/zitadel/ {print $2}' | head -n1)
 useradd zitadel
-zitadel -v > /opt/zitadel_version.txt
 msg_ok "Zitadel initialized"
 
 msg_info "Set ExternalDomain to current IP and restart Zitadel"
@@ -162,7 +148,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf zitadel-linux-$ARCH
+rm -rf ~/zitadel-linux-amd64
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
