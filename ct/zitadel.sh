@@ -38,13 +38,13 @@ function update_script() {
         systemctl stop zitadel
         msg_ok "Stopped $APP"
         
-        msg_info "Updating $APP to v${RELEASE}"
+        msg_info "Updating $APP to ${RELEASE}"
         cd /tmp
         wget -qc https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-amd64.tar.gz -O - | tar -xz
         mv zitadel-linux-amd64/zitadel /usr/local/bin
         zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true &>/dev/null
         echo "${RELEASE}" >/opt/${APP}_version.txt
-        msg_ok "Updated $APP to v${RELEASE}"
+        msg_ok "Updated $APP to ${RELEASE}"
 
         msg_info "Starting $APP"
         systemctl start zitadel
