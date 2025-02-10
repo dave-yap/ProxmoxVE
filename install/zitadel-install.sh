@@ -125,7 +125,7 @@ zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zi
 sleep 60
 kill $(lsof -i | awk '/zitadel/ {print $2}' | head -n1)
 useradd zitadel
-echo -e "$(zitadel -v | grep -oP 'v\d+\.\d+\.\d+')" > /opt/${APP}_version.txt
+echo -e "$(zitadel -v | grep -oP 'v\d+\.\d+\.\d+')" > /opt/Zitadel_version.txt
 msg_ok "Zitadel initialized"
 
 msg_info "Set ExternalDomain to current IP and restart Zitadel"

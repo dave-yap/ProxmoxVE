@@ -33,7 +33,7 @@ function update_script() {
         exit
     fi
     RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-    if [[ "${RELEASE}" != "$(cat /opt/zitadel_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/zitadel_version.txt ]]; then
+    if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
         msg_info "Updating ${APP} (Patience)"
         wget -qc https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-amd64.tar.gz -O - | tar -xz
         systemctl stop zitadel.service
@@ -41,7 +41,7 @@ function update_script() {
         rm -rf zitadel-linux-amd64
         zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true &>/dev/null
         systemctl start zitadel.service
-        echo "${RELEASE}" > /opt/${APP}_version.txt
+        echo -e "$(zitadel -v | grep -oP 'v\d+\.\d+\.\d+')" > /opt/${APP}_version.txt
         msg_ok "Updated ${APP} to ${RELEASE}"
     else
         msg_ok "No update required. ${APP} is already at ${RELEASE}"
