@@ -1,6 +1,6 @@
 {
-    "name": "Zitadel",
-    "slug": "Zitadel",
+    "name": "Test",
+    "slug": "Test",
     "categories": [
         0
     ],
@@ -10,13 +10,13 @@
     "privileged": false,
     "interface_port": 8080,
     "documentation": null,
-    "website": "https://zitadel.com",
-    "logo": "https://zitadel.com/zitadel-logo-dark.svg",
-    "description": "Zitadel is an open-source identity and access management (IAM) solution designed to provide secure authentication, authorization, and user management for modern applications and services. Built with a focus on flexibility, scalability, and security, Zitadel offers a comprehensive set of features for developers and organizations looking to implement robust identity management.",
+    "website": "<website url>",
+    "logo": "<logo url>",
+    "description": "<description>",
     "install_methods": [
         {
             "type": "default",
-            "script": "ct/zitadel.sh",
+            "script": "ct/test.sh",
             "resources": {
                 "cpu": 2,
                 "ram": 2048,

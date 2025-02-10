@@ -7,7 +7,7 @@ source <(curl -s https://raw.githubusercontent.com/dave-yap/ProxmoxVE/refs/heads
 # Source: https://zitadel.com/
 
 # App Default Values
-APP="Zitadel"
+APP="APP"
 var_tags="identity-provider"
 var_cpu="1"
 var_ram="1024"
