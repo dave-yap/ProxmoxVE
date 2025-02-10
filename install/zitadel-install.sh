@@ -46,7 +46,7 @@ msg_info "Installing Zitadel"
 RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
 wget -qc https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-amd64.tar.gz -O - | tar -xz
 mv zitadel-linux-amd64/zitadel /usr/local/bin
-echo -e "$(zitadel -v)" > /opt/${APP}_version.txt 
+echo -e "$(zitadel -v | grep -oP 'v\d+\.\d+\.\d+')" > /opt/${APP}_version.txt 
 msg_ok "Installed Zitadel"
 
 msg_info "Setting up Zitadel Environments"
