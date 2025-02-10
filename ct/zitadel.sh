@@ -34,16 +34,27 @@ function update_script() {
     fi
     RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
     if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
-        msg_info "Updating ${APP} (Patience)"
+        msg_info "Stopping $APP"
+        systemctl stop zitadel
+        msg_ok "Stopped $APP"
+        
+        msg_info "Updating $APP to v${RELEASE}"
+        cd /tmp
         wget -qc https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-amd64.tar.gz -O - | tar -xz
-        systemctl stop zitadel.service
-        sudo mv zitadel-linux-amd64/zitadel /usr/local/bin
-        rm -rf zitadel-linux-amd64
+        mv zitadel-linux-amd64/zitadel /usr/local/bin
         zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true &>/dev/null
-        systemctl start zitadel.service
-        echo -e "$(zitadel -v | grep -oP 'v\d+\.\d+\.\d+')" > /opt/${APP}_version.txt
-        msg_ok "Updated ${APP} to ${RELEASE}"
-    else
+        echo "${RELEASE}" >/opt/${APP}_version.txt
+        msg_ok "Updated $APP to v${RELEASE}"
+
+        msg_info "Starting $APP"
+        systemctl start zitadel
+        msg_ok "Started $APP"
+
+        msg_info "Cleaning Up"
+        rm -rf /tmp/zitadel-linux-amd64
+        msg_ok "Cleanup Completed"
+        msg_ok "Update Successful"
+      else
         msg_ok "No update required. ${APP} is already at ${RELEASE}"
     fi
     exit
