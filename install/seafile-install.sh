@@ -24,7 +24,8 @@ $STD apt-get install -y \
     python3-pip \
     libmariadb-dev \
     ldap-utils \
-    libldap2-dev
+    libldap2-dev \
+    libsasl2-dev
 msg_ok "Installed Dependecies"
 
 msg_info "Installing MariaDB"
