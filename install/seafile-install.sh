@@ -36,21 +36,6 @@ SEAHUB_DB="seahub_db"
 DB_USER="seafile"
 DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 systemctl start mariadb
-sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
-sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
-sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
-sudo -u mysql mysql -s -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
-sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $CCNET_DB.* TO '$DB_USER'@localhost;"
-sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAFILE_DB.* TO '$DB_USER'@localhost;"
-sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@localhost;"
-{
-    echo "Application Credentials"
-    echo "CCNET_DB: $CCNET_DB"
-    echo "SEAFILE_DB: $SEAFILE_DB"
-    echo "SEAHUB_DB: $SEAHUB_DB"
-    echo "DB_USER: $DB_USER"
-    echo "DB_PASS: $DB_PASS"
-} >> ~/seafile.creds
 msg_ok "Installed MariaDB"
 
 msg_info "Installing Seafile Python Dependecies"
@@ -83,6 +68,24 @@ sudo chown seafile: /opt/seafile
 wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz -O - | tar -xz -C /opt/seafile/
 #sudo su - seafile -c "bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh"
 msg_ok "Installed Seafile"
+
+msg_info "Setup MariaDB for Seafile"
+sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
+sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
+sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
+sudo -u mysql mysql -s -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $CCNET_DB.* TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAFILE_DB.* TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@localhost;"
+{
+    echo "Application Credentials"
+    echo "CCNET_DB: $CCNET_DB"
+    echo "SEAFILE_DB: $SEAFILE_DB"
+    echo "SEAHUB_DB: $SEAHUB_DB"
+    echo "DB_USER: $DB_USER"
+    echo "DB_PASS: $DB_PASS"
+} >> ~/seafile.creds
+msg_ok "MariaDB setup for Seafile"
 
 msg_info "Setting up Memcached"
 $STD sudo apt-get install -y \
