@@ -17,8 +17,7 @@ $STD apt-get install -y \
     sudo \
     mc \
     wget \
-    memcached \
-    libmemcached-dev \
+    expect \
     python3 \
     python3-dev \
     python3-setuptools \
@@ -30,13 +29,32 @@ msg_ok "Installed Dependecies"
 
 msg_info "Installing MariaDB"
 $STD apt-get install -y mariadb-server
+systemctl start mariadb
+msg_ok "Installed MariaDB"
+
+msg_info "Setup MariaDB for Seafile"
 CCNET_DB="ccnet_db"
 SEAFILE_DB="seafile_db"
 SEAHUB_DB="seahub_db"
 DB_USER="seafile"
 DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
-systemctl start mariadb
-msg_ok "Installed MariaDB"
+sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
+sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
+sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
+sudo -u mysql mysql -s -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $CCNET_DB.* TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAFILE_DB.* TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@localhost;"
+{
+    echo "Application Credentials"
+    echo "CCNET_DB: $CCNET_DB"
+    echo "SEAFILE_DB: $SEAFILE_DB"
+    echo "SEAHUB_DB: $SEAHUB_DB"
+    echo "DB_USER: $DB_USER"
+    echo "DB_PASS: $DB_PASS"
+    echo "DB_TEMP_PASS": $DB_TEMP_PASS"
+} >> ~/seafile.creds
+msg_ok "MariaDB setup for Seafile"
 
 msg_info "Installing Seafile Python Dependecies"
 $STD sudo pip3 install --timeout=3600 \
@@ -64,28 +82,55 @@ msg_ok "Installed Seafile Python Dependecies"
 msg_info "Installing Seafile"
 sudo mkdir -p /opt/seafile
 sudo useradd seafile
+mkdir -p /home/seafile
+sudo chown seafile: /home/seafile
 sudo chown seafile: /opt/seafile
-wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz -O - | tar -xz -C /opt/seafile/
-#sudo su - seafile -c "bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh"
-msg_ok "Installed Seafile"
+sudo su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
+sudo su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
+sudo su - seafile -c "bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh"
+expect <<EOF
+expect "Press ENTER to continue"
+send "\r"
 
-msg_info "Setup MariaDB for Seafile"
-sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
-sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
-sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
-sudo -u mysql mysql -s -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
-sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $CCNET_DB.* TO '$DB_USER'@localhost;"
-sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAFILE_DB.* TO '$DB_USER'@localhost;"
-sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@localhost;"
-{
-    echo "Application Credentials"
-    echo "CCNET_DB: $CCNET_DB"
-    echo "SEAFILE_DB: $SEAFILE_DB"
-    echo "SEAHUB_DB: $SEAHUB_DB"
-    echo "DB_USER: $DB_USER"
-    echo "DB_PASS: $DB_PASS"
-} >> ~/seafile.creds
-msg_ok "MariaDB setup for Seafile"
+expect "What is the name of the server?"
+send "Seafile\r"
+
+expect "What is the ip or domain of the server?"
+send "127.0.0.1\r"
+
+expect "Which port do you want to use for the seafile fileserver?"
+send "\r"
+
+expect "[ 1 or 2 ]"
+send "2\r"
+
+expect "What is the host of mysql server?"
+send "\r"
+
+expect "What is the port of mysql server?"
+send "\r"
+
+expect "Which mysql user to use for seafile?"
+send "seafile\r"
+
+expect "What is the password for mysql user "seafile"?"
+send "$DB_PASS\r"
+
+expect "Enter the existing database name for ccnet:"
+send "$CCNET_DB\r"
+
+expect "Enter the existing database name for seafile:"
+send "$SEAFILE_DB\r"
+
+expect "Enter the existing database name for seahub:"
+send "$SEAHUB_DB\r"
+
+expect "Press ENTER to continue, or Ctrl-C to abort"
+send "\r"
+
+expect eof
+EOF
+msg_ok "Installed Seafile"
 
 msg_info "Setting up Memcached"
 $STD sudo apt-get install -y \
