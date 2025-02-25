@@ -56,7 +56,7 @@ sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@lo
 msg_ok "MariaDB setup for Seafile"
 
 msg_info "Installing Seafile Python Dependecies"
-$STD sudo pip3 install --timeout=3600 \
+$STD sudo pip3 install \
     django==4.2.* \
     future==0.18.* \
     mysqlclient==2.1.* \
@@ -135,7 +135,7 @@ msg_info "Setting up Memcached"
 $STD sudo apt-get install -y \
     memcached \
     libmemcached-dev
-$STD sudo pip3 install --timeout=3600 \
+$STD sudo pip3 install \
     pylibmc \
     django-pylibmc
 systemctl enable --now -q memcached
