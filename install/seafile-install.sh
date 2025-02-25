@@ -23,7 +23,7 @@ $STD apt-get install -y \
     python3-dev \
     python3-setuptools \
     python3-pip \
-    libmysqlclient-dev \
+    libmariadb-dev \
     ldap-utils \
     libldap2-dev
 msg_ok "Installed Dependecies"
