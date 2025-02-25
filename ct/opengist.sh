@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://opengist.io/
 
-# App Default Values
 APP="Opengist"
 var_tags="development"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -39,8 +34,8 @@ function update_script() {
     msg_ok "Stopped Service"
     
     msg_info "Updating ${APP} to v${RELEASE}"
-    apt-get update &>/dev/null
-    apt-get -y upgrade &>/dev/null
+    $STD apt-get update
+    $STD apt-get -y upgrade
     cd /opt
     mv /opt/opengist /opt/opengist-backup
     wget -q "https://github.com/thomiceli/opengist/releases/download/v${RELEASE}/opengist${RELEASE}-linux-amd64.tar.gz"
@@ -57,8 +52,8 @@ function update_script() {
     msg_info "Cleaning up"
     rm -rf /opt/opengist${RELEASE}-linux-amd64.tar.gz
     rm -rf /opt/opengist-backup
-    apt-get -y autoremove &>/dev/null
-    apt-get -y autoclean &>/dev/null
+    $STD apt-get -y autoremove
+    $STD apt-get -y autoclean
     msg_ok "Cleaned"
     msg_ok "Updated Successfully"
   else

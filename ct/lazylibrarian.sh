@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://gitlab.com/LazyLibrarian/LazyLibrarian
 
-# App Default Values
 APP="LazyLibrarian"
 var_tags="eBook"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -37,7 +32,7 @@ function update_script() {
     msg_ok "LazyLibrarian Stopped"
 
     msg_info "Updating $APP LXC"
-    git -C /opt/LazyLibrarian pull origin master &>/dev/null
+    $STD git -C /opt/LazyLibrarian pull origin master
     msg_ok "Updated $APP LXC"
 
     msg_info "Starting LazyLibrarian"

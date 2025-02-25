@@ -19,7 +19,7 @@ jobs:
       - name: Install minimatch
         run: npm install minimatch
 
-      - name: Label PR based on config rules
+      - name: Label PR based on file changes and PR template
         uses: actions/github-script@v7
         with:
           script: |
@@ -30,33 +30,79 @@ jobs:
             const configPath = path.resolve(process.env.CONFIG_PATH);
             const fileContent = await fs.readFile(configPath, 'utf-8');
             const autolabelerConfig = JSON.parse(fileContent);
- 
+
             const prNumber = context.payload.pull_request.number;
+
+            const prBody = context.payload.pull_request.body.toLowerCase();
+
+            let labelsToAdd = new Set();
+
             const prListFilesResponse = await github.rest.pulls.listFiles({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber,
             });
             const prFiles = prListFilesResponse.data;
+           
+            const templateLabelMappings = {
+              "🐞 **bug fix**": "bugfix",
+              "✨ **new feature**": "feature",
+              "💥 **breaking change**": "breaking change",
+              "🆕 **new script**": "new script"
+            };
+            
+            for (const [checkbox, label] of Object.entries(templateLabelMappings)) {
+              const escapedCheckbox = checkbox.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+              const regex = new RegExp(`- \\[(x|X)\\]\\s*.*${escapedCheckbox}`, "i");
+              const match = prBody.match(regex);              
+              if (match) {
+                console.log(`Match: ${match}`);
+                labelsToAdd.add(label);
+              }
+            }
+            if (labelsToAdd.size === 0) {
+              labelsToAdd.add("general");
+            } 
 
+            // Apply labels based on file changes
             for (const [label, rules] of Object.entries(autolabelerConfig)) {
               const shouldAddLabel = prFiles.some((prFile) => {
                 return rules.some((rule) => {
                   const isFileStatusMatch = rule.fileStatus ? rule.fileStatus === prFile.status : true;
                   const isIncludeGlobMatch = rule.includeGlobs.some((glob) => minimatch(prFile.filename, glob));
                   const isExcludeGlobMatch = rule.excludeGlobs.some((glob) => minimatch(prFile.filename, glob));
-                  
+
                   return isFileStatusMatch && isIncludeGlobMatch && !isExcludeGlobMatch;
                 });
               });
 
               if (shouldAddLabel) {
-                console.log(`Adding label ${label} to PR ${prNumber}`);
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: prNumber,
-                  labels: [label],
-                });
+                labelsToAdd.add(label);
               }
+            }
+
+            const templateLabelMappings = {
+              "🐞 bug fix": "bugfix",
+              "✨ new feature": "feature",
+              "💥 breaking change": "breaking change",
+              "🆕 new script": "new script"
+            };
+
+            for (const [checkbox, label] of Object.entries(templateLabelMappings)) {
+              const regex = new RegExp(`- \\[x\\] ${checkbox}`, "i"); // Match only checked checkboxes
+              if (regex.test(prBody)) {
+                labelsToAdd.add(label);
+              }
+            }
+
+            console.log(`Labels to add: ${Array.from(labelsToAdd).join(", ")}`);
+
+            if (labelsToAdd.size > 0) {
+              console.log(`Adding labels ${Array.from(labelsToAdd).join(", ")} to PR ${prNumber}`);
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: Array.from(labelsToAdd),
+              });
             }

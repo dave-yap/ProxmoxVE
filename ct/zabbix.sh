@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.zabbix.com/
 
-# App Default Values
 APP="Zabbix"
 var_tags="monitoring"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -45,9 +40,9 @@ function update_script() {
     rm -Rf /etc/apt/sources.list.d/zabbix.list
     cd /tmp
     wget -q https://repo.zabbix.com/zabbix/7.2/release/debian/pool/main/z/zabbix-release/zabbix-release_latest+debian12_all.deb
-    dpkg -i zabbix-release_latest+debian12_all.deb &>/dev/null
-    apt-get update &>/dev/null
-    apt-get install --only-upgrade zabbix-server-pgsql zabbix-frontend-php zabbix-agent2 zabbix-agent2-plugin-* &>/dev/null
+    $STD dpkg -i zabbix-release_latest+debian12_all.deb
+    $STD apt-get update
+    $STD apt-get install --only-upgrade zabbix-server-pgsql zabbix-frontend-php zabbix-agent2 zabbix-agent2-plugin-*
 
     msg_info "Starting ${APP} Services"
     systemctl start zabbix-server zabbix-agent2

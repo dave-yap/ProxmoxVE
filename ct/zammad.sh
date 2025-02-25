@@ -5,9 +5,8 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://zammad.com
 
-#App Default Values
 APP="Zammad"
-TAGS="webserver;ticket-system"
+var_tags="webserver;ticket-system"
 var_disk="8"
 var_cpu="2"
 var_ram="4096"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -33,15 +28,15 @@ function update_script() {
         exit
     fi
     msg_info "Stopping Service"
-    systemctl stop zammad &>/dev/null
+    $STD systemctl stop zammad
     msg_info "Updating ${APP}"
-    apt-get update &>/dev/null
-    apt-mark hold zammad &>/dev/null
-    apt-get -y upgrade &>/dev/null
-    apt-mark unhold zammad &>/dev/null
-    apt-get -y upgrade &>/dev/null
+    $STD apt-get update
+    $STD apt-mark hold zammad
+    $STD apt-get -y upgrade
+    $STD apt-mark unhold zammad
+    $STD apt-get -y upgrade
     msg_info "Starting Service"
-    systemctl start zammad &>/dev/null
+    $STD systemctl start zammad
     msg_ok "Updated ${APP} LXC"
     exit
 }

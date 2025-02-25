@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.tp-link.com/us/support/download/omada-software-controller/
 
-# App Default Values
 APP="Omada"
 var_tags="tp-link;controller"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -32,18 +27,33 @@ function update_script() {
     msg_error "No ${APP} Installation Found!"
     exit
   fi
+
+  msg_info "Updating MongoDB"
+  MONGODB_VERSION="7.0"
+  if ! lscpu | grep -q 'avx'; then
+    MONGODB_VERSION="4.4"
+    msg_error "No AVX detected: TP-Link Canceled Support for Old MongoDB for Debian 12\n https://www.tp-link.com/baltic/support/faq/4160/"
+    exit 1 
+  fi
+
+  wget -qO- https://www.mongodb.org/static/pgp/server-${MONGODB_VERSION}.asc | gpg --dearmor >/usr/share/keyrings/mongodb-server-${MONGODB_VERSION}.gpg
+  echo "deb [signed-by=/usr/share/keyrings/mongodb-server-${MONGODB_VERSION}.gpg] http://repo.mongodb.org/apt/debian $(grep '^VERSION_CODENAME=' /etc/os-release | cut -d'=' -f2)/mongodb-org/${MONGODB_VERSION} main" >/etc/apt/sources.list.d/mongodb-org-${MONGODB_VERSION}.list
+  $STD apt-get update
+  $STD apt-get install -y --only-upgrade mongodb-org
+  msg_ok "Updated MongoDB to $MONGODB_VERSION"
+
+  msg_info "Updating Omada Controller"
   latest_url=$(curl -s "https://support.omadanetworks.com/en/product/omada-software-controller/?resourceType=download" | grep -o 'https://static\.tp-link\.com/upload/software/[^"]*linux_x64[^"]*\.deb' | head -n 1)
   latest_version=$(basename "$latest_url")
   if [ -z "${latest_version}" ]; then
     msg_error "It seems that the server (tp-link.com) might be down. Please try again at a later time."
     exit
   fi
-  echo -e "Updating Omada Controller"
+
   wget -qL ${latest_url}
   dpkg -i ${latest_version}
   rm -rf ${latest_version}
-  echo -e "Updated Omada Controller"
-  exit
+  msg_ok "Updated Omada Controller"
 }
 
 start

@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.wireguard.com/
 
-# App Default Values
 APP="Wireguard"
 var_tags="network;vpn"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -37,6 +32,7 @@ function update_script() {
     sleep 2
     cd /etc/wgdashboard/src
     ./wgd.sh update
+    ./wgd.sh start
     exit
 }
 

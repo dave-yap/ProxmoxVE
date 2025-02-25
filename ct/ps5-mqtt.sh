@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/FunkeyFlo/ps5-mqtt/
 
-# App Default Values
 APP="PS5-MQTT"
 var_tags="smarthome;automation"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -52,8 +47,8 @@ function update_script() {
 
         msg_info "Building new PS5-MQTT version"
         cd /opt/ps5-mqtt/ps5-mqtt/
-        npm install &>/dev/null
-        npm run build &>/dev/null
+        $STD npm install
+        $STD npm run build
         msg_ok "Built new PS5-MQTT version"
 
         msg_info "Starting service"

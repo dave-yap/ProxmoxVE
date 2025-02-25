@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://cronicle.net/
 
-# App Default Values
 APP="Cronicle"
 var_tags="task-scheduler"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -41,12 +36,12 @@ function update_script() {
     if [[ "$(node -v | cut -d 'v' -f 2)" == "18."* ]]; then
       if ! command -v npm >/dev/null 2>&1; then
         echo "Installing NPM..."
-        apt-get install -y npm >/dev/null 2>&1
+        $STD apt-get install -y npm
         echo "Installed NPM..."
       fi
     fi
     msg_info "Updating ${APP}"
-    /opt/cronicle/bin/control.sh upgrade &>/dev/null
+    $STD /opt/cronicle/bin/control.sh upgrade
     msg_ok "Updated ${APP}"
     exit
   fi
@@ -54,7 +49,7 @@ function update_script() {
     if [[ "$(node -v | cut -d 'v' -f 2)" == "18."* ]]; then
       if ! command -v npm >/dev/null 2>&1; then
         echo "Installing NPM..."
-        apt-get install -y npm >/dev/null 2>&1
+        $STD apt-get install -y npm
         echo "Installed NPM..."
       fi
     fi
@@ -62,12 +57,12 @@ function update_script() {
     IP=$(hostname -I | awk '{print $1}')
     msg_info "Installing Dependencies"
 
-    apt-get install -y git &>/dev/null
-    apt-get install -y make &>/dev/null
-    apt-get install -y g++ &>/dev/null
-    apt-get install -y gcc &>/dev/null
-    apt-get install -y ca-certificates &>/dev/null
-    apt-get install -y gnupg &>/dev/null
+    $STD apt-get install -y git
+    $STD apt-get install -y make
+    $STD apt-get install -y g++
+    $STD apt-get install -y gcc
+    $STD apt-get install -y ca-certificates
+    $STD apt-get install -y gnupg
     msg_ok "Installed Dependencies"
 
     msg_info "Setting up Node.js Repository"
@@ -77,21 +72,21 @@ function update_script() {
     msg_ok "Set up Node.js Repository"
 
     msg_info "Installing Node.js"
-    apt-get update &>/dev/null
-    apt-get install -y nodejs &>/dev/null
+    $STD apt-get update
+    $STD apt-get install -y nodejs
     msg_ok "Installed Node.js"
 
     msg_info "Installing Cronicle Worker"
     mkdir -p /opt/cronicle
     cd /opt/cronicle
-    tar zxvf <(curl -fsSL https://github.com/jhuckaby/Cronicle/archive/${LATEST}.tar.gz) --strip-components 1 &>/dev/null
-    npm install &>/dev/null
-    node bin/build.js dist &>/dev/null
+    $STD tar zxvf <(curl -fsSL https://github.com/jhuckaby/Cronicle/archive/${LATEST}.tar.gz) --strip-components 1
+    $STD npm install
+    $STD node bin/build.js dist
     sed -i "s/localhost:3012/${IP}:3012/g" /opt/cronicle/conf/config.json
-    /opt/cronicle/bin/control.sh start &>/dev/null
-    cp /opt/cronicle/bin/cronicled.init /etc/init.d/cronicled &>/dev/null
+    $STD /opt/cronicle/bin/control.sh start
+    $STD cp /opt/cronicle/bin/cronicled.init /etc/init.d/cronicled
     chmod 775 /etc/init.d/cronicled
-    update-rc.d cronicled defaults &>/dev/null
+    $STD update-rc.d cronicled defaults
     msg_ok "Installed Cronicle Worker"
     echo -e "\n Add Masters secret key to /opt/cronicle/conf/config.json \n"
     exit

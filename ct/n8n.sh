@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://n8n.io/
 
-# App Default Values
 APP="n8n"
 var_tags="automation"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -35,12 +30,12 @@ function update_script() {
   if [[ "$(node -v | cut -d 'v' -f 2)" == "18."* ]]; then
     if ! command -v npm >/dev/null 2>&1; then
       echo "Installing NPM..."
-      apt-get install -y npm >/dev/null 2>&1
+      $STD apt-get install -y npm
       echo "Installed NPM..."
     fi
   fi
   msg_info "Updating ${APP} LXC"
-  npm update -g n8n &>/dev/null
+  $STD npm update -g n8n
   systemctl restart n8n
   msg_ok "Updated Successfully"
   exit

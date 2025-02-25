@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://zitadel.com/
 
-# App Default Values
 APP="Zitadel"
 var_tags="identity-provider"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -42,7 +37,7 @@ function update_script() {
         cd /tmp
         wget -qc https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-amd64.tar.gz -O - | tar -xz
         mv zitadel-linux-amd64/zitadel /usr/local/bin
-        zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true &>/dev/null
+        $STD zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true
         echo "${RELEASE}" >/opt/${APP}_version.txt
         msg_ok "Updated $APP to ${RELEASE}"
 

@@ -3,8 +3,8 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: MickLesk (Canbiz)
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://nodebb.org/
 
-# App Default Values
 APP="NodeBB"
 var_tags="forum"
 var_disk="10"
@@ -39,7 +39,7 @@ function update_script() {
 
     msg_info "Updating ${APP} to v${RELEASE}"
     cd /opt/nodebb
-    ./nodebb upgrade >/dev/null 2>&1
+    $STD ./nodebb upgrade
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated ${APP} to v${RELEASE}"
 

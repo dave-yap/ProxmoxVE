@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/Brandawg93/PeaNUT/
 
-# App Default Values
 APP="PeaNUT"
 var_tags="network;ups;"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -40,8 +35,8 @@ function update_script() {
     tar -xzf peanut.tar.gz -C /opt/peanut --strip-components 1
     rm peanut.tar.gz
     cd /opt/peanut
-    pnpm i &>/dev/null
-    pnpm run build &>/dev/null
+    $STD pnpm i
+    $STD pnpm run build
     cp -r .next/static .next/standalone/.next/
     mkdir -p /opt/peanut/.next/standalone/config
     ln -sf /etc/peanut/settings.yml /opt/peanut/.next/standalone/config/settings.yml

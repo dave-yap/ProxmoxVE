@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/clusterzx/paperless-ai
 
-# App Default Values
 APP="Paperless-AI"
 var_tags="ai;document"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -47,7 +42,7 @@ function update_script() {
     mkdir -p /opt/paperless-ai/data
     cp -a /opt/paperless-ai_bak/data/. /opt/paperless-ai/data/
     cd /opt/paperless-ai
-    npm install &>/dev/null
+    $STD npm install
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated $APP to v${RELEASE}"
 

@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://heimdall.site/
 
-# App Default Values
 APP="Heimdall-Dashboard"
 var_tags="dashboard"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -49,8 +44,8 @@ function update_script() {
     VER=$(curl -s https://api.github.com/repos/linuxserver/Heimdall/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
     cp -R Heimdall-${VER}/* /opt/Heimdall
     cd /opt/Heimdall
-    apt-get install -y composer &>/dev/null
-    COMPOSER_ALLOW_SUPERUSER=1 composer dump-autoload &>/dev/null
+    $STD apt-get install -y composer
+    $STD COMPOSER_ALLOW_SUPERUSER=1 composer dump-autoload
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated Heimdall Dashboard to ${RELEASE}"
     msg_info "Restoring Data"

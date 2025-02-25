@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://stonith404.github.io/pingvin-share/introduction
 
-# App Default Values
 APP="Pingvin"
 var_tags="sharing"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -34,7 +29,7 @@ function update_script() {
     fi
    
     RELEASE=$(curl -s https://api.github.com/repos/stonith404/pingvin-share/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
-    if [[ ! -f /opt/$pingvin_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/pingvin_version.txt)" ]]; then
+    if [[ ! -f /opt/pingvin_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/pingvin_version.txt)" ]]; then
       
       msg_info "Stopping Pingvin Share"
       systemctl stop pm2-root.service
@@ -44,16 +39,17 @@ function update_script() {
       cd /opt
       wget -q "https://github.com/stonith404/pingvin-share/archive/refs/tags/v${RELEASE}.zip"
       unzip -q v${RELEASE}.zip
-      mv pingvin-share-${RELEASE} /opt/pingvin-share  
+      cp -rf pingvin-share-${RELEASE}/* /opt/pingvin-share
       cd /opt/pingvin-share
       cd backend
-      npm install &>/dev/null
-      npm run build &>/dev/null
+      $STD npm install
+      $STD npm run build
       cd ../frontend
-      npm install &>/dev/null
-      npm run build &>/dev/null
+      $STD npm install
+      $STD npm run build
       echo "${RELEASE}" >"/opt/pingvin_version.txt"
       rm -rf /opt/v${RELEASE}.zip
+      rm -rf /opt/pingvin-share-${RELEASE}
       msg_ok "Updated Pingvin Share to v${RELEASE}"
 
       msg_info "Starting Pingvin Share"

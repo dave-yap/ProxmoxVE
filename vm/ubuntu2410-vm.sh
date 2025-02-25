@@ -419,7 +419,7 @@ else
 fi
 msg_ok "Using ${CL}${BL}$STORAGE${CL} ${GN}for Storage Location."
 msg_ok "Virtual Machine ID is ${CL}${BL}$VMID${CL}."
-msg_info "Retrieving the URL for the Ubuntu 24.0 Disk Image"
+msg_info "Retrieving the URL for the Ubuntu 24.10 Disk Image"
 URL=https://cloud-images.ubuntu.com/oracular/current/oracular-server-cloudimg-amd64.img
 sleep 2
 msg_ok "${CL}${BL}${URL}${CL}"
@@ -506,7 +506,7 @@ if [ "$START_VM" == "yes" ]; then
   qm start $VMID
   msg_ok "Started Ubuntu 24.10 VM"
 fi
-post_update_to_api "done" "none"s
+post_update_to_api "done" "none"
 msg_ok "Completed Successfully!\n"
 echo -e "Setup Cloud-Init before starting \n
 More info at https://github.com/community-scripts/ProxmoxVE/discussions/272 \n"

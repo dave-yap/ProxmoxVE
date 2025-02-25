@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.kimai.org/
 
-# App Default Values
 APP="Kimai"
 var_tags="time-tracking"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -46,8 +41,8 @@ function update_script() {
     mv kimai-${RELEASE} /opt/kimai
     mv /opt/.env /opt/kimai/.env
     cd /opt/kimai
-    composer install --no-dev --optimize-autoloader &>/dev/null
-    bin/console kimai:update &>/dev/null
+    $STD composer install --no-dev --optimize-autoloader
+    $STD bin/console kimai:update
     chown -R :www-data .
     chmod -R g+r .
     chmod -R g+rw var/

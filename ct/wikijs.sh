@@ -5,21 +5,16 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://js.wiki/
 
-# App Default Values
 APP="Wikijs"
 var_tags="wiki"
-var_cpu="1"
-var_ram="512"
-var_disk="3"
+var_cpu="2"
+var_ram="2048"
+var_disk="10"
 var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -51,7 +46,7 @@ function update_script() {
     msg_info "Restoring Data"
     cp -R ~/data-backup/* /opt/wikijs
     rm -rf ~/data-backup
-    npm rebuild sqlite3 &>/dev/null
+    $STD npm rebuild sqlite3
     msg_ok "Restored Data"
 
     msg_info "Starting ${APP}"

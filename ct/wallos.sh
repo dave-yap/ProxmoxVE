@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://wallosapp.com/
 
-# App Default Values
 APP="Wallos"
 var_tags="finance"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -49,7 +44,7 @@ function update_script() {
     chown -R www-data:www-data /opt/wallos
     chmod -R 755 /opt/wallos
     mkdir -p /var/log/cron
-    curl http://localhost/endpoints/db/migrate.php &>/dev/null
+    $STD curl http://localhost/endpoints/db/migrate.php
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated ${APP}"
 

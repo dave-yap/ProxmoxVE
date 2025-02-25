@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://esphome.io/
 
-# App Default Values
 APP="ESPHome"
 var_tags="automation"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -38,9 +33,9 @@ function update_script() {
 
   msg_info "Updating ESPHome"
   if [[ -d /srv/esphome ]]; then
-    source /srv/esphome/bin/activate &>/dev/null
+    $STD source /srv/esphome/bin/activate
   fi
-  pip3 install -U esphome &>/dev/null
+  $STD pip3 install -U esphome
   msg_ok "Updated ESPHome"
 
   msg_info "Starting ESPHome"

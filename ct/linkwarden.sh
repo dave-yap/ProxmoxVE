@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://linkwarden.app/
 
-# App Default Values
 APP="Linkwarden"
 var_tags="bookmark"
 var_cpu="2"
@@ -14,11 +13,7 @@ var_disk="12"
 var_os="ubuntu"
 var_version="22.04"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -46,12 +41,12 @@ function update_script() {
     unzip -q ${RELEASE}.zip
     mv linkwarden-${RELEASE:1} /opt/linkwarden
     cd /opt/linkwarden
-    yarn &>/dev/null
-    npx playwright install-deps &>/dev/null
-    yarn playwright install &>/dev/null
+    $STD yarn
+    $STD npx playwright install-deps
+    $STD yarn playwright install
     cp /opt/.env /opt/linkwarden/.env
-    yarn build &>/dev/null
-    yarn prisma migrate deploy &>/dev/null
+    $STD yarn build
+    $STD yarn prisma migrate deploy
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated ${APP} to ${RELEASE}"
 

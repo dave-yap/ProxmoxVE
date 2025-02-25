@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://jellyfin.org/
 
-# App Default Values
 APP="Jellyfin"
 var_tags="media"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="ubuntu"
 var_version="22.04"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -33,9 +28,9 @@ function update_script() {
           exit
      fi
      msg_info "Updating ${APP} LXC"
-     apt-get update &>/dev/null
-     apt-get -y upgrade &>/dev/null
-     apt-get -y --with-new-pkgs upgrade jellyfin jellyfin-server &>/dev/null
+     $STD apt-get update
+     $STD apt-get -y upgrade
+     $STD apt-get -y --with-new-pkgs upgrade jellyfin jellyfin-server
      msg_ok "Updated ${APP} LXC"
      exit
 }

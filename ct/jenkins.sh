@@ -2,11 +2,9 @@
 source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: kristocopani
-# License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.jenkins.io/
 
-# App Default Values
 APP="Jenkins"
 var_tags="automation"
 var_cpu="2"
@@ -16,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -34,8 +28,8 @@ function update_script() {
         exit
     fi
     msg_info "Updating $APP LXC"
-    apt-get update &>/dev/null
-    apt-get -y upgrade &>/dev/null
+    $STD apt-get update
+    $STD apt-get -y upgrade
     msg_ok "Updated $APP LXC"
     exit
 }

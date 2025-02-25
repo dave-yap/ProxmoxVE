@@ -5,9 +5,8 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://docs.2fauth.app/
 
-# App Default Values
 APP="2FAuth"
-TAGS="2fa;authenticator"
+var_tags="2fa;authenticator"
 var_cpu="1"
 var_ram="512"
 var_disk="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -40,8 +35,8 @@ function update_script() {
     if [[ "${RELEASE}" != "$(cat /opt/2fauth_version.txt)" ]] || [[ ! -f /opt/2fauth_version.txt ]]; then
         msg_info "Updating $APP to ${RELEASE}"
 
-        apt-get update &>/dev/null
-        apt-get -y upgrade &>/dev/null
+        $STD apt-get update
+        $STD apt-get -y upgrade
 
         # Creating Backup
         msg_info "Creating Backup"
@@ -60,7 +55,7 @@ function update_script() {
         chmod -R 755 "/opt/2fauth"
 
         export COMPOSER_ALLOW_SUPERUSER=1
-        composer install --no-dev --prefer-source &>/dev/null
+        $STD composer install --no-dev --prefer-source
 
         php artisan 2fauth:install
 

@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/ipfs/kubo
 
-# App Default Values
 APP="Kubo"
 var_tags="sharing"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -35,8 +30,8 @@ function update_script() {
   RELEASE=$(wget -q https://github.com/ipfs/kubo/releases/latest -O - | grep "title>Release" | cut -d " " -f 4)
   if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
     msg_info "Updating $APP LXC"
-    apt-get update &>/dev/null
-    apt-get -y upgrade &>/dev/null
+    $STD apt-get update
+    $STD apt-get -y upgrade
     wget -q "https://github.com/ipfs/kubo/releases/download/${RELEASE}/kubo_${RELEASE}_linux-amd64.tar.gz"
     tar -xzf "kubo_${RELEASE}_linux-amd64.tar.gz" -C /usr/local
     systemctl restart ipfs.service

@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.rabbitmq.com/
 
-# App Default Values
 APP="RabbitMQ"
 var_tags="mqtt"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -37,7 +32,7 @@ function update_script() {
     msg_ok "Stopped ${APP} Service"
 
     msg_info "Updating..."
-    apt install --only-upgrade rabbitmq-server &>/dev/null
+    $STD apt install --only-upgrade rabbitmq-server
     msg_ok "Update Successfully"
 
     msg_info "Starting ${APP}"

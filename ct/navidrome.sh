@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.navidrome.org/
 
-# App Default Values
 APP="Navidrome"
 var_tags="music"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -40,7 +35,7 @@ function update_script() {
     msg_info "Updating to v${RELEASE}"
     cd /opt
     wget -q https://github.com/navidrome/navidrome/releases/download/v${RELEASE}/navidrome_${RELEASE}_linux_amd64.tar.gz -O Navidrome.tar.gz
-    tar -xvzf Navidrome.tar.gz -C /opt/navidrome/ &>/dev/null
+    $STD tar -xvzf Navidrome.tar.gz -C /opt/navidrome/
     chmod +x /opt/navidrome/navidrome
     msg_ok "Updated ${APP}"
     rm -rf /opt/Navidrome.tar.gz

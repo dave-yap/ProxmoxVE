@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://onedev.io/
 
-# App Default Values
 APP="OneDev"
 var_tags="git"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -42,7 +37,7 @@ function update_script() {
     cd /opt
     wget -q https://code.onedev.io/onedev/server/~site/onedev-latest.tar.gz
     tar -xzf onedev-latest.tar.gz
-    /opt/onedev-latest/bin/upgrade.sh /opt/onedev >/dev/null
+    $STD /opt/onedev-latest/bin/upgrade.sh /opt/onedev
     RELEASE=$(cat /opt/onedev/release.properties | grep "version" | cut -d'=' -f2)
     echo "${RELEASE}" >"/opt/${APP}_version.txt"
     msg_ok "Updated ${APP} to v${RELEASE}"

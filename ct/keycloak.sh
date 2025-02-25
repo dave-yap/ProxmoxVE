@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.keycloak.org/
 
-# App Default Values
 APP="Keycloak"
 var_tags="access-management"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -35,8 +30,8 @@ function update_script() {
   msg_info "Updating ${APP} LXC"
 
   msg_info "Updating packages"
-  apt-get update &>/dev/null
-  apt-get -y upgrade &>/dev/null
+  $STD apt-get update
+  $STD apt-get -y upgrade
 
   RELEASE=$(curl -s https://api.github.com/repos/keycloak/keycloak/releases/latest | grep "tag_name" | awk '{print substr($2, 2, length($2)-3) }')
   msg_info "Updating Keycloak to v$RELEASE"

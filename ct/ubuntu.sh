@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://ubuntu.com/
 
-# App Default Values
 echo -e "Loading..."
 APP="Ubuntu"
 var_tags="os"
@@ -15,11 +14,7 @@ var_disk="2"
 var_os="ubuntu"
 var_version="24.04"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -33,8 +28,8 @@ function update_script() {
         exit
     fi
     msg_info "Updating ${APP} LXC"
-    apt-get update &>/dev/null
-    apt-get -y upgrade &>/dev/null
+    $STD apt-get update
+    $STD apt-get -y upgrade
     msg_ok "Updated ${APP} LXC"
     exit
 }

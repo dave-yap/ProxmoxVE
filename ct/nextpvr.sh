@@ -6,7 +6,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # https://github.com/tteck/Proxmox/raw/main/LICENSE
 # Source: https://nextpvr.com/
 
-# App Default Values
 APP="NextPVR"
 var_tags="pvr"
 var_cpu="1"
@@ -16,11 +15,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -38,14 +33,14 @@ function update_script() {
     msg_ok "Stopped ${APP}"
 
     msg_info "Updating LXC packages"
-    apt-get update &>/dev/null
-    apt-get -y upgrade &>/dev/null
+    $STD apt-get update
+    $STD apt-get -y upgrade
     msg_ok "Updated LXC packages"
 
     msg_info "Updating ${APP}"
     cd /opt
     wget -q https://nextpvr.com/nextpvr-helper.deb
-    dpkg -i nextpvr-helper.deb &>/dev/null
+    $STD dpkg -i nextpvr-helper.deb
     msg_ok "Updated ${APP}"
 
     msg_info "Starting ${APP}"

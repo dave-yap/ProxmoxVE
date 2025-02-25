@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/bastienwirtz/homer
 
-# App Default Values
 APP="Homer"
 var_tags="dashboard"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -46,7 +41,7 @@ function update_script() {
     rm -rf /opt/homer/*
     cd /opt/homer
     wget -q https://github.com/bastienwirtz/homer/releases/latest/download/homer.zip
-    unzip homer.zip &>/dev/null
+    $STD unzip homer.zip
     msg_ok "Updated ${APP}"
 
     msg_info "Restoring assets directory"

@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://openwebui.com/
 
-# App Default Values
 APP="Open WebUI"
 var_tags="ai;interface"
 var_cpu="4"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -40,11 +35,11 @@ function update_script() {
     exit
   fi
   systemctl stop open-webui.service
-  npm install &>/dev/null
+  $STD npm install
   export NODE_OPTIONS="--max-old-space-size=3584"
-  npm run build &>/dev/null
+  $STD npm run build
   cd ./backend
-  pip install -r requirements.txt -U &>/dev/null
+  $STD pip install -r requirements.txt -U
   systemctl start open-webui.service
   msg_ok "Updated Successfully"
   exit

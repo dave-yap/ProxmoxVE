@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.deluge-torrent.org/
 
-# App Default Values
 APP="Deluge"
 var_tags="torrent"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -33,7 +28,7 @@ function update_script() {
         exit
     fi
     msg_info "Updating $APP LXC"
-    apt-get update &>/dev/null
+    $STD apt-get update
     pip3 install deluge[all] --upgrade
     msg_ok "Updated $APP LXC"
     exit

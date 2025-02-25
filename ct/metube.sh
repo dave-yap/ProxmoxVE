@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/alexta69/metube
 
-# App Default Values
 APP="MeTube"
 var_tags="media;youtube"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -42,14 +37,14 @@ function update_script() {
     rm -rf metube_bak
   fi
   mv metube metube_bak
-  git clone https://github.com/alexta69/metube /opt/metube >/dev/null 2>&1
+  $STD git clone https://github.com/alexta69/metube /opt/metube
   cd /opt/metube/ui
-  npm install >/dev/null 2>&1
-  node_modules/.bin/ng build >/dev/null 2>&1
+  $STD npm install
+  $STD node_modules/.bin/ng build
   cd /opt/metube
   cp /opt/metube_bak/.env /opt/metube/
-  pip3 install pipenv >/dev/null 2>&1
-  pipenv install >/dev/null 2>&1
+  $STD pip3 install pipenv
+  $STD pipenv install
 
   if [ -d "/opt/metube_bak" ]; then
     rm -rf /opt/metube_bak

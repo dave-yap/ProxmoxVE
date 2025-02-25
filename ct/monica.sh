@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.monicahq.com/
 
-# App Default Values
 APP="Monica"
 var_tags="network"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -47,10 +42,10 @@ function update_script() {
     cd /opt/monica/
     cp -r /opt/monica-backup/.env /opt/monica
     cp -r /opt/monica-backup/storage/* /opt/monica/storage/
-    composer install --no-interaction --no-dev &>/dev/null
-    yarn install &>/dev/null
-    yarn run production &>/dev/null
-    php artisan monica:update --force &>/dev/null
+    $STD composer install --no-interaction --no-dev
+    $STD yarn install
+    $STD yarn run production
+    $STD php artisan monica:update --force
     chown -R www-data:www-data /opt/monica
     chmod -R 775 /opt/monica/storage
     echo "${RELEASE}" >/opt/${APP}_version.txt

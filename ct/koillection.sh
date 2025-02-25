@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://koillection.github.io/
 
-# App Default Values
 APP="Koillection"
 var_tags="network"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -48,12 +43,12 @@ function update_script() {
     cp -r /opt/koillection-backup/.env.local /opt/koillection
     cp -r /opt/koillection-backup/public/uploads/. /opt/koillection/public/uploads/
     export COMPOSER_ALLOW_SUPERUSER=1
-    composer install --no-dev -o --no-interaction --classmap-authoritative &>/dev/null
-    php bin/console doctrine:migrations:migrate --no-interaction &>/dev/null
-    php bin/console app:translations:dump &>/dev/null
+    $STD composer install --no-dev -o --no-interaction --classmap-authoritative
+    $STD php bin/console doctrine:migrations:migrate --no-interaction
+    $STD php bin/console app:translations:dump
     cd assets/
-    yarn install &>/dev/null
-    yarn build &>/dev/null
+    $STD yarn install
+    $STD yarn build
     chown -R www-data:www-data /opt/koillection/public/uploads
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated $APP to v${RELEASE}"

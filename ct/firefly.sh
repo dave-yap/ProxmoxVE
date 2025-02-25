@@ -2,11 +2,9 @@
 source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
 # Copyright (c) 2021-2025 community-scripts ORG
 # Author: quantumryuu
-# License: MIT
-# https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://firefly-iii.org/
 
-# App Default Values
 APP="Firefly"
 var_tags="finance"
 var_cpu="1"
@@ -16,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -43,21 +37,19 @@ check_container_resources
     msg_info "Updating ${APP} to v${RELEASE}"
     cp /opt/firefly/.env /opt/.env
     cp -r /opt/firefly/storage /opt/storage
-    rm -rf /opt/firefly/*
     cd /opt
     wget -q "https://github.com/firefly-iii/firefly-iii/releases/download/v${RELEASE}/FireflyIII-v${RELEASE}.tar.gz"
     tar -xzf FireflyIII-v${RELEASE}.tar.gz -C /opt/firefly --exclude='storage'
+    cp /opt/.env /opt/firefly/.env
+    cp -r /opt/storage /opt/firefly/storage
     cd /opt/firefly 
-    composer install --no-dev --no-interaction &>/dev/null
-    php artisan migrate --seed --force &>/dev/null
-    php artisan firefly:decrypt-all &>/dev/null
-    php artisan cache:clear &>/dev/null
-    php artisan view:clear &>/dev/null
-    php artisan firefly:upgrade-database &>/dev/null
-    php artisan firefly:laravel-passport-keys &>/dev/null
     chown -R www-data:www-data /opt/firefly
     chmod -R 775 /opt/firefly/storage
-
+    $STD php artisan migrate --seed --force
+    $STD php artisan cache:clear
+    $STD php artisan view:clear
+    $STD php artisan firefly-iii:upgrade-database
+    $STD php artisan firefly-iii:laravel-passport-keys
     echo "${RELEASE}" >"/opt/${APP}_version.txt"
     msg_ok "Updated ${APP} to v${RELEASE}"
 

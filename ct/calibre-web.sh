@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/janeczku/calibre-web
 
-# App Default Values
 APP="Calibre-Web"
 var_tags="eBook"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -120,10 +115,10 @@ function update_script() {
       echo "${options[*]}"
     )
     echo $cps_options >/opt/calibre-web/options.txt
-    pip install --upgrade calibreweb[$cps_options] &>/dev/null
+    $STD pip install --upgrade calibreweb[$cps_options]
   else
     rm -rf /opt/calibre-web/options.txt
-    pip install --upgrade calibreweb &>/dev/null
+    $STD pip install --upgrade calibreweb
   fi
 
   msg_info "Starting ${APP}"

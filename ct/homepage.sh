@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://gethomepage.dev/
 
-# App Default Values
 APP="Homepage"
 var_tags="dashboard"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -35,8 +30,8 @@ function update_script() {
   if [[ "$(node -v | cut -d 'v' -f 2)" == "18."* ]]; then
     if ! command -v npm >/dev/null 2>&1; then
       echo "Installing NPM..."
-      apt-get install -y npm >/dev/null 2>&1
-      npm install -g pnpm >/dev/null 2>&1
+      $STD apt-get install -y npm
+      $STD npm install -g pnpm
       echo "Installed NPM..."
     fi
   fi
@@ -50,11 +45,11 @@ function update_script() {
     cp -r homepage-${RELEASE}/* /opt/homepage/
     rm -rf homepage-${RELEASE}
     cd /opt/homepage
-    npx --yes update-browserslist-db@latest >/dev/null 2>&1
-    pnpm install >/dev/null 2>&1
+    $STD npx --yes update-browserslist-db@latest
+    $STD pnpm install
     export NEXT_PUBLIC_VERSION="v$RELEASE"
     export NEXT_PUBLIC_REVISION="source"
-    pnpm build >/dev/null 2>&1
+    $STD pnpm build
     systemctl start homepage
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated Homepage to v${RELEASE}"

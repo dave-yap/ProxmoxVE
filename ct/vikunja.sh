@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://vikunja.io/
 
-# App Default Values
 APP="Vikunja"
 var_tags="todo-app"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -42,7 +37,7 @@ function update_script() {
     cd /opt
     rm -rf /opt/vikunja/vikunja
     wget -q "https://dl.vikunja.io/vikunja/$RELEASE/vikunja-$RELEASE-amd64.deb"
-    DEBIAN_FRONTEND=noninteractive dpkg -i vikunja-$RELEASE-amd64.deb &>/dev/null
+    $STD DEBIAN_FRONTEND=noninteractive dpkg -i vikunja-$RELEASE-amd64.deb
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated ${APP}"
 

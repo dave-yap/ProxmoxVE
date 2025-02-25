@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://www.photoprism.app/
 
-# App Default Values
 APP="PhotoPrism"
 var_tags="media;photo"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -37,7 +32,7 @@ function update_script() {
   msg_ok "Stopped PhotoPrism"
 
   msg_info "Updating PhotoPrism"
-  apt-get install -y libvips42 &>/dev/null
+  $STD apt-get install -y libvips42
   wget -q -cO - https://dl.photoprism.app/pkg/linux/amd64.tar.gz | tar -xzf - -C /opt/photoprism --strip-components=1
   msg_ok "Updated PhotoPrism"
 

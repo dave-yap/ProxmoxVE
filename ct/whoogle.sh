@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/benbusby/whoogle-search
 
-# App Default Values
 APP="Whoogle"
 var_tags="network;seaching"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -33,7 +28,7 @@ function update_script() {
         exit
     fi
     msg_info "Updating ${APP} LXC"
-    pip3 install whoogle-search --upgrade &>/dev/null
+    $STD pip3 install whoogle-search --upgrade
     systemctl restart whoogle.service
     msg_ok "Updated Successfully"
     exit

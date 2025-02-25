@@ -8,7 +8,7 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # App Default Values
 APP="[APP_NAME]"
 # Name of the app (e.g. Google, Adventurelog, Apache-Guacamole"
-TAGS="[TAGS]"
+var_tags="[TAGS]"
 # Tags for Proxmox VE, maximum 2 pcs., no spaces allowed, separated by a semicolon ; (e.g. database | adblock;dhcp) 
 var_cpu="[CPU]"
 # Number of cores (1-X) (e.g. 4) - default are 2
@@ -23,11 +23,7 @@ var_version="[VERSION]"
 var_unprivileged="[UNPRIVILEGED]"
 # 1 = unprivileged container, 0 = privileged container
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -46,8 +42,6 @@ function update_script() {
     # Crawling the new version and checking whether an update is required
     RELEASE=$(curl -fsSL [RELEASE_URL] | [PARSE_RELEASE_COMMAND])
     if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
-        msg_info "Updating $APP"
-
         # Stopping Services
         msg_info "Stopping $APP"
         systemctl stop [SERVICE_NAME]

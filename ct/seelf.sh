@@ -6,7 +6,7 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # Source: https://github.com/YuukanOO/seelf
 
 APP="seelf"
-TAGS="server;docker"
+var_tags="server;docker"
 var_cpu="2"
 var_ram="4096"
 var_disk="10"
@@ -15,8 +15,6 @@ var_version="12"
 var_unprivileged="1"
 
 header_info "$APP"
-base_settings
-
 variables
 color
 catch_errors
@@ -46,7 +44,7 @@ function update_script() {
         tar -xzf v${RELEASE}.tar.gz
         cp -r seelf-${RELEASE}/ /opt/seelf
         cd /opt/seelf
-        make build &> /dev/null
+        $STD make build
         msg_ok "Updated $APP to v${RELEASE}"
 
         msg_info "Starting $APP"

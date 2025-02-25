@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://octoprint.org/
 
-# App Default Values
 APP="OctoPrint"
 var_tags="3d-printing"
 var_cpu="1"
@@ -15,11 +14,7 @@ var_os="debian"
 var_version="12"
 var_unprivileged="0"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -38,7 +33,7 @@ function update_script() {
 
     msg_info "Updating OctoPrint"
     source /opt/octoprint/bin/activate
-    pip3 install octoprint --upgrade &>/dev/null
+    $STD pip3 install octoprint --upgrade
     msg_ok "Updated OctoPrint"
 
     msg_info "Starting OctoPrint"

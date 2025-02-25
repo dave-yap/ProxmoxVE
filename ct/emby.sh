@@ -5,7 +5,6 @@ source <(curl -s https://raw.githubusercontent.com/community-scripts/ProxmoxVE/m
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://emby.media/
 
-# App Default Values
 APP="Emby"
 var_tags="media"
 var_cpu="2"
@@ -15,11 +14,7 @@ var_os="ubuntu"
 var_version="22.04"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
-base_settings
-
-# Core
 variables
 color
 catch_errors
@@ -38,8 +33,8 @@ function update_script() {
     msg_ok "Stopped ${APP}"
 
     msg_info "Updating ${APP}"
-    wget https://github.com/MediaBrowser/Emby.Releases/releases/download/${LATEST}/emby-server-deb_${LATEST}_amd64.deb &>/dev/null
-    dpkg -i emby-server-deb_${LATEST}_amd64.deb &>/dev/null
+    $STD wget https://github.com/MediaBrowser/Emby.Releases/releases/download/${LATEST}/emby-server-deb_${LATEST}_amd64.deb
+    $STD dpkg -i emby-server-deb_${LATEST}_amd64.deb
     rm emby-server-deb_${LATEST}_amd64.deb
     msg_ok "Updated ${APP}"
 
