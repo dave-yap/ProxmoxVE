@@ -87,9 +87,12 @@ sudo chown seafile: /home/seafile
 sudo chown seafile: /opt/seafile
 sudo su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
 sudo su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
-sudo su - seafile -c "bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh"
-sudo su - seafile -c "
-expect <<EOF
+#sudo su - seafile -c "bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh"
+#sudo su - seafile -c "
+#expect <<EOF
+sudo -u seafile expect <<EOF
+spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
+
 expect \"Press ENTER to continue\"
 send \"\r\"
 
@@ -130,7 +133,8 @@ expect \"Press ENTER to continue, or Ctrl-C to abort\"
 send \"\r\"
 
 expect eof
-EOF"
+#EOF"
+EOF
 msg_ok "Installed Seafile"
 
 msg_info "Setting up Memcached"
