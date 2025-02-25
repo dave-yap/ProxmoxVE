@@ -79,10 +79,10 @@ msg_ok "Installed Seafile Python Dependecies"
 msg_info "Installing Seafile"
 sudo mkdir -p /opt/seafile
 sudo useradd seafile
-sudo chown -R seafile: /opt/seafile
+sudo chown seafile: /opt/seafile
 wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz -O - | tar -xz -C /opt/seafile/
 sudo su seafile
-bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
+sudo su - seafile -c "bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh"
 msg_ok "Installed Seafile"
 
 msg_info "Setting up Memcached"
