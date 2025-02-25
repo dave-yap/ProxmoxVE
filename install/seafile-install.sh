@@ -35,8 +35,6 @@ SEAFILE_DB="seafile_db"
 SEAHUB_DB="seahub_db"
 DB_USER="seafile"
 DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
-DB_ADMIN_USER="root"
-DB_ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 systemctl start mariadb
 sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
@@ -52,8 +50,6 @@ sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@lo
     echo "SEAHUB_DB: $SEAHUB_DB"
     echo "DB_USER: $DB_USER"
     echo "DB_PASS: $DB_PASS"
-    echo "DB_ADMIN_USER: $DB_ADMIN_USER"
-    echo "DB_ADMIN_PASS: $DB_ADMIN_PASS"
 } >> ~/seafile.creds
 msg_ok "Installed MariaDB"
 
@@ -82,12 +78,11 @@ msg_ok "Installed Seafile Python Dependecies"
 
 msg_info "Installing Seafile"
 sudo mkdir /opt/seafile
-sudo adduser seafile
+sudo useradd seafile
 sudo chown -R seafile: /opt/seafile
 wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz -O - | tar -xz
-cd seafile-server_11.0.13
 sudo su seafile
-bash setup-seafile-mysql.sh
+bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 msg_ok "Installed Seafile"
 
 msg_info "Setting up Memcached"
@@ -113,10 +108,9 @@ sed -i "0,/127.0.0.1/s/127.0.0.1/127.0.0.1:8000/" /opt/seafile/conf/seahub_setti
 sed -i "0,/localhost/s/localhost/0.0.0.0/" /opt/seafile/gunicorn.conf.py
 msg_ok "Conf files adjusted"
 
-msg_info "Starting Seafile"
-cd /opt/seafile/seafile-server-latest
-./seafile.sh start
-./seahub.sh start
+msg_info "Starting Seafile" 
+/opt/seafile/seafile-server-latest/seafile.sh start
+/opt/seafile/seafile-server-latest/seahub.sh start
 msg_ok "Seafile started"
 
 msg_info "Creating Services"
@@ -152,6 +146,19 @@ WantedBy=multi-user.target
 EOF
 systemctl enable -q seafile.service
 msg_ok "Created Services"
+
+msg_info "Creating External Storage script"
+cat<<EOF >~/external-storage.sh
+#!/bin/bash
+STORAGE_DIR="/path/to/your/external/storage"
+
+# Move the seafile-data folder to external storage
+mv /opt/seafile/seafile-data $STORAGE_DIR/seafile-data
+
+# Create a symlink for access
+ln -s $STORAGE_DIR/seafile-data /opt/seafile/seafile-data
+EOF
+msg_ok "External Storage script created"
 
 motd_ssh
 customize
