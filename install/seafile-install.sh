@@ -38,13 +38,13 @@ DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 DB_ADMIN_USER="root"
 DB_ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 systemctl start mariadb
-$STD sudo -u mysql mysql -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
-$STD sudo -u mysql mysql -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
-$STD sudo -u mysql mysql -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
-$STD sudo -u mysql mysql -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
-$STD sudo -u mysql mysql -e "GRANT ALL PRIVILEGES ON $CCNET_DB.* TO '$DB_USER'@localhost;"
-$STD sudo -u mysql mysql -e "GRANT ALL PRIVILEGES ON $SEAFILE_DB.* TO '$DB_USER'@localhost;"
-$STD sudo -u mysql mysql -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
+sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
+sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
+sudo -u mysql mysql -s -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $CCNET_DB.* TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAFILE_DB.* TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@localhost;"
 {
     echo "Application Credentials"
     echo "CCNET_DB: $CCNET_DB"
