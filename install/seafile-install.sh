@@ -112,7 +112,7 @@ send "\r"
 expect "Which mysql user to use for seafile?"
 send "seafile\r"
 
-expect "What is the password for mysql user "seafile"?"
+expect "What is the password for mysql user \"seafile\"?"
 send "$DB_PASS\r"
 
 expect "Enter the existing database name for ccnet:"
