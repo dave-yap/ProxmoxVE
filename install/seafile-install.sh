@@ -90,7 +90,7 @@ msg_ok "MariaDB setup for Seafile"
 msg_info "Setting up Memcached"
 $STD sudo apt-get install -y \
     memcached \
-    libmemcached-dev \
+    libmemcached-dev
 $STD sudo pip3 install --timeout=3600 \
     pylibmc \
     django-pylibmc
