@@ -192,18 +192,16 @@ spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
     "What is the email for the admin account" {
         send "$ADMIN_EMAIL\r"
-        exp_continue
+        }
     }
+expect {
     "What is the password for the admin account" {
         send "$ADMIN_PASS\r"
-        exp_continue
+        }
     }
+expect {
     "Enter the password again:" {
         send "$ADMIN_PASS\r"
-        exp_continue
-    }
-    "Starting seahub at port" {
-        exp_continue
     }
 }
 expect eof

@@ -34,6 +34,10 @@
         {
             "text": "Application credentials: `cat ~/seafile.creds`",
             "type": "info"
+        },
+        {
+            "text": "Change STORAGE_DIR value in `external-storage.sh` and run `bash external-storage.sh` to use your defined storage instead of internal.",
+            "type": "info"
         }
     ]
 }
