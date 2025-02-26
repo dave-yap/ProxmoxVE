@@ -94,7 +94,7 @@ exp_internal 1
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 
 expect "Press ENTER to continue"
-send [return]
+send "\r"
 
 expect "What is the name of the server?"
 send "Seafile\r"
@@ -103,16 +103,16 @@ expect "What is the ip or domain of the server?"
 send "127.0.0.1\r"
 
 expect "Which port do you want to use for the seafile fileserver?"
-send [return]
+send "\r"
 
 expect "[ 1 or 2 ]"
 send "2\r"
 
 expect "What is the host of mysql server?"
-send [return]
+send "\r"
 
 expect "What is the port of mysql server?"
-send [return]
+send "\r"
 
 expect "Which mysql user to use for seafile?"
 send "seafile\r"
@@ -130,7 +130,7 @@ expect "Enter the existing database name for seahub:"
 send "$SEAHUB_DB\r"
 
 expect "Press ENTER to continue, or Ctrl-C to abort"
-send [return]
+send "\r"
 
 expect eof
 EOF
