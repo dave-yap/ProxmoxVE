@@ -93,7 +93,7 @@ exp_internal 1
 
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 
-expect -re ".*Press ENTER to continue"
+expect -re ".*Checking python on this machine"
 send "\r"
 
 expect -re ".*What is the name of the server?"
