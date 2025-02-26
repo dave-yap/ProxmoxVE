@@ -186,25 +186,24 @@ sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 msg_ok "Conf files adjusted"
 
 msg_info "Starting Seafile" 
+$STD sudo su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start"
 $STD sudo -u seafile expect <<EOF
-spawn bash /opt/seafile/seafile-server-latest/seafile.sh start
-expect {
-    "Done"
-        spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
-}
+spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
     "What is the email for the admin account" {
         send "$ADMIN_EMAIL\r"
+        exp_continue
     }
-}
-expect {
     "What is the password for the admin account" {
         send "$ADMIN_PASS\r"
+        exp_continue
     }
-}
-expect {
     "Enter the password again:" {
         send "$ADMIN_PASS\r"
+        exp_continue
+    }
+    "Starting seahub at port" {
+        exp_continue
     }
 }
 expect eof
