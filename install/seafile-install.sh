@@ -93,43 +93,43 @@ exp_internal 1
 
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 
-expect "Press ENTER to continue"
+expect -re ".*Press ENTER to continue"
 send "\r"
 
-expect "What is the name of the server?"
+expect -re ".*What is the name of the server?"
 send "Seafile\r"
 
-expect "What is the ip or domain of the server?"
+expect -re ".*What is the ip or domain of the server?"
 send "127.0.0.1\r"
 
-expect "Which port do you want to use for the seafile fileserver?"
+expect -re ".*Which port do you want to use for the seafile fileserver?"
 send "\r"
 
-expect "[ 1 or 2 ]"
+expect -re ".*[ 1 or 2 ]"
 send "2\r"
 
-expect "What is the host of mysql server?"
+expect -re ".*What is the host of mysql server?"
 send "\r"
 
-expect "What is the port of mysql server?"
+expect -re ".*What is the port of mysql server?"
 send "\r"
 
-expect "Which mysql user to use for seafile?"
+expect -re ".*Which mysql user to use for seafile?"
 send "seafile\r"
 
-expect "What is the password for mysql user \"seafile\"?"
+expect -re ".*What is the password for mysql user \"seafile\"?"
 send "$DB_PASS\r"
 
-expect "Enter the existing database name for ccnet:"
+expect -re ".*Enter the existing database name for ccnet:"
 send "$CCNET_DB\r"
 
-expect "Enter the existing database name for seafile:"
+expect -re ".*Enter the existing database name for seafile:"
 send "$SEAFILE_DB\r"
 
-expect "Enter the existing database name for seahub:"
+expect -re ".*Enter the existing database name for seahub:"
 send "$SEAHUB_DB\r"
 
-expect "Press ENTER to continue, or Ctrl-C to abort"
+expect -re ".*Press ENTER to continue, or Ctrl-C to abort"
 send "\r"
 
 expect eof
