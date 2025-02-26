@@ -39,6 +39,8 @@ SEAFILE_DB="seafile_db"
 SEAHUB_DB="seahub_db"
 DB_USER="seafile"
 DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
+ADMIN_EMAIL="admin@localhost.local"
+ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
@@ -53,6 +55,8 @@ sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@lo
     echo "SEAHUB_DB: $SEAHUB_DB"
     echo "DB_USER: $DB_USER"
     echo "DB_PASS: $DB_PASS"
+    echo "ADMIN_EMIAL: $ADMIN_EMAIL"
+    echo "ADMIN_PASS: $ADMIN_PASS"
 } >> ~/seafile.creds
 msg_ok "MariaDB setup for Seafile"
 
@@ -185,6 +189,24 @@ msg_ok "Conf files adjusted"
 msg_info "Starting Seafile" 
 $STD sudo su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh start"
 $STD sudo su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh start"
+expect <<EOF
+expect {
+    "What is the email for the admin account" {
+        send "$ADMIN_EMAIL\r"
+    }
+}
+expect {
+    "What is the password for the admin account" {
+        send "$ADMIN_PASS\r"
+    }
+}
+expect {
+    "Enter the password again:" {
+        send "$ADMIN_PASS\r"
+    }
+}
+expect eof
+EOF
 msg_ok "Seafile started"
 
 msg_info "Creating Services"
@@ -222,7 +244,7 @@ systemctl enable -q seafile.service
 msg_ok "Created Services"
 
 msg_info "Creating External Storage script"
-cat<<EOF >~/external-storage.sh
+cat <<'EOF' >~/external-storage.sh
 #!/bin/bash
 STORAGE_DIR="/path/to/your/external/storage"
 
@@ -232,7 +254,7 @@ mv /opt/seafile/seafile-data $STORAGE_DIR/seafile-data
 # Create a symlink for access
 ln -s $STORAGE_DIR/seafile-data /opt/seafile/seafile-data
 EOF
-msg_ok "External Storage script created"
+msg_ok "Bash Script for External Storage created"
 
 motd_ssh
 customize
