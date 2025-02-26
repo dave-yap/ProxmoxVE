@@ -179,13 +179,12 @@ EOF
 msg_ok "Memcached Started"
 
 msg_info "Adjusting Conf files"
-sed -i "0,/127.0.0.1/s/127.0.0.1/127.0.0.1:8000/" /opt/seafile/conf/seahub_settings.py
-sed -i "0,/localhost/s/localhost/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
+sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 msg_ok "Conf files adjusted"
 
 msg_info "Starting Seafile" 
-/opt/seafile/seafile-server-latest/seafile.sh start
-/opt/seafile/seafile-server-latest/seahub.sh start
+$STD sudo su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh start"
+$STD sudo su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh start"
 msg_ok "Seafile started"
 
 msg_info "Creating Services"
