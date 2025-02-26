@@ -188,7 +188,10 @@ msg_ok "Conf files adjusted"
 msg_info "Starting Seafile" 
 $STD sudo -u seafile expect <<EOF
 spawn bash /opt/seafile/seafile-server-latest/seafile.sh start
-spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
+expect {
+    "Done"
+        spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
+}
 expect {
     "What is the email for the admin account" {
         send "$ADMIN_EMAIL\r"
