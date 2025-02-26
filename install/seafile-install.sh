@@ -93,7 +93,6 @@ sudo chown seafile: /opt/seafile
 sudo su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
 sudo su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
 $STD sudo -u seafile expect <<EOF
-exp_internal 1
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 expect {
     "Press ENTER to continue" {
@@ -187,9 +186,9 @@ sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 msg_ok "Conf files adjusted"
 
 msg_info "Starting Seafile" 
-$STD sudo su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh start"
-$STD sudo su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh start"
-expect <<EOF
+$STD sudo -u seafile expect <<EOF
+spawn bash /opt/seafile/seafile-server-latest/seafile.sh start
+spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
     "What is the email for the admin account" {
         send "$ADMIN_EMAIL\r"
