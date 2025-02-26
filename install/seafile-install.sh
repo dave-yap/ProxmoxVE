@@ -80,7 +80,6 @@ $STD pip3 install \
 msg_ok "Installed Seafile Python Dependecies"
 
 msg_info "Installing Seafile"
-IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 sudo mkdir -p /opt/seafile
 sudo useradd seafile
 mkdir -p /home/seafile
@@ -90,6 +89,7 @@ sudo su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.se
 sudo su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
 sudo -u seafile expect <<'EOF'
 exp_internal 1
+IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 expect {
     "Press ENTER to continue" {
