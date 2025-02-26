@@ -214,8 +214,8 @@ msg_info "Creating Services"
 cat <<EOF >/etc/systemd/system/seafile.service
 [Unit]
 Description=Seafile File-hosting
-After=network.target mysql.service
-Wants=mysql
+After=network.target mysql.service memcached.service
+Wants=mysql.service memcached.service
 
 [Service]
 Type=forking
@@ -223,16 +223,9 @@ User=seafile
 Group=seafile
 WorkingDirectory=/opt/seafile
 
-# Start Seafile
 ExecStart=/opt/seafile/seafile-server-latest/seafile.sh start
-
-# Start Seahub (web interface)
 ExecStartPost=/opt/seafile/seafile-server-latest/seahub.sh start
-
-# Stop Seahub
 ExecStop=/opt/seafile/seafile-server-latest/seahub.sh stop
-
-# Stop Seafile
 ExecStop=/opt/seafile/seafile-server-latest/seafile.sh stop
 
 Restart=on-failure
