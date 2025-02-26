@@ -89,6 +89,8 @@ sudo su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.se
 sudo su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
 #sudo su - seafile -c "bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh"
 sudo -u seafile expect <<'EOF'
+exp_internal 1
+
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 
 expect "Press ENTER to continue"
