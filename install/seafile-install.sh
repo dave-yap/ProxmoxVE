@@ -185,7 +185,7 @@ msg_info "Adjusting Conf files"
 sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 msg_ok "Conf files adjusted"
 
-msg_info "Starting Seafile" 
+msg_info "Setting up Seafile" 
 $STD sudo su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start"
 $STD sudo -u seafile expect <<EOF
 spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
@@ -206,7 +206,9 @@ expect {
 }
 expect eof
 EOF
-msg_ok "Seafile started"
+$STD sudo su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh stop"
+$STD sudo su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh stop"
+msg_ok "Seafile setup"
 
 msg_info "Creating Services"
 cat <<EOF >/etc/systemd/system/seafile.service
@@ -232,7 +234,7 @@ RestartSec=5s
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable -q seafile.service
+systemctl enable -q --now seafile.service
 msg_ok "Created Services"
 
 msg_info "Creating External Storage script"
