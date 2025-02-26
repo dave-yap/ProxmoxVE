@@ -116,7 +116,7 @@ expect {
 }
 
 expect {
-    "[ 1 or 2 ]" {
+    "1 or 2" {
         send "2\r"
     }
 }
