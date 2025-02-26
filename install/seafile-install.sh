@@ -95,68 +95,68 @@ su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
 $STD su - seafile -c "expect <<EOF
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 expect {
-    "Press ENTER to continue" {
-        send "\r"
+    \"Press ENTER to continue\" {
+        send \"\r\"
     }
 }
 expect {
-    "What is the name of the server" {
-        send "Seafile\r"
+    \"What is the name of the server\" {
+        send \"Seafile\r\"
     }
 }
 expect {
-    "What is the ip or domain of the server" {
-        send "$IP\r"
+    \"What is the ip or domain of the server\" {
+        send \"$IP\r\"
     }
 }
 expect {
-    "Which port do you want to use for the seafile fileserver" {
-        send "8082\r"
+    \"Which port do you want to use for the seafile fileserver\" {
+        send \"8082\r\"
     }
 }
 expect {
-    "1 or 2" {
-        send "2\r"
+    \"1 or 2\" {
+        send \"2\r\"
     }
 }
 expect {
-    "What is the host of mysql server" {
-        send "localhost\r"
+    \"What is the host of mysql server\" {
+        send \"localhost\r\"
     }
 }
 expect {
-    "What is the port of mysql server" {
-        send "3306\r"
+    \"What is the port of mysql server\" {
+        send \"3306\r\"
     }
 }
 expect {
-    "Which mysql user to use for seafile" {
-        send "seafile\r"
+    \"Which mysql user to use for seafile\" {
+        send \"seafile\r\"
     }
 }
 expect {
-    "What is the password for mysql user" {
-        send "$DB_PASS\r"
+    \"What is the password for mysql user\" {
+        send \"$DB_PASS\r\"
     }
 }
 expect {
-    "Enter the existing database name for ccnet" {
-        send "$CCNET_DB\r"
+    \"Enter the existing database name for ccnet\" {
+        send \"$CCNET_DB\r\"
     }
 }
 expect {
-    "Enter the existing database name for seafile" {
-        send "$SEAFILE_DB\r"
+    \"Enter the existing database name for seafile\" {
+        send \"$SEAFILE_DB\r\"
     }
 }
 expect {
-    "Enter the existing database name for seahub" {
-        send "$SEAHUB_DB\r"
+    \"Enter the existing database name for seahub\" {
+        send \"$SEAHUB_DB\r\"
     }
 }
 expect {
-    "Press ENTER to continue, or Ctrl-C to abort" {
-        send "\r"
+    \"Press ENTER to continue, or Ctrl-C to abort\" {
+        send \"\r\"
     }
 }
 expect eof
@@ -190,18 +190,18 @@ $STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start"
 $STD su - seafile -c "expect <<EOF
 spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
-    "What is the email for the admin account" {
-        send "$ADMIN_EMAIL\r"
+    \"What is the email for the admin account\" {
+        send \"$ADMIN_EMAIL\r\"
         }
     }
 expect {
-    "What is the password for the admin account" {
-        send "$ADMIN_PASS\r"
+    \"What is the password for the admin account\" {
+        send \"$ADMIN_PASS\r\"
         }
     }
 expect {
-    "Enter the password again:" {
-        send "$ADMIN_PASS\r"
+    \"Enter the password again:\" {
+        send \"$ADMIN_PASS\r\"
     }
 }
 expect eof
