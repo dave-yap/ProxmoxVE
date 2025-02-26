@@ -96,79 +96,66 @@ expect {
         send "\r"
     }
 }
-
 expect {
     "What is the name of the server" {
         send "Seafile\r"
     }
 }
-
 expect {
     "What is the ip or domain of the server" {
         send "$IP\r"
     }
 }
-
 expect {
     "Which port do you want to use for the seafile fileserver" {
         send "8082\r"
     }
 }
-
 expect {
     "1 or 2" {
         send "2\r"
     }
 }
-
 expect {
     "What is the host of mysql server" {
         send "localhost\r"
     }
 }
-
 expect {
     "What is the port of mysql server" {
         send "3306\r"
     }
 }
-
 expect {
     "Which mysql user to use for seafile" {
         send "seafile\r"
     }
 }
-
 expect {
     "What is the password for mysql user" {
         send "$DB_PASS\r"
     }
 }
-
 expect {
     "Enter the existing database name for ccnet" {
         send "$CCNET_DB\r"
     }
 }
-
 expect {
     "Enter the existing database name for seafile" {
         send "$SEAFILE_DB\r"
     }
 }
-
 expect {
     "Enter the existing database name for seahub" {
         send "$SEAHUB_DB\r"
     }
 }
-
 expect {
     "Press ENTER to continue, or Ctrl-C to abort" {
         send "\r"
     }
 }
-
 expect eof
 EOF
 msg_ok "Installed Seafile"
@@ -193,7 +180,7 @@ msg_ok "Memcached Started"
 
 msg_info "Adjusting Conf files"
 sed -i "0,/127.0.0.1/s/127.0.0.1/127.0.0.1:8000/" /opt/seafile/conf/seahub_settings.py
-sed -i "0,/localhost/s/localhost/0.0.0.0/" /opt/seafile/gunicorn.conf.py
+sed -i "0,/localhost/s/localhost/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 msg_ok "Conf files adjusted"
 
 msg_info "Starting Seafile" 
