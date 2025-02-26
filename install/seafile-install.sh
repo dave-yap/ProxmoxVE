@@ -90,50 +90,34 @@ sudo su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.se
 sudo su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
 sudo -u seafile expect <<'EOF'
 exp_internal 1
-
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
-
 expect "Checking python on this machine"
-
 expect "Press ENTER to continue"
 send "\r"
-
 expect"What is the name of the server"
 send "Seafile\r"
-
 expect "What is the ip or domain of the server"
 send "$IP\r"
-
 expect "Which port do you want to use for the seafile fileserver"
 send "8082\r"
-
-expect "\[ 1 or 2 \]"
+expect "[ 1 or 2 ]"
 send "2\r"
-
 expect "What is the host of mysql server"
 send "localhost\r"
-
 expect "What is the port of mysql server"
 send "3306\r"
-
 expect "Which mysql user to use for seafile"
 send "seafile\r"
-
 expect "What is the password for mysql user \"seafile\""
 send "$DB_PASS\r"
-
 expect "Enter the existing database name for ccnet:"
 send "$CCNET_DB\r"
-
 expect "Enter the existing database name for seafile:"
 send "$SEAFILE_DB\r"
-
 expect "Enter the existing database name for seahub:"
 send "$SEAHUB_DB\r"
-
 expect "Press ENTER to continue"
 send "\r"
-
 expect eof
 EOF
 msg_ok "Installed Seafile"
