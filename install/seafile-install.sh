@@ -43,9 +43,9 @@ sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
-sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $CCNET_DB.* TO '$DB_USER'@localhost;"
-sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAFILE_DB.* TO '$DB_USER'@localhost;"
-sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $CCNET_DB TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAFILE_DB TO '$DB_USER'@localhost;"
+sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB TO '$DB_USER'@localhost;"
 {
     echo "Application Credentials"
     echo "CCNET_DB: $CCNET_DB"
@@ -58,28 +58,29 @@ msg_ok "MariaDB setup for Seafile"
 
 msg_info "Installing Seafile Python Dependecies"
 $STD pip3 install \
-    django==4.2.* \
-    future==0.18.* \
-    mysqlclient==2.1.* \
+    django==4.2 \
+    future==0.18 \
+    mysqlclient==2.1 \
     pymysql \
-    pillow==10.2.* \
+    pillow==10.2 \
     pylibmc \
-    captcha==0.5.* \
+    captcha==0.5 \
     markupsafe==2.0.1 \
     jinja2 \
     sqlalchemy==2.0.18 \
     psd-tools \
     django-pylibmc \
-    django_simple_captcha==0.6.* \
-    djangosaml2==1.5.* \
-    pysaml2==7.2.* \
-    pycryptodome==3.16.* \
+    django_simple_captcha==0.6 \
+    djangosaml2==1.5 \
+    pysaml2==7.2 \
+    pycryptodome==3.16 \
     cffi==1.15.1 \
     lxml \
     python-ldap==3.4.3
 msg_ok "Installed Seafile Python Dependecies"
 
 msg_info "Installing Seafile"
+IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 sudo mkdir -p /opt/seafile
 sudo useradd seafile
 mkdir -p /home/seafile
@@ -87,52 +88,50 @@ sudo chown seafile: /home/seafile
 sudo chown seafile: /opt/seafile
 sudo su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
 sudo su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
-#sudo su - seafile -c "bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh"
 sudo -u seafile expect <<'EOF'
 exp_internal 1
 
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 
 expect "Checking python on this machine"
-send "\r"
 
 expect "Press ENTER to continue"
 send "\r"
 
-expect -re ".*What is the name of the server?"
+expect"What is the name of the server?"
 send "Seafile\r"
 
-expect -re ".*What is the ip or domain of the server?"
-send "127.0.0.1\r"
+expect "What is the ip or domain of the server?"
+send "$IP\r"
 
-expect -re ".*Which port do you want to use for the seafile fileserver?"
-send "\r"
+expect "Which port do you want to use for the seafile fileserver?"
+send "8082\r"
 
-expect -re ".*[ 1 or 2 ]"
+expect "[ 1 or 2 ]"
 send "2\r"
 
-expect -re ".*What is the host of mysql server?"
-send "\r"
+expect "What is the host of mysql server?"
+send "localhost\r"
 
-expect -re ".*What is the port of mysql server?"
-send "\r"
+expect "What is the port of mysql server?"
+send "3306\r"
 
-expect -re ".*Which mysql user to use for seafile?"
+expect "Which mysql user to use for seafile?"
 send "seafile\r"
 
-expect -re ".*What is the password for mysql user \"seafile\"?"
+expect "What is the password for mysql user \"seafile\"?"
 send "$DB_PASS\r"
 
-expect -re ".*Enter the existing database name for ccnet:"
+expect "Enter the existing database name for ccnet:"
 send "$CCNET_DB\r"
 
-expect -re ".*Enter the existing database name for seafile:"
+expect "Enter the existing database name for seafile:"
 send "$SEAFILE_DB\r"
 
-expect -re ".*Enter the existing database name for seahub:"
+expect "Enter the existing database name for seahub:"
 send "$SEAHUB_DB\r"
 
-expect -re *Press ENTER to continue"
+expect "Press ENTER to continue"
 send "\r"
 
 expect eof
