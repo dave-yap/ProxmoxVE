@@ -98,28 +98,28 @@ expect "Checking python on this machine"
 expect "Press ENTER to continue"
 send "\r"
 
-expect"What is the name of the server?"
+expect"What is the name of the server"
 send "Seafile\r"
 
-expect "What is the ip or domain of the server?"
+expect "What is the ip or domain of the server"
 send "$IP\r"
 
-expect "Which port do you want to use for the seafile fileserver?"
+expect "Which port do you want to use for the seafile fileserver"
 send "8082\r"
 
-expect "[ 1 or 2 ]"
+expect "\[ 1 or 2 \]"
 send "2\r"
 
-expect "What is the host of mysql server?"
+expect "What is the host of mysql server"
 send "localhost\r"
 
-expect "What is the port of mysql server?"
+expect "What is the port of mysql server"
 send "3306\r"
 
-expect "Which mysql user to use for seafile?"
+expect "Which mysql user to use for seafile"
 send "seafile\r"
 
-expect "What is the password for mysql user \"seafile\"?"
+expect "What is the password for mysql user \"seafile\""
 send "$DB_PASS\r"
 
 expect "Enter the existing database name for ccnet:"
