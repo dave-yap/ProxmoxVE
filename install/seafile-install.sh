@@ -88,13 +88,11 @@ sudo chown seafile: /opt/seafile
 sudo su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
 sudo su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
 #sudo su - seafile -c "bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh"
-#sudo su - seafile -c "
-#expect <<EOF
 sudo -u seafile expect <<'EOF'
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 
 expect "Press ENTER to continue"
-send "\r"
+send [return]
 
 expect "What is the name of the server?"
 send "Seafile\r"
@@ -103,16 +101,16 @@ expect "What is the ip or domain of the server?"
 send "127.0.0.1\r"
 
 expect "Which port do you want to use for the seafile fileserver?"
-send "\r"
+send [return]
 
 expect "[ 1 or 2 ]"
 send "2\r"
 
 expect "What is the host of mysql server?"
-send "\r"
+send [return]
 
 expect "What is the port of mysql server?"
-send "\r"
+send [return]
 
 expect "Which mysql user to use for seafile?"
 send "seafile\r"
@@ -130,7 +128,7 @@ expect "Enter the existing database name for seahub:"
 send "$SEAHUB_DB\r"
 
 expect "Press ENTER to continue, or Ctrl-C to abort"
-send "\r"
+send [return]
 
 expect eof
 EOF
