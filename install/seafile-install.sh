@@ -85,14 +85,14 @@ msg_ok "Installed Seafile Python Dependecies"
 
 msg_info "Installing Seafile"
 IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
-sudo mkdir -p /opt/seafile
-sudo useradd seafile
+mkdir -p /opt/seafile
+useradd seafile
 mkdir -p /home/seafile
-sudo chown seafile: /home/seafile
-sudo chown seafile: /opt/seafile
-sudo su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
-sudo su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
-$STD sudo -u seafile expect <<EOF
+chown seafile: /home/seafile
+chown seafile: /opt/seafile
+su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
+su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
+$STD su - seafile -c "expect <<EOF
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 expect {
     "Press ENTER to continue" {
@@ -160,11 +160,11 @@ expect {
     }
 }
 expect eof
-EOF
+EOF"
 msg_ok "Installed Seafile"
 
 msg_info "Setting up Memcached"
-$STD sudo apt-get install -y \
+$STD apt-get install -y \
     memcached \
     libmemcached-dev
 $STD pip3 install \
@@ -186,8 +186,8 @@ sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
-$STD sudo su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start"
-$STD sudo -u seafile expect <<EOF
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start"
+$STD su - seafile -c "expect <<EOF
 spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
     "What is the email for the admin account" {
@@ -205,9 +205,9 @@ expect {
     }
 }
 expect eof
-EOF
-$STD sudo su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh stop"
-$STD sudo su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh stop"
+EOF"
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh stop"
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh stop"
 msg_ok "Seafile setup"
 
 msg_info "Creating Services"
@@ -254,6 +254,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
+rm -rf seafile-server_11.0.13_x86-64.tar.gz
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
