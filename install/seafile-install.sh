@@ -105,7 +105,7 @@ expect {
 
 expect {
     "What is the ip or domain of the server" {
-        send "127.0.0.1\r"
+        send "$IP\r"
     }
 }
 
