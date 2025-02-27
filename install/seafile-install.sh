@@ -66,7 +66,7 @@ $STD apt-get install -y \
 $STD pip3 install \
     django \
     future \
-    mysqlclient==2.2.* \
+    mysqlclient==2.2.6 \
     pymysql \
     pillow \
     pylibmc \
