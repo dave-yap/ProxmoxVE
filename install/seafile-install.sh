@@ -18,16 +18,8 @@ $STD apt-get install -y \
     sudo \
     mc \
     wget \
-    expect \
-    python3 \
-    python3-dev \
-    python3-setuptools \
-    python3-pip \
-    libmariadb-dev \
-    ldap-utils \
-    libldap2-dev \
-    libsasl2-dev
-msg_ok "Installed Dependecies"
+    expect
+msg_ok "Installed Dependencies"
 
 msg_info "Installing MariaDB"
 $STD apt-get install -y mariadb-server
@@ -61,7 +53,16 @@ sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@lo
 } >> ~/seafile.creds
 msg_ok "MariaDB setup for Seafile"
 
-msg_info "Installing Seafile Python Dependecies"
+msg_info "Installing Seafile Python Dependencies"
+$STD apt-get install \
+    python3 \
+    python3-dev \
+    python3-setuptools \
+    python3-pip \
+    libmariadb-dev \
+    ldap-utils \
+    libldap2-dev \
+    libsasl2-dev
 $STD pip3 install \
     django==4.2.* \
     future==0.18.* \
