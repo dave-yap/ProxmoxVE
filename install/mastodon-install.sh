@@ -106,7 +106,7 @@ RUBY_BUILD_RELEASE=$(curl -si https://github.com/rbenv/ruby-build/releases/lates
 su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
 su - mastodon -c "mkdir -p "$(rbenv root)"/plugins/ruby-build"
-su - mastodon -c "mv ruby*/* "$(rbenv root)"/plugins/ruby-build"
+su - mastodon -c "mv ruby-build-* "$(rbenv root)"/plugins/ruby-build"
 su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install"
 msg_ok "Installed Ruby"
 
