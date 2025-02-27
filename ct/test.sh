@@ -3,9 +3,8 @@ source <(curl -s https://raw.githubusercontent.com/dave-yap/ProxmoxVE/refs/heads
 # Copyright (c) 2021-2025 tteck
 # Author: dave-yap (dave-yap)
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
-# Source: https://zitadel.com/
+# Source: https://
 
-# App Default Values
 APP="APP"
 var_tags="identity-provider"
 var_cpu="1"
@@ -15,11 +14,9 @@ var_os="debian"
 var_version="12"
 var_unprivileged="1"
 
-# App Output & Base Settings
 header_info "$APP"
 base_settings
 
-# Core
 variables
 color
 catch_errors
