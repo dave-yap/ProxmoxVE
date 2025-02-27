@@ -29,6 +29,7 @@ msg_info "Installing Node.JS"
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 $STD apt-get install -y nodejs
+corepack enable
 msg_ok "Installed Node.JS"
 
 msg_ok "Installing Mastodon Dependecies"
@@ -63,7 +64,7 @@ $STD apt-get install -y \
     libidn11-dev \
     libicu-dev \
     libjemalloc-dev
-$STD corepack enable
+corepack enable
 useradd --disable-password mastodon
 mkdir -p /home/mastodon
 mkdir -p /opt/mastodon
