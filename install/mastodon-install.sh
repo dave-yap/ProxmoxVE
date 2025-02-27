@@ -100,14 +100,24 @@ msg_ok "PostgreSQL setup for Mastodon"
 
 msg_info "Installing Ruby"
 RUBY_RELEASE=$(curl -si https://github.com/rbenv/rbenv/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-su - mastodon -c "wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz"
-su - mastodon -c "tar -xzf $RUBY_RELEASE.tar.gz"
-su - mastodon -c "mv rbenv-*/ ~/.rbenv"
-su - mastodon -c "echo 'export PATH="~/.rbenv/bin:$PATH"' >> ~/.bashrc"
-su - mastodon -c 'echo "export PATH="/home/mastodon/.rbenv/shims:$PATH"" >> ~/.bashrc'
-su - mastodon -c 'echo "export RBENV_SHELL=bash" >> ~/.bashrc'
-su - mastodon -c 'eval "$(~/.rbenv/bin/rbenv init -)"'
 RUBY_BUILD_RELEASE=$(curl -si https://github.com/rbenv/ruby-build/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
+su - mastodon -c 'bash' << EOF
+cd ~
+wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz
+tar -xzf $RUBY_RELEASE.tar.gz
+mv rbenv-*/ ~/.rbenv
+echo 'export PATH="~/.rbenv/bin:$PATH"' >> ~/.bashrc
+echo "export PATH="/home/mastodon/.rbenv/shims:$PATH"" >> ~/.bashrc
+echo "export RBENV_SHELL=bash" >> ~/.bashrc
+echo 'eval "$(~/.rbenv/bin/rbenv init -)"' >> ~/.bashrc
+EOF
+#su - mastodon -c "wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz"
+#su - mastodon -c "tar -xzf $RUBY_RELEASE.tar.gz"
+#su - mastodon -c "mv rbenv-*/ ~/.rbenv"
+#su - mastodon -c "echo 'export PATH="~/.rbenv/bin:$PATH"' >> ~/.bashrc"
+#su - mastodon -c 'echo "export PATH="/home/mastodon/.rbenv/shims:$PATH"" >> ~/.bashrc'
+#su - mastodon -c 'echo "export RBENV_SHELL=bash" >> ~/.bashrc'
+#su - mastodon -c 'eval "$(~/.rbenv/bin/rbenv init -)"'
 su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
 su - mastodon -c "mkdir -p ~/.rbenv/plugins/ruby-build"
