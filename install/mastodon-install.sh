@@ -335,7 +335,7 @@ systemctl restart nginx
 EOF
 msg_ok "Bash script for semi-automating nginx setup"
 
-msg_info "Start Mastodon"
+msg_info "Starting Mastodon"
 systemctl start mastodon-*
 msg_ok "Mastodon started"
 
