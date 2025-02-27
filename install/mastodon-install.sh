@@ -21,7 +21,6 @@ $STD apt-get install -y \
     apt-transport-https \
     lsb-release \
     ca-certificates \
-    git \
     sudo \
     mc
 msg_ok "Installed Dependecies"
@@ -97,19 +96,25 @@ msg_ok "PostgreSQL setup for Mastodon"
 
 msg_info "Installing Ruby"
 RUBY_RELEASE=$(curl -si https://github.com/rbenv/rbenv/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-su - mastodon -c "git clone https://github.com/rbenv/rbenv.git ~/.rbenv"
-su - mastodon -c "echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc"
+su - mastodon -c "wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz"
+su - mastodon -c "tar -xzf $RUBY_RELEASE.tar.gz"
+su - mastodon -c "mv rbenv-$RUBY_RELEASE ~/.rbenv"
+su - mastodon -c "echo 'export PATH="/home/mastodon/.rbenv/bin:$PATH"' >> ~/.bashrc"
 su - mastodon -c "echo 'eval "$(rbenv init -)"' >> ~/.bashrc"
-su - mastodon -c "source ~/.bashrc"
-su - mastodon -c "git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build"
+su - mastodon -c "exec bash"
+RUBY_BUILD_RELEASE=$(curl -si https://github.com/rbenv/ruby-build/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
+su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz"
+su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
+su - mastodon -c "mkdir -p "$(rbenv root)"/plugins/ruby-build"
+su - mastodon -c "mv ruby*/* "$(rbenv root)"/plugins/ruby-build"
 su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install"
 msg_ok "Installed Ruby"
 
 msg_info "Installing Mastodon"
 RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-sudo - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
-sudo - mastodon -c "tar -xzf $RELEASE.tar.gz"
-sudo - mastodon -c "mv mastodon-$RELEASE/* /opt/mastodon/"
+su - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
+su - mastodon -c "tar -xzf $RELEASE.tar.gz"
+su - mastodon -c "mv mastodon-$RELEASE/* /opt/mastodon/"
 su - mastodon -c "cd /opt/mastodon"
 su - mastodon -c "bundle config deployment 'true'"
 su - mastodon -c "bundle config without 'development test'"
