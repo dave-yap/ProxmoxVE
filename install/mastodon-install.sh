@@ -82,8 +82,8 @@ msg_ok "Installed PostgreSQL"
 msg_info "Setting up PostgreSQL"
 DB_USER="mastodon"
 DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
-ADMIN_EMAIL="admin@localhost.local"
-ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
+DB_ADMIN_USER="root"
+DB_ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 $STD sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS' CREATEDB;"
 $STD sudo -u postgres psql -c "CREATE USER $DB_ADMIN_USER WITH PASSWORD '$DB_ADMIN_PASS' SUPERUSER;"
 {
@@ -96,6 +96,7 @@ $STD sudo -u postgres psql -c "CREATE USER $DB_ADMIN_USER WITH PASSWORD '$DB_ADM
 msg_ok "PostgreSQL setup for Mastodon"
 
 msg_info "Installing Ruby"
+RUBY_RELEASE=$(curl -si https://github.com/rbenv/rbenv/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
 su - mastodon -c "git clone https://github.com/rbenv/rbenv.git ~/.rbenv"
 su - mastodon -c "echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc"
 su - mastodon -c "echo 'eval "$(rbenv init -)"' >> ~/.bashrc"
