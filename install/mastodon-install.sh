@@ -99,17 +99,17 @@ msg_ok "PostgreSQL setup for Mastodon"
 
 msg_info "Installing Ruby"
 RUBY_RELEASE=$(curl -si https://github.com/rbenv/rbenv/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-su - mastodon -c "wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz"
-su - mastodon -c "tar -xzf $RUBY_RELEASE.tar.gz"
-su - mastodon -c "mv rbenv-*/ ~/.rbenv"
-su - mastodon -c "echo 'export PATH="/home/mastodon/.rbenv/bin:$PATH"' >> ~/.bashrc"
-su - mastodon -c "echo 'eval "$(rbenv init -)"' >> ~/.bashrc"
-su - mastodon -c "exec bash"
+wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz
+tar -xzf $RUBY_RELEASE.tar.gz
+mv rbenv-*/ ~/.rbenv
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+source .bashrc
 RUBY_BUILD_RELEASE=$(curl -si https://github.com/rbenv/ruby-build/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz"
-su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
-su - mastodon -c "mkdir -p "$(rbenv root)"/plugins/ruby-build"
-su - mastodon -c "mv ruby-build-*/ "$(rbenv root)"/plugins/ruby-build"
+wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz
+tar -xzf $RUBY_BUILD_RELEASE.tar.gz
+mkdir -p "$(rbenv root)"/plugins/ruby-build
+mv ruby-build-*/ "$(rbenv root)"/plugins/ruby-build
 su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install"
 msg_ok "Installed Ruby"
 
@@ -343,7 +343,8 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-su - mastodon -c "rm ~/*.tar.gz"
+rm -rf ~/*.tar.gz
+su - mastodon -c "rm -rf ~/*.tar.gz"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
