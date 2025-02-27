@@ -118,13 +118,12 @@ RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep l
 su - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RELEASE.tar.gz"
 su - mastodon -c "cp -r mastodon-*/* /opt/mastodon"
-su - mastodon -c "cd /opt/mastodon"
 su - mastodon -c "cd /opt/mastodon && bundle config deployment 'true'"
 su - mastodon -c "cd /opt/mastodon && bundle config without 'development test'"
 su - mastodon -c "cd /opt/mastodon && bundle install -j$(getconf _NPROCESSORS_ONLN)"
-su - mastodon -c "yarn install"
+su - mastodon -c "cd /opt/mastodon && yarn install"
 $STD su - mastodon -c "expect <<EOF
-spawn RAILS_ENV=production bin/rails mastodon:setup
+spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
 EOF"
 msg_ok "Installed Mastodon"
 
