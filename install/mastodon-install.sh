@@ -74,6 +74,9 @@ chown mastodon: /opt/mastodon
 msg_ok "Installed Mastodon Dependencies"
 
 msg_info "Installing PostgreSQL"
+wget -qO /usr/share/keyrings/postgresql.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+echo "deb [signed-by=/usr/share/keyrings/postgresql.asc] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list
+$STD apt-get update -y
 $STD apt-get install -y postgresql
 systemctl -q start postgresql
 msg_ok "Installed PostgreSQL"
