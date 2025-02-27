@@ -117,7 +117,7 @@ msg_info "Installing Mastodon"
 RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
 su - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RELEASE.tar.gz"
-su - mastodon -c "mv mastodon-$RELEASE/* /opt/mastodon/"
+su - mastodon -c "mv mastodon-*/ /opt/mastodon"
 su - mastodon -c "cd /opt/mastodon"
 su - mastodon -c "bundle config deployment 'true'"
 su - mastodon -c "bundle config without 'development test'"
