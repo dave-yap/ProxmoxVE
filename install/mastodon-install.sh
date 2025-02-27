@@ -101,7 +101,7 @@ msg_info "Installing Ruby"
 RUBY_RELEASE=$(curl -si https://github.com/rbenv/rbenv/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
 su - mastodon -c "wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RUBY_RELEASE.tar.gz"
-su - mastodon -c "mv rbenv-*/ ~/.rbenv"
+su - mastodon -c "cp -r rbenv-*/* ~/.rbenv"
 su - mastodon -c "echo 'export PATH="~/.rbenv/bin:$PATH"' >> ~/.bashrc"
 su - mastodon -c 'echo "eval \"$(~/.rbenv/bin/rbenv init -)\"" >> ~/.bashrc'
 RUBY_BUILD_RELEASE=$(curl -si https://github.com/rbenv/ruby-build/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
@@ -117,7 +117,7 @@ msg_info "Installing Mastodon"
 RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
 su - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RELEASE.tar.gz"
-su - mastodon -c "mv mastodon-*/ /opt/mastodon"
+su - mastodon -c "cp -r mastodon-*/* /opt/mastodon"
 su - mastodon -c "cd /opt/mastodon"
 su - mastodon -c "bundle config deployment 'true'"
 su - mastodon -c "bundle config without 'development test'"
@@ -343,7 +343,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-su - mastodon -c "rm -rf ~/ruby* ~/rbenv*"
+su - mastodon -c "rm -rf ~/ruby* ~/rbenv* ~/mastodon*"
 su - mastodon -c "rm -rf ~/*.tar.gz"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
