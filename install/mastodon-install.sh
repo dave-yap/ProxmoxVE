@@ -110,7 +110,6 @@ sudo - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/t
 sudo - mastodon -c "tar -xzf $RELEASE.tar.gz"
 sudo - mastodon -c "mv mastodon-$RELEASE/* /opt/mastodon/"
 su - mastodon -c "cd /opt/mastodon"
-su - mastodon -c "git checkout $(git tag -l | grep '^v[0-9.]*$' | sort -V | tail -n 1)"
 su - mastodon -c "bundle config deployment 'true'"
 su - mastodon -c "bundle config without 'development test'"
 su - mastodon -c "bundle install -j$(getconf _NPROCESSORS_ONLN)"
