@@ -21,14 +21,20 @@ Do not break established syntax in this file, as it is automatically updated by 
 
 ### 🆕 New Scripts
 
-  - ByteStash [@tremor021](https://github.com/tremor021) ([#2680](https://github.com/community-scripts/ProxmoxVE/pull/2680))
+  - Pelican Panel [@bvdberg01](https://github.com/bvdberg01) ([#2678](https://github.com/community-scripts/ProxmoxVE/pull/2678))
 - Pelican Wings [@bvdberg01](https://github.com/bvdberg01) ([#2677](https://github.com/community-scripts/ProxmoxVE/pull/2677))
-- Pelican Panel [@bvdberg01](https://github.com/bvdberg01) ([#2678](https://github.com/community-scripts/ProxmoxVE/pull/2678))
+- ByteStash [@tremor021](https://github.com/tremor021) ([#2680](https://github.com/community-scripts/ProxmoxVE/pull/2680))
 
 ### 🚀 Updated Scripts
 
+  - Keycloak: Update installation script [@tremor021](https://github.com/tremor021) ([#2714](https://github.com/community-scripts/ProxmoxVE/pull/2714))
+- ByteStash: Fix Node 22 compatibility (thanks t2lc) [@tremor021](https://github.com/tremor021) ([#2705](https://github.com/community-scripts/ProxmoxVE/pull/2705))
+
   - #### 🐞 Bug Fixes
 
+    - Zitadel-install.sh: Remove one version file and update to our standard [@bvdberg01](https://github.com/bvdberg01) ([#2710](https://github.com/community-scripts/ProxmoxVE/pull/2710))
+    - Outline: Change key to hex32 [@tremor021](https://github.com/tremor021) ([#2709](https://github.com/community-scripts/ProxmoxVE/pull/2709))
+    - Typo in update scripts [@bvdberg01](https://github.com/bvdberg01) ([#2707](https://github.com/community-scripts/ProxmoxVE/pull/2707))
     - SFTPGo Remove unneeded RELEASE variable [@MickLesk](https://github.com/MickLesk) ([#2683](https://github.com/community-scripts/ProxmoxVE/pull/2683))
 
 ### 🧰 Maintenance
@@ -39,9 +45,15 @@ Do not break established syntax in this file, as it is automatically updated by 
 
   - #### 📂 Github
 
-    - [gh] New Workflow to close Script Request Discussions on PR merge [@michelroegl-brunner](https://github.com/michelroegl-brunner) ([#2688](https://github.com/community-scripts/ProxmoxVE/pull/2688))
+    - New Workflow to close Script Request Discussions on PR merge [@michelroegl-brunner](https://github.com/michelroegl-brunner) ([#2688](https://github.com/community-scripts/ProxmoxVE/pull/2688))
+    - Improve Script-Test Workflow [@michelroegl-brunner](https://github.com/michelroegl-brunner) ([#2712](https://github.com/community-scripts/ProxmoxVE/pull/2712))
+    - Switch all actions to self-hosted Runners [@michelroegl-brunner](https://github.com/michelroegl-brunner) ([#2711](https://github.com/community-scripts/ProxmoxVE/pull/2711))
 
 ### 🌐 Website
+
+  - #### ✨ New Features
+
+    - Add basic pagination to Data Viewer [@michelroegl-brunner](https://github.com/michelroegl-brunner) ([#2715](https://github.com/community-scripts/ProxmoxVE/pull/2715))
 
   - #### 📝 Script Information
 
