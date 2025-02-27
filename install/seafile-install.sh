@@ -48,7 +48,7 @@ sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@lo
     echo "SEAHUB_DB: $SEAHUB_DB"
     echo "DB_USER: $DB_USER"
     echo "DB_PASS: $DB_PASS"
-    echo "ADMIN_EMIAL: $ADMIN_EMAIL"
+    echo "ADMIN_EMAIL: $ADMIN_EMAIL"
     echo "ADMIN_PASS: $ADMIN_PASS"
 } >> ~/seafile.creds
 msg_ok "MariaDB setup for Seafile"
