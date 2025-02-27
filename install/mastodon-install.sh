@@ -104,7 +104,7 @@ tar -xzf $RUBY_RELEASE.tar.gz
 mv rbenv-*/ ~/.rbenv
 echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-source .bashrc
+source ~/.bashrc
 RUBY_BUILD_RELEASE=$(curl -si https://github.com/rbenv/ruby-build/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
 wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz
 tar -xzf $RUBY_BUILD_RELEASE.tar.gz
