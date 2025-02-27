@@ -102,15 +102,15 @@ RUBY_RELEASE=$(curl -si https://github.com/rbenv/rbenv/releases/latest | grep lo
 su - mastodon -c "wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RUBY_RELEASE.tar.gz"
 su - mastodon -c "mv rbenv-*/ ~/.rbenv"
-su - mastodon -c "echo 'export PATH="/home/mastodon/.rbenv/bin:$PATH"' >> ~/.bashrc"
-su - mastodon -c "echo 'eval "$(/home/mastodon/.rbenv/bin/rbenv init -)"' >> ~/.bashrc"
+su - mastodon -c "echo 'export PATH="~/.rbenv/bin:$PATH"' >> ~/.bashrc"
+su - mastodon -c 'echo "eval \"$(~/.rbenv/bin/rbenv init -)\"" >> ~/.bashrc'
 RUBY_BUILD_RELEASE=$(curl -si https://github.com/rbenv/ruby-build/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
 su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
-su - mastodon -c "mkdir -p /home/mastodon/.rbenv/plugins/ruby-build"
+su - mastodon -c "mkdir -p ~/.rbenv/plugins/ruby-build"
 su - mastodon -c "cp -r ruby-build-*/* ~/.rbenv/plugins/ruby-build"
-su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc /home/mastodon/.rbenv/bin/rbenv install 3.4.2"
-su - mastodon -c "/home/mastodon/.rbenv/bin/rbenv global 3.4.2"
+su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install 3.4.2"
+su - mastodon -c "~/.rbenv/bin/rbenv global 3.4.2"
 msg_ok "Installed Ruby"
 
 msg_info "Installing Mastodon"
