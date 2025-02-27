@@ -42,7 +42,6 @@ $STD apt-get install -y \
     libxml2-dev \
     libxslt1-dev \
     file \
-    git-core \
     g++ \
     libprotobuf-dev \
     protobuf-compiler \
