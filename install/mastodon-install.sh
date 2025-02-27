@@ -66,7 +66,7 @@ $STD apt-get install -y \
     libicu-dev \
     libjemalloc-dev
 corepack enable
-useradd --disable-password mastodon
+useradd mastodon
 mkdir -p /home/mastodon
 mkdir -p /opt/mastodon
 chown mastodon: /home/mastodon
