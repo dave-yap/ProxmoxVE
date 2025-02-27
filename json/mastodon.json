@@ -1,0 +1,43 @@
+{
+    "name": "Test",
+    "slug": "Test",
+    "categories": [
+        0
+    ],
+    "date_created": "2025-02-07",
+    "type": "ct",
+    "updateable": true,
+    "privileged": false,
+    "interface_port": 8080,
+    "documentation": null,
+    "website": "<website url>",
+    "logo": "<logo url>",
+    "description": "<description>",
+    "install_methods": [
+        {
+            "type": "default",
+            "script": "ct/test.sh",
+            "resources": {
+                "cpu": 2,
+                "ram": 2048,
+                "hdd": 12,
+                "os": "debian",
+                "version": "12"
+            }
+        }
+    ],
+    "default_credentials": {
+        "username": "zitadel-admin@zitadel.localhost",
+        "password": "Password1!"
+    },
+    "notes": [
+        {
+            "text": "Application credentials: `cat ~/zitadel.creds`",
+            "type": "info"
+        },
+        {
+            "text": "Change the ExternalDomain value in `/opt/zitadel/config.yaml` to your domain/hostname/IP and run `bash zitadel-rerun.sh`",
+            "type": "info"
+        }
+    ]
+}
