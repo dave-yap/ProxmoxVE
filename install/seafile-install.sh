@@ -64,25 +64,25 @@ $STD apt-get install -y \
     libldap2-dev \
     libsasl2-dev
 $STD pip3 install \
-    django==4.2.* \
-    future==0.18.* \
-    mysqlclient==2.1.* \
+    django \
+    future \
+    mysqlclient \
     pymysql \
-    pillow==10.2.* \
+    pillow \
     pylibmc \
-    captcha==0.5.* \
-    markupsafe==2.0.1 \
+    captcha \
+    markupsafe \
     jinja2 \
-    sqlalchemy==2.0.18 \
+    sqlalchemy \
     psd-tools \
     django-pylibmc \
-    django_simple_captcha==0.6.* \
-    djangosaml2==1.5.* \
-    pysaml2==7.2.* \
-    pycryptodome==3.16.* \
-    cffi==1.15.1 \
+    django_simple_captcha \
+    djangosaml2 \
+    pysaml2 \
+    pycryptodome \
+    cffi \
     lxml \
-    python-ldap==3.4.3
+    python-ldap
 msg_ok "Installed Seafile Python Dependecies"
 
 msg_info "Installing Seafile"
