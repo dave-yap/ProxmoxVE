@@ -109,7 +109,8 @@ su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags
 su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
 su - mastodon -c "mkdir -p /home/mastodon/.rbenv/plugins/ruby-build"
 su - mastodon -c "cp -r ruby-build-*/* ~/.rbenv/plugins/ruby-build"
-su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc /home/mastodon/.rbenv/bin/rbenv install"
+su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc /home/mastodon/.rbenv/bin/rbenv install 3.4.2"
+su - mastodon -c "/home/mastodon/.rbenv/bin/rbenv global 3.4.2"
 msg_ok "Installed Ruby"
 
 msg_info "Installing Mastodon"
