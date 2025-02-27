@@ -62,11 +62,12 @@ $STD apt-get install -y \
     libmariadb-dev \
     ldap-utils \
     libldap2-dev \
-    libsasl2-dev
+    libsasl2-dev \
+    pkg-config
 $STD pip3 install \
     django \
     future \
-    mysqlclient==2.2.6 \
+    mysqlclient \
     pymysql \
     pillow \
     pylibmc \
