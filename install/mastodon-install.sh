@@ -22,6 +22,7 @@ $STD apt-get install -y \
     lsb-release \
     ca-certificates \
     git \
+    sudo \
     mc
 msg_ok "Installed Dependecies"
 
@@ -104,7 +105,10 @@ su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install"
 msg_ok "Installed Ruby"
 
 msg_info "Installing Mastodon"
-su - mastodon -c "git clone https://github.com/mastodon/mastodon.git /opt/mastodon"
+RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
+sudo - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
+sudo - mastodon -c "tar -xzf $RELEASE.tar.gz"
+sudo - mastodon -c "mv mastodon-$RELEASE/* /opt/mastodon/"
 su - mastodon -c "cd /opt/mastodon"
 su - mastodon -c "git checkout $(git tag -l | grep '^v[0-9.]*$' | sort -V | tail -n 1)"
 su - mastodon -c "bundle config deployment 'true'"
