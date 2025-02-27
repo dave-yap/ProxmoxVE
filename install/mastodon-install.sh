@@ -23,6 +23,7 @@ $STD apt-get install -y \
     ca-certificates \
     sudo \
     expect \
+    source \
     mc
 msg_ok "Installed Dependecies"
 
@@ -103,9 +104,9 @@ su - mastodon -c "wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUB
 su - mastodon -c "tar -xzf $RUBY_RELEASE.tar.gz"
 su - mastodon -c "mv rbenv-*/ ~/.rbenv"
 su - mastodon -c "echo 'export PATH="/home/mastodon/.rbenv/bin:$PATH"' >> ~/.bashrc"
-su - mastodon -c "exec bash"
+su - mastodon -c "source ~/.bashrc"
 su - mastodon -c "echo 'eval "$(rbenv init -)"' >> ~/.bashrc"
-su - mastodon -c "exec bash"
+su - mastodon -c "source ~/.bashrc"
 RUBY_BUILD_RELEASE=$(curl -si https://github.com/rbenv/ruby-build/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
 su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
