@@ -19,18 +19,36 @@ Do not break established syntax in this file, as it is automatically updated by 
 
 ## 2025-02-26
 
-### Changes
+### 🆕 New Scripts
+
+  - New Script: Outline [@tremor021](https://github.com/tremor021) ([#2653](https://github.com/community-scripts/ProxmoxVE/pull/2653))
 
 ### 🚀 Updated Scripts
 
-  #### 🐞 Bug Fixes
+  - Fix: SABnzbd - Removed few artefacts in the code preventing the update [@tremor021](https://github.com/tremor021) ([#2670](https://github.com/community-scripts/ProxmoxVE/pull/2670))
 
-  - PiHole: Fix Unbound sed for DNS [@MickLesk](https://github.com/MickLesk) ([#2647](https://github.com/community-scripts/ProxmoxVE/pull/2647))
+  - #### 🐞 Bug Fixes
+
+    - Fix: Homarr - Manually correct db-migration wrong-folder [@CrazyWolf13](https://github.com/CrazyWolf13) ([#2676](https://github.com/community-scripts/ProxmoxVE/pull/2676))
+    - Kimai: add local.yaml & fix path permissions [@MickLesk](https://github.com/MickLesk) ([#2646](https://github.com/community-scripts/ProxmoxVE/pull/2646))
+    - PiHole: Fix Unbound sed for DNS [@MickLesk](https://github.com/MickLesk) ([#2647](https://github.com/community-scripts/ProxmoxVE/pull/2647))
     - Alpine IT-Tools fix typo "unexpected EOF while looking for matching `"' [@MickLesk](https://github.com/MickLesk) ([#2644](https://github.com/community-scripts/ProxmoxVE/pull/2644))
+
+### 🧰 Maintenance
+
+  - #### 📂 Github
+
+    - [gh] Furhter Impove Changelog Workflow [@michelroegl-brunner](https://github.com/michelroegl-brunner) ([#2655](https://github.com/community-scripts/ProxmoxVE/pull/2655))
 
 ### 🌐 Website
 
-- Website: PocketID Change of website and documentation links [@schneider-de-com](https://github.com/schneider-de-com) ([#2643](https://github.com/community-scripts/ProxmoxVE/pull/2643))
+  - #### 🐞 Bug Fixes
+
+    - Website: PocketID Change of website and documentation links [@schneider-de-com](https://github.com/schneider-de-com) ([#2643](https://github.com/community-scripts/ProxmoxVE/pull/2643))
+
+  - #### 📝 Script Information
+
+    - Fix: Graylog - Improve application description for website [@tremor021](https://github.com/tremor021) ([#2658](https://github.com/community-scripts/ProxmoxVE/pull/2658))
 
 ## 2025-02-25
 
