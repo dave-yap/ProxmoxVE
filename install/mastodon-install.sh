@@ -109,7 +109,9 @@ su - mastodon -c "bundle config deployment 'true'"
 su - mastodon -c "bundle config without 'development test'"
 su - mastodon -c "bundle install -j$(getconf _NPROCESSORS_ONLN)"
 su - mastodon -c "yarn install"
-su - mastodon -c "RAILS_ENV=production bin/rails mastodon:setup"
+$STD su - mastodon -c "expect <<EOF
+spawn RAILS_ENV=production bin/rails mastodon:setup
+EOF"
 msg_ok "Installed Mastodon"
 
 msg_info "Creating Services"
@@ -293,32 +295,29 @@ ReadWritePaths=/home/mastodon/live
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable -q zitadel.service
+systemctl enable -q mastodon-web mastodon-sidekiq mastodon-streaming
 msg_ok "Created Services"
 
-msg_info "Zitadel initial setup"
-zitadel start-from-init --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &>/dev/null &
-sleep 60
-kill $(lsof -i | awk '/zitadel/ {print $2}' | head -n1)
-useradd zitadel
-echo -e "$(zitadel -v | grep -oP 'v\d+\.\d+\.\d+')" > /opt/Zitadel_version.txt
-msg_ok "Zitadel initialized"
+msg_info "Create nginx-setup.sh"
+cat <<EOF >~/nginx-setup.sh
+certbot certonly --nginx -d $2
+cp /opt/mastodon/dist/nginx.conf /etc/nginx/sites-available/mastodon
+ln -s /etc/nginx/sites-available/mastodon /etc/nginx/sites-enabled/mastodon
+rm /etc/nginx/sites-enabled/default
 
-msg_info "Set ExternalDomain to current IP and restart Zitadel"
-IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
-sed -i "0,/localhost/s/localhost/${IP}/" /opt/zitadel/config.yaml
-systemctl stop -q zitadel.service
-zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml &>/dev/null 
-systemctl restart -q zitadel.service
-msg_ok "Zitadel restarted with ExternalDomain set to current IP"
+sed -i "g,/example.com/s/example.com/$2/" /etc/nginx/sites-enabled/mastodon
+sed -i 's|# ssl_certificate\s*/etc/letsencrypt/live/example.com/fullchain.pem;|ssl_certificate     /etc/letsencrypt/live/$2/fullchain.pem;|' /etc/nginx/sites-enabled/mastodon
+sed -i 's|# ssl_certificate\s*/etc/letsencrypt/live/example.com/privkey.pem;|ssl_certificate     /etc/letsencrypt/live/$2/privkey.pem;|' /etc/nginx/sites-enabled/mastodon
 
-msg_info "Create zitadel-rerun.sh"
-cat <<EOF >~/zitadel-rerun.sh
-systemctl stop zitadel.service
-timeout --kill-after=5s 15s zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml
-systemctl restart zitadel.service
+chmod o+x /opt/mastodon
+
+systemctl restart nginx
 EOF
-msg_ok "Bash script for rerunning Zitadel after changing Zitadel config.yaml"
+msg_ok "Bash script for semi-automating nginx setup"
+
+msg_info "Start Mastodon"
+systemctl start mastodon-*
+msg_ok "Mastodon started"
 
 motd_ssh
 customize
