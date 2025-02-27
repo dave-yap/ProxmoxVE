@@ -302,14 +302,20 @@ msg_ok "Created Services"
 
 msg_info "Create nginx-setup.sh"
 cat <<EOF >~/nginx-setup.sh
-certbot certonly --nginx -d $2
+if [ -z "$1" ]; then
+    echo "Error: Please provide a domain name"
+    echo "Usage: $0 domain.com"
+    exit 1
+fi
+
+certbot certonly --nginx -d $1
 cp /opt/mastodon/dist/nginx.conf /etc/nginx/sites-available/mastodon
 ln -s /etc/nginx/sites-available/mastodon /etc/nginx/sites-enabled/mastodon
 rm /etc/nginx/sites-enabled/default
 
-sed -i "g,/example.com/s/example.com/$2/" /etc/nginx/sites-enabled/mastodon
-sed -i 's|# ssl_certificate\s*/etc/letsencrypt/live/example.com/fullchain.pem;|ssl_certificate     /etc/letsencrypt/live/$2/fullchain.pem;|' /etc/nginx/sites-enabled/mastodon
-sed -i 's|# ssl_certificate\s*/etc/letsencrypt/live/example.com/privkey.pem;|ssl_certificate     /etc/letsencrypt/live/$2/privkey.pem;|' /etc/nginx/sites-enabled/mastodon
+sed -i "s,example.com,$1,g" /etc/nginx/sites-enabled/mastodon
+sed -i "s|# ssl_certificate\s*/etc/letsencrypt/live/example.com/fullchain.pem;|ssl_certificate     /etc/letsencrypt/live/$2/fullchain.pem;|' /etc/nginx/sites-enabled/mastodon
+sed -i "s|# ssl_certificate\s*/etc/letsencrypt/live/example.com/privkey.pem;|ssl_certificate     /etc/letsencrypt/live/$2/privkey.pem;|' /etc/nginx/sites-enabled/mastodon
 
 chmod o+x /opt/mastodon
 
