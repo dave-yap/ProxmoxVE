@@ -54,7 +54,7 @@ sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@lo
 msg_ok "MariaDB setup for Seafile"
 
 msg_info "Installing Seafile Python Dependencies"
-$STD apt-get install \
+$STD apt-get install -y \
     python3 \
     python3-dev \
     python3-setuptools \
