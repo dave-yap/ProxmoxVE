@@ -124,7 +124,7 @@ su - mastodon -c "mkdir -p ~/.rbenv/plugins/ruby-build"
 su - mastodon -c "cp -r ruby-build-*/* ~/.rbenv/plugins/ruby-build"
 su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install 3.4.2"
 su - mastodon -c "~/.rbenv/bin/rbenv global 3.4.2"
-su - mastodon -c "gem install bundler --no-document"
+su - mastodon -c "~/.rbenv/shims/gem install bundler --no-document"
 su - mastodon -c "~/.rbenv/bin/rbenv rehash"
 msg_ok "Installed Ruby"
 
@@ -133,10 +133,10 @@ RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep l
 su - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
 su - mastodon -c "tar -xzf $RELEASE.tar.gz"
 su - mastodon -c "cp -r mastodon-*/* /opt/mastodon"
-su - mastodon -c "cd /opt/mastodon && bundle config deployment 'true'"
-su - mastodon -c "cd /opt/mastodon && bundle config without 'development test'"
-su - mastodon -c "cd /opt/mastodon && bundle install -j$(getconf _NPROCESSORS_ONLN)"
-su - mastodon -c "cd /opt/mastodon && yarn install"
+su - mastodon -c "cd /opt/mastodon && ~/.rbenv/shims/bundle config deployment 'true'"
+su - mastodon -c "cd /opt/mastodon && ~/.rbenv/shims/bundle config without 'development test'"
+su - mastodon -c "cd /opt/mastodon && ~/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)"
+su - mastodon -c "cd /opt/mastodon && yarn install <<< 'y'"
 $STD su - mastodon -c "expect <<EOF
 spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
 EOF"
