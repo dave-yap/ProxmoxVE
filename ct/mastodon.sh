@@ -5,11 +5,11 @@ source <(curl -s https://raw.githubusercontent.com/dave-yap/ProxmoxVE/refs/heads
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://docs.joinmastodon.org/admin/
 
-APP="APP"
-var_tags="identity-provider"
-var_cpu="1"
-var_ram="1024"
-var_disk="8"
+APP="Mastodon"
+var_tags="social-media"
+var_cpu="2"
+var_ram="4096"
+var_disk="20"
 var_os="debian"
 var_version="12"
 var_unprivileged="1"
@@ -25,24 +25,12 @@ function update_script() {
     header_info
     check_container_storage
     check_container_resources
-    if [[ ! -f /etc/systemd/system/zitadel.service ]]; then
+    if [[ ! -f /etc/systemd/system/mastodon-web.service ]]; then
         msg_error "No ${APP} Installation Found!"
         exit
     fi
-    RELEASE=$(curl -si https://github.com/zitadel/zitadel/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-    if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
-        msg_info "Updating ${APP} (Patience)"
-        wget -qc https://github.com/zitadel/zitadel/releases/download/$RELEASE/zitadel-linux-amd64.tar.gz -O - | tar -xz
-        systemctl stop zitadel.service
-        sudo mv zitadel-linux-amd64/zitadel /usr/local/bin
-        rm -rf zitadel-linux-amd64
-        zitadel setup --masterkeyFile /opt/zitadel/.masterkey --config /opt/zitadel/config.yaml --init-projections=true &>/dev/null
-        systemctl start zitadel.service
-        echo "${RELEASE}" > /opt/${APP}_version.txt
-        msg_ok "Updated ${APP} to ${RELEASE}"
-    else
+    RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
         msg_ok "No update required. ${APP} is already at ${RELEASE}"
-    fi
     exit
 }
 
@@ -53,4 +41,4 @@ description
 msg_ok "Completed Successfully!\n"
 echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
 echo -e "${INFO}${YW} Access it using the following URL:${CL}"
-echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:8080/ui/console${CL}"
+echo -e "${TAB}${GATEWAY}${BGN}http://${IP}${CL}"
