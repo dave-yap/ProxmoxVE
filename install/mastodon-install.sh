@@ -136,7 +136,7 @@ su - mastodon -c "cp -r mastodon-*/* /opt/mastodon"
 su - mastodon -c "cd /opt/mastodon && ~/.rbenv/shims/bundle config deployment 'true'"
 su - mastodon -c "cd /opt/mastodon && ~/.rbenv/shims/bundle config without 'development test'"
 su - mastodon -c "cd /opt/mastodon && ~/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)"
-su - mastodon -c "cd /opt/mastodon && yarn install"
+yes | su - mastodon -c "cd /opt/mastodon && yarn install"
 $STD su - mastodon -c "expect <<EOF
 spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
 EOF"
