@@ -101,7 +101,7 @@ msg_ok "PostgreSQL setup for Mastodon"
 msg_info "Installing Ruby"
 RUBY_RELEASE=$(curl -si https://github.com/rbenv/rbenv/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
 RUBY_BUILD_RELEASE=$(curl -si https://github.com/rbenv/ruby-build/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-su - mastodon -c 'bash' << EOF
+$STD su - mastodon -c 'bash' << EOF
 cd ~
 wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz
 tar -xzf $RUBY_RELEASE.tar.gz
@@ -138,7 +138,7 @@ msg_ok "Installed Ruby"
 
 msg_info "Installing Mastodon"
 RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-su - mastodon -c 'bash' << EOF
+$STD su - mastodon -c 'bash' << EOF
 cd ~
 wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz
 tar -xzf $RELEASE.tar.gz
@@ -148,8 +148,15 @@ cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'developme
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
 yes | su - mastodon -c "cd /opt/mastodon && yarn install"
 EOF
+su - mastodon -c "RAILS_ENV=production"
 su - mastodon -c "expect <<EOF
-spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
+spawn /opt/mastodon/bin/rails mastodon:setup
+#expect {
+#    \"Text to expect\" {
+#        send \"\r\"
+#      }
+#}
+#expect EOF
 EOF"
 #su - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
 #su - mastodon -c "tar -xzf $RELEASE.tar.gz"
