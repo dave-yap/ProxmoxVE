@@ -110,6 +110,14 @@ echo 'export PATH="/home/mastodon/.rbenv/bin:$PATH"' >> ~/.bashrc
 echo "export PATH="/home/mastodon/.rbenv/shims:$PATH"" >> ~/.bashrc
 echo "export RBENV_SHELL=bash" >> ~/.bashrc
 echo 'eval "$(/home/mastodon/.rbenv/bin/rbenv init -)"' >> ~/.bashrc
+wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz
+tar -xzf $RUBY_BUILD_RELEASE.tar.gz
+mkdir -p /home/mastodon/.rbenv/plugins/ruby-build
+cp -r ruby-build-*/* /home/mastodon/.rbenv/plugins/ruby-build
+RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install 3.4.2
+/home/mastodon/.rbenv/bin/rbenv global 3.4.2
+/home/mastodon/.rbenv/shims/gem install bundler --no-document
+/home/mastodon/.rbenv/bin/rbenv rehash
 EOF
 #su - mastodon -c "wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz"
 #su - mastodon -c "tar -xzf $RUBY_RELEASE.tar.gz"
@@ -118,28 +126,40 @@ EOF
 #su - mastodon -c 'echo "export PATH="/home/mastodon/.rbenv/shims:$PATH"" >> ~/.bashrc'
 #su - mastodon -c 'echo "export RBENV_SHELL=bash" >> ~/.bashrc'
 #su - mastodon -c 'eval "$(~/.rbenv/bin/rbenv init -)"'
-su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz"
-su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
-su - mastodon -c "mkdir -p /home/mastodon/.rbenv/plugins/ruby-build"
-su - mastodon -c "cp -r ruby-build-*/* /home/mastodon/.rbenv/plugins/ruby-build"
-su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install 3.4.2"
-su - mastodon -c "/home/mastodon/.rbenv/bin/rbenv global 3.4.2"
-su - mastodon -c "/home/mastodon/.rbenv/shims/gem install bundler --no-document"
-su - mastodon -c "/home/mastodon/.rbenv/bin/rbenv rehash"
+#su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz"
+#su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
+#su - mastodon -c "mkdir -p /home/mastodon/.rbenv/plugins/ruby-build"
+#su - mastodon -c "cp -r ruby-build-*/* /home/mastodon/.rbenv/plugins/ruby-build"
+#su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install 3.4.2"
+#su - mastodon -c "/home/mastodon/.rbenv/bin/rbenv global 3.4.2"
+#su - mastodon -c "/home/mastodon/.rbenv/shims/gem install bundler --no-document"
+#su - mastodon -c "/home/mastodon/.rbenv/bin/rbenv rehash"
 msg_ok "Installed Ruby"
 
 msg_info "Installing Mastodon"
 RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-su - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
-su - mastodon -c "tar -xzf $RELEASE.tar.gz"
-su - mastodon -c "cp -r mastodon-*/* /opt/mastodon"
-su - mastodon -c "cd /opt/mastodon && ~/.rbenv/shims/bundle config deployment 'true'"
-su - mastodon -c "cd /opt/mastodon && ~/.rbenv/shims/bundle config without 'development test'"
-su - mastodon -c "cd /opt/mastodon && ~/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)"
-yes | su - mastodon -c "cd /opt/mastodon && yarn install"
-$STD su - mastodon -c "expect <<EOF
+su - mastodon -c 'bash' << EOF
+cd ~
+wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz
+tar -xzf $RELEASE.tar.gz
+cp -r mastodon-*/* /opt/mastodon
+cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'
+cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'
+cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
+EOF
+su - mastodon -c "expect <<EOF
 spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
 EOF"
+#su - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
+#su - mastodon -c "tar -xzf $RELEASE.tar.gz"
+#su - mastodon -c "cp -r mastodon-*/* /opt/mastodon"
+#su - mastodon -c "cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'"
+#su - mastodon -c "cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'"
+#su - mastodon -c "cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)"
+#yes | su - mastodon -c "cd /opt/mastodon && yarn install"
+#$STD su - mastodon -c "expect <<EOF
+#spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
+#EOF"
 msg_ok "Installed Mastodon"
 
 msg_info "Creating Services"
