@@ -146,6 +146,7 @@ cp -r mastodon-*/* /opt/mastodon
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
+yes | su - mastodon -c "cd /opt/mastodon && yarn install"
 EOF
 su - mastodon -c "expect <<EOF
 spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
