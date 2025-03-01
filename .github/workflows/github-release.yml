@@ -2,24 +2,43 @@ name: Create new release
 
 on:
   schedule:
-    # Runs "At 00:01 every night" (UTC)
-    - cron: '1 0 * * *'
+    - cron: '1 0 * * *'  # Runs nightly
+  workflow_dispatch:
 
 jobs:
   create-new-release:
-    runs-on: ubuntu-latest
+    runs-on: runner-cluster-htl-set
     permissions:
       contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Parse CHANGELOG.md for yesterday's entries and create a new release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           YESTERDAY=$(date -u --date="yesterday" +%Y-%m-%d)
-          YESTERDAY_CHANGELOG_NOTES=$(awk '/^## '"$YESTERDAY"'/ {f=1; next} f && /^## [0-9]{4}-[0-9]{2}-[0-9]{2}/ {f=0} f && !/^## / {print}' CHANGELOG.md)
-          
-          if [ -n "$YESTERDAY_CHANGELOG_NOTES" ]; then
-            gh release create "$YESTERDAY" -t "$YESTERDAY" -n "$YESTERDAY_CHANGELOG_NOTES" --latest
+
+          # Crop the changelog first (keep first 20,000 characters)
+          MAX_SIZE=20000
+          head -c "$MAX_SIZE" CHANGELOG.md > changelog_cropped.md
+
+          # Extract exactly the section for YESTERDAY, stopping at the next date
+          awk -v date="## $YESTERDAY" '
+            $0 ~ date {found=1} 
+            found && /^## [0-9]{4}-[0-9]{2}-[0-9]{2}/ && $0 != date {exit} 
+            found
+          ' changelog_cropped.md > changelog_tmp.md
+
+          echo "=== Extracted Changelog ==="
+          cat changelog_tmp.md
+          echo "==========================="
+
+          if [ ! -s changelog_tmp.md ]; then
+            echo "No changes found for $YESTERDAY, skipping release."
+            exit 0
           fi
+
+          echo "Creating GitHub release for $YESTERDAY..."
+          gh release create "$YESTERDAY" -t "$YESTERDAY" -F changelog_tmp.md
