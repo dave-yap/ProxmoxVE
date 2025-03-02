@@ -133,7 +133,7 @@ cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPRO
 EOF
 $STD npm install -g yarn@1.22.19 --force
 $STD su - mastodon -c "cd /opt/mastodon && yes | yarn install"
-$STD su - mastodon -c "cd /opt/mastodon && expect <<EOF
+$STD su - mastodon -c "cd /opt/mastodon && . ~/.bashrc && expect <<EOF
 spawn env RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
 expect \"Domain name:\" { send \"localhost\r\" }
 expect \"single user mode\" { send \"n\r\" }
