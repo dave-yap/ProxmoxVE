@@ -32,7 +32,6 @@ curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dea
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 $STD apt-get update -y
 $STD apt-get install -y nodejs
-$STD npm install -g yarn@1.22.19
 msg_ok "Installed Node.JS"
 
 msg_ok "Installing Mastodon Dependecies"
@@ -138,6 +137,7 @@ msg_ok "Installed Ruby"
 
 msg_info "Installing Mastodon"
 RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
+$STD npm install -g yarn@1.22.19
 $STD su - mastodon -c 'bash' << EOF
 cd ~
 wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz
