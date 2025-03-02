@@ -106,16 +106,15 @@ cd ~
 wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz
 tar -xzf $RUBY_RELEASE.tar.gz
 mv rbenv-*/ /home/mastodon/.rbenv
-echo 'export PATH="/home/mastodon/.rbenv/bin:$PATH"' >> ~/.bashrc
+echo "export PATH="/home/mastodon/.rbenv/bin:$PATH"" >> ~/.bashrc
 echo "export PATH="/home/mastodon/.rbenv/shims:$PATH"" >> ~/.bashrc
 echo "export RBENV_SHELL=bash" >> ~/.bashrc
-echo 'eval "$(/home/mastodon/.rbenv/bin/rbenv init -)"' >> ~/.bashrc
+echo "eval "$(/home/mastodon/.rbenv/bin/rbenv init -)"" >> ~/.bashrc
 wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz
 tar -xzf $RUBY_BUILD_RELEASE.tar.gz
 mkdir -p /home/mastodon/.rbenv/plugins/ruby-build
 cp -r ruby-build-*/* /home/mastodon/.rbenv/plugins/ruby-build
-EOF
-$STD su - mastodon -c 'bash' << EOF
+. ~/.bashrc
 RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install 3.4.2
 /home/mastodon/.rbenv/bin/rbenv global 3.4.2
 /home/mastodon/.rbenv/shims/gem install bundler --no-document
