@@ -114,6 +114,8 @@ wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEA
 tar -xzf $RUBY_BUILD_RELEASE.tar.gz
 mkdir -p /home/mastodon/.rbenv/plugins/ruby-build
 cp -r ruby-build-*/* /home/mastodon/.rbenv/plugins/ruby-build
+EOF
+$STD su - mastodon -c 'bash' << EOF
 RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install 3.4.2
 /home/mastodon/.rbenv/bin/rbenv global 3.4.2
 /home/mastodon/.rbenv/shims/gem install bundler --no-document
