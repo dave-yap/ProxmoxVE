@@ -122,7 +122,6 @@ msg_ok "Installed Ruby"
 
 msg_info "Installing Mastodon"
 RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-$STD corepack install --global yarn@1.22.19
 $STD su - mastodon -c 'bash' << EOF
 cd ~
 wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz
@@ -131,10 +130,11 @@ cp -r mastodon-*/* /opt/mastodon
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
-cd /opt/mastodon && yes | yarn install --frozen-lockfile
 EOF
-su - mastodon -c "RAILS_ENV=production"
-su - mastodon -c "expect <<EOF
+$STD corepack install --global yarn@1.22.19
+$STD su - mastodon -c "cd /opt/mastodon && yes | yarn install --frozen-lockfile"
+$STD su - mastodon -c "RAILS_ENV=production"
+$STD su - mastodon -c "expect <<EOF
 spawn /opt/mastodon/bin/rails mastodon:setup
 #expect {
 #    \"Text to expect\" {
