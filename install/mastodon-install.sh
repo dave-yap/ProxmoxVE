@@ -32,6 +32,7 @@ curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dea
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 $STD apt-get update -y
 $STD apt-get install -y nodejs
+npm install -g yarn@1.22.19
 msg_ok "Installed Node.JS"
 
 msg_ok "Installing Mastodon Dependecies"
@@ -147,7 +148,7 @@ cp -r mastodon-*/* /opt/mastodon
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
-cd /opt/mastodon && yes | yarn install
+cd /opt/mastodon && yes | yarn install --frozen-lockfile
 EOF
 su - mastodon -c "RAILS_ENV=production"
 su - mastodon -c "expect <<EOF
