@@ -134,117 +134,27 @@ EOF
 $STD npm install -g yarn@1.22.19 --force
 $STD su - mastodon -c "cd /opt/mastodon && yes | yarn install"
 $STD su - mastodon -c "cd /opt/mastodon && expect <<EOF
-spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
-expect {
-    \"Domain name:\" {
-        send \"localhost\r\"
-      }
-}
-expect {
-    \"single user mode\" {
-        send \"n\r\"
-    }
-}
-expect {
-    \"Docker\" {
-        send \"n\r\"
-    }
-}
-expect {
-    \"PostgreSQL host\" {
-        send \"\r\"
-    }
-}
-expect {
-    \"PostgreSQL port\" {
-        send \"\r\"
-    }
-}
-expect {
-    \"Name of PostgreSQL database\" {
-        send \"\r\"
-    }
-}
-expect {
-    \"Name of PostgreSQL user\" {
-        send \"\r\"
-    }
-}
-expect {
-    \"Password of PostgreSQL user\" {
-        send \"$DB_PASS\r\"
-    }
-}
-expect {
-    \"Redis host\" {
-        send \"\r\"
-    }
-}
-expect {
-    \"Redis port\" {
-        send \"\r\"
-    }
-}
-expect {
-    \"Redis password\" {
-        send \"\r\"
-    }
-}
-expect {
-    \"store uploaded files on the cloud\" {
-        send \"n\r\"
-    }
-}
-expect {
-    \"send e-mails\" {
-        send \"y\r\"
-    }
-}
-expect {
-    \"E-mail address to send e-mails\"{
-        send \"\r\"
-    }
-}
-expect {
-    \"Send a test e-mail\" {
-        send \"n\r\"
-    }
-}
-expect {
-    \"periodically check for important updates\" {
-        send \"y\r\"
-    }
-}
-expect {
-    \"Save configuration\" {
-        send \"y\r\"
-    }
-}
-expect {
-    \"Prepare the database now\" {
-        send \"y\r\"
-    }
-}
-expect {
-    \"Compile the assets now\" {
-        send \"y\r\"
-    }
-}
-expect {
-    \"create an admin user\" {
-        send \"n\r\"
-    }
-}
-#expect {
-#    \"Username\" {
-#        send \"admin\r\"
-#    }
-#}
-#expect {
-#    \"E-mail\" {
-#        send \"admin@localhost\r\"
-#    }
-#}
+spawn env RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
+expect \"Domain name:\" { send \"localhost\r\" }
+expect \"single user mode\" { send \"n\r\" }
+expect \"Docker\" { send \"n\r\" }
+expect \"PostgreSQL host\" { send \"\r\" }
+expect \"PostgreSQL port\" { send \"\r\" }
+expect \"Name of PostgreSQL database\" { send \"\r\" }
+expect \"Name of PostgreSQL user\" { send \"\r\" }
+expect \"Password of PostgreSQL user\" { send \"$DB_PASS\r\" }
+expect \"Redis host\" { send \"\r\" }
+expect \"Redis port\" { send \"\r\" }
+expect \"Redis password\" { send \"\r\" }
+expect \"store uploaded files on the cloud\" { send \"n\r\" }
+expect \"send e-mails\" { send \"y\r\" }
+expect \"E-mail address to send e-mails\"{ send \"\r\" }
+expect \"Send a test e-mail\" { send \"n\r\" }
+expect \"periodically check for important updates\" { send \"y\r\" }
+expect \"Save configuration\" { send \"y\r\" }
+expect \"Prepare the database now\" { send \"y\r\" }
+expect \"Compile the assets now\" { send \"y\r\" }
+expect \"create an admin user\" { send \"n\r\" }
 expect EOF
 EOF"
 msg_ok "Installed Mastodon"
