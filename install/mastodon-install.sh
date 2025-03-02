@@ -131,7 +131,7 @@ cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
 EOF
-$STD npm install -g yarn@1.22.19
+$STD npm install -g yarn@1.22.19 --force
 $STD su - mastodon -c "cd /opt/mastodon && yes | yarn install --frozen-lockfile"
 $STD su - mastodon -c "RAILS_ENV=production"
 $STD su - mastodon -c "expect <<EOF
