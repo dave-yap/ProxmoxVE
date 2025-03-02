@@ -130,6 +130,8 @@ cp -r mastodon-*/* /opt/mastodon
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
+cd /opt/mastodon && mkdir -p .yarn/patches
+touch .yarn/patches/babel-plugin-lodash-npm-3.3.4-c7161075b6.patch
 EOF
 #$STD npm install -g yarn@1.22.19 --force
 $STD su - mastodon -c "cd /opt/mastodon && yes | yarn install"
