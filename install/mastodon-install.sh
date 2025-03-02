@@ -133,26 +133,120 @@ cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPRO
 EOF
 $STD npm install -g yarn@1.22.19 --force
 $STD su - mastodon -c "cd /opt/mastodon && yes | yarn install"
-$STD su - mastodon -c "RAILS_ENV=production"
-$STD su - mastodon -c "expect <<EOF
-spawn /opt/mastodon/bin/rails mastodon:setup
+$STD su - mastodon -c "cd /opt/mastodon && expect <<EOF
+spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
+expect {
+    \"Domain name:\" {
+        send \"localhost\r\"
+      }
+}
+expect {
+    \"single user mode\" {
+        send \"n\r\"
+    }
+}
+expect {
+    \"Docker\" {
+        send \"n\r\"
+    }
+}
+expect {
+    \"PostgreSQL host\" {
+        send \"\r\"
+    }
+}
+expect {
+    \"PostgreSQL port\" {
+        send \"\r\"
+    }
+}
+expect {
+    \"Name of PostgreSQL database\" {
+        send \"\r\"
+    }
+}
+expect {
+    \"Name of PostgreSQL user\" {
+        send \"\r\"
+    }
+}
+expect {
+    \"Password of PostgreSQL user\" {
+        send \"$DB_PASS\r\"
+    }
+}
+expect {
+    \"Redis host\" {
+        send \"\r\"
+    }
+}
+expect {
+    \"Redis port\" {
+        send \"\r\"
+    }
+}
+expect {
+    \"Redis password\" {
+        send \"\r\"
+    }
+}
+expect {
+    \"store uploaded files on the cloud\" {
+        send \"n\r\"
+    }
+}
+expect {
+    \"send e-mails\" {
+        send \"y\r\"
+    }
+}
+expect {
+    \"E-mail address to send e-mails\"{
+        send \"\r\"
+    }
+}
+expect {
+    \"Send a test e-mail\" {
+        send \"n\r\"
+    }
+}
+expect {
+    \"periodically check for important updates\" {
+        send \"y\r\"
+    }
+}
+expect {
+    \"Save configuration\" {
+        send \"y\r\"
+    }
+}
+expect {
+    \"Prepare the database now\" {
+        send \"y\r\"
+    }
+}
+expect {
+    \"Compile the assets now\" {
+        send \"y\r\"
+    }
+}
+expect {
+    \"create an admin user\" {
+        send \"n\r\"
+    }
+}
 #expect {
-#    \"Text to expect\" {
-#        send \"\r\"
-#      }
+#    \"Username\" {
+#        send \"admin\r\"
+#    }
 #}
-#expect EOF
+#expect {
+#    \"E-mail\" {
+#        send \"admin@localhost\r\"
+#    }
+#}
+expect EOF
 EOF"
-#su - mastodon -c "wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz"
-#su - mastodon -c "tar -xzf $RELEASE.tar.gz"
-#su - mastodon -c "cp -r mastodon-*/* /opt/mastodon"
-#su - mastodon -c "cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'"
-#su - mastodon -c "cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'"
-#su - mastodon -c "cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)"
-#yes | su - mastodon -c "cd /opt/mastodon && yarn install"
-#$STD su - mastodon -c "expect <<EOF
-#spawn RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
-#EOF"
 msg_ok "Installed Mastodon"
 
 msg_info "Creating Services"
@@ -206,7 +300,7 @@ SystemCallFilter=~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileg
 SystemCallFilter=@chown
 SystemCallFilter=pipe
 SystemCallFilter=pipe2
-ReadWritePaths=/home/mastodon/live
+ReadWritePaths=/opt/mastodon
 
 [Install]
 WantedBy=multi-user.target
@@ -276,7 +370,7 @@ SystemCallArchitectures=native
 SystemCallFilter=~@cpu-emulation @debug @keyring @ipc @memlock @mount @obsolete @privileged @resources @setuid
 SystemCallFilter=pipe
 SystemCallFilter=pipe2
-ReadWritePaths=/home/mastodon/live
+ReadWritePaths=/opt/mastodon
 
 [Install]
 WantedBy=multi-user.target mastodon-streaming.service
@@ -331,11 +425,12 @@ SystemCallFilter=~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileg
 SystemCallFilter=@chown
 SystemCallFilter=pipe
 SystemCallFilter=pipe2
-ReadWritePaths=/home/mastodon/live
+ReadWritePaths=/opt/mastodon
 
 [Install]
 WantedBy=multi-user.target
 EOF
+systemctl -q daemon-reload
 systemctl enable -q mastodon-web mastodon-sidekiq mastodon-streaming
 msg_ok "Created Services"
 
