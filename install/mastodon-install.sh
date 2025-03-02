@@ -448,8 +448,8 @@ ln -s /etc/nginx/sites-available/mastodon /etc/nginx/sites-enabled/mastodon
 rm /etc/nginx/sites-enabled/default
 
 sed -i "s,example.com,$1,g" /etc/nginx/sites-enabled/mastodon
-sed -i "s|# ssl_certificate\s*/etc/letsencrypt/live/example.com/fullchain.pem;|ssl_certificate     /etc/letsencrypt/live/$2/fullchain.pem;|" /etc/nginx/sites-enabled/mastodon
-sed -i "s|# ssl_certificate\s*/etc/letsencrypt/live/example.com/privkey.pem;|ssl_certificate     /etc/letsencrypt/live/$2/privkey.pem;|" /etc/nginx/sites-enabled/mastodon
+sed -i "s|# ssl_certificate\s*/etc/letsencrypt/live/example.com/fullchain.pem;|ssl_certificate     /etc/letsencrypt/live/$1/fullchain.pem;|" /etc/nginx/sites-enabled/mastodon
+sed -i "s|# ssl_certificate\s*/etc/letsencrypt/live/example.com/privkey.pem;|ssl_certificate     /etc/letsencrypt/live/$1/privkey.pem;|" /etc/nginx/sites-enabled/mastodon
 
 chmod o+x /opt/mastodon
 
