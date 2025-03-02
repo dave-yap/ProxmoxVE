@@ -14,6 +14,14 @@ Exercise vigilance regarding copycat or coat-tailing sites that seek to exploit 
 All LXC instances created using this repository come pre-installed with Midnight Commander, which is a command-line tool (`mc`) that offers a user-friendly file and directory management interface for the terminal environment.
 
 
+## 2025-03-02
+
+### 🚀 Updated Scripts
+
+  - #### 🐞 Bug Fixes
+
+    - Fix gpg Repo for nzbget [@flatlinebb](https://github.com/flatlinebb) ([#2774](https://github.com/community-scripts/ProxmoxVE/pull/2774))
+
 ## 2025-03-01
 
 ### 🚀 Updated Scripts
@@ -22,6 +30,14 @@ All LXC instances created using this repository come pre-installed with Midnight
 
     - Firefly III: FIx Ownership for OAuth Key [@michelroegl-brunner](https://github.com/michelroegl-brunner) ([#2759](https://github.com/community-scripts/ProxmoxVE/pull/2759))
     - homarr: double restart to fix homarr migration [@CrazyWolf13](https://github.com/CrazyWolf13) ([#2757](https://github.com/community-scripts/ProxmoxVE/pull/2757))
+
+  - #### ✨ New Features
+
+    - ActualBudget: New Installation Script with new Repo [@MickLesk](https://github.com/MickLesk) ([#2770](https://github.com/community-scripts/ProxmoxVE/pull/2770))
+
+  - #### 💥 Breaking Changes
+
+    - Breaking: Remove Update Function for Actual Budget until it fixed [@MickLesk](https://github.com/MickLesk) ([#2768](https://github.com/community-scripts/ProxmoxVE/pull/2768))
 
 ### 🧰 Maintenance
 
