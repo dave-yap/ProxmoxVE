@@ -109,7 +109,6 @@ mv rbenv-*/ /home/mastodon/.rbenv
 echo "export PATH="/home/mastodon/.rbenv/bin:$PATH"" >> ~/.bashrc
 echo "export PATH="/home/mastodon/.rbenv/shims:$PATH"" >> ~/.bashrc
 echo "export RBENV_SHELL=bash" >> ~/.bashrc
-echo "eval "$(/home/mastodon/.rbenv/bin/rbenv init -)"" >> ~/.bashrc
 wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz
 tar -xzf $RUBY_BUILD_RELEASE.tar.gz
 mkdir -p /home/mastodon/.rbenv/plugins/ruby-build
