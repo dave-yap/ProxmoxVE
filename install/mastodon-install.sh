@@ -148,7 +148,7 @@ expect \"Redis port\" { send \"\r\" }
 expect \"Redis password\" { send \"\r\" }
 expect \"store uploaded files on the cloud\" { send \"n\r\" }
 expect \"send e-mails\" { send \"y\r\" }
-expect \"E-mail address to send e-mails\"{ send \"\r\" }
+expect \"E-mail address to send e-mails\" { send \"\r\" }
 expect \"Send a test e-mail\" { send \"n\r\" }
 expect \"periodically check for important updates\" { send \"y\r\" }
 expect \"Save configuration\" { send \"y\r\" }
