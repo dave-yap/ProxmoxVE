@@ -65,7 +65,7 @@ $STD apt-get install -y \
     libidn11-dev \
     libicu-dev \
     libjemalloc-dev
-corepack enable
+$STD corepack enable
 useradd mastodon
 mkdir -p /home/mastodon
 mkdir -p /opt/mastodon
@@ -118,26 +118,11 @@ RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install 3.4.2
 /home/mastodon/.rbenv/shims/gem install bundler --no-document
 /home/mastodon/.rbenv/bin/rbenv rehash
 EOF
-#su - mastodon -c "wget -qc https://github.com/rbenv/rbenv/archive/refs/tags/$RUBY_RELEASE.tar.gz"
-#su - mastodon -c "tar -xzf $RUBY_RELEASE.tar.gz"
-#su - mastodon -c "mv rbenv-*/ ~/.rbenv"
-#su - mastodon -c "echo 'export PATH="~/.rbenv/bin:$PATH"' >> ~/.bashrc"
-#su - mastodon -c 'echo "export PATH="/home/mastodon/.rbenv/shims:$PATH"" >> ~/.bashrc'
-#su - mastodon -c 'echo "export RBENV_SHELL=bash" >> ~/.bashrc'
-#su - mastodon -c 'eval "$(~/.rbenv/bin/rbenv init -)"'
-#su - mastodon -c "wget -qc https://github.com/rbenv/ruby-build/archive/refs/tags/$RUBY_BUILD_RELEASE.tar.gz"
-#su - mastodon -c "tar -xzf $RUBY_BUILD_RELEASE.tar.gz"
-#su - mastodon -c "mkdir -p /home/mastodon/.rbenv/plugins/ruby-build"
-#su - mastodon -c "cp -r ruby-build-*/* /home/mastodon/.rbenv/plugins/ruby-build"
-#su - mastodon -c "RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install 3.4.2"
-#su - mastodon -c "/home/mastodon/.rbenv/bin/rbenv global 3.4.2"
-#su - mastodon -c "/home/mastodon/.rbenv/shims/gem install bundler --no-document"
-#su - mastodon -c "/home/mastodon/.rbenv/bin/rbenv rehash"
 msg_ok "Installed Ruby"
 
 msg_info "Installing Mastodon"
 RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
-$STD npm install -g yarn@1.22.19
+$STD corepack install --global yarn@1.22.19
 $STD su - mastodon -c 'bash' << EOF
 cd ~
 wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz
