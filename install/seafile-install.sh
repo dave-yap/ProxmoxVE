@@ -199,12 +199,12 @@ expect {
     }
 expect {
     \"What is the password for the admin account\" {
-        send \"$ADMIN_PASS\r\"
+        send \"helper-scripts\r\"
         }
     }
 expect {
     \"Enter the password again:\" {
-        send \"$ADMIN_PASS\r\"
+        send \"helper-scripts\r\"
     }
 }
 expect eof
