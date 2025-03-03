@@ -132,11 +132,11 @@ cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'developme
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
 mkdir -p /opt/mastodon/.yarn/patches
 cat > /opt/mastodon/.yarn/patches/babel-plugin-lodash-npm-3.3.4-c7161075b6.patch << 'PATCH'
-diff --git a/package.json b/package.json
-index xxxxxxx..xxxxxxx 100644
---- a/package.json
-+++ b/package.json
-@@ -1,1 +1,1 @@
+diff --git a/lib/index.js b/lib/index.js
+index 3aabfaa..3aabfaa 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -1,5 +1,5 @@
 -// Original content
 +// Modified content
 PATCH
