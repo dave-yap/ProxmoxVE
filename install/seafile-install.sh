@@ -189,9 +189,9 @@ sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start"
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh start"
 $STD su - seafile -c "expect <<EOF
-spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
+spawn /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
     \"What is the email for the admin account\" {
         send \"$ADMIN_EMAIL\r\"
@@ -209,8 +209,8 @@ expect {
 }
 expect eof
 EOF"
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh stop"
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh stop"
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop"
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop"
 msg_ok "Seafile setup"
 
 msg_info "Creating Services"
