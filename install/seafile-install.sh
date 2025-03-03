@@ -33,7 +33,7 @@ SEAHUB_DB="seahub_db"
 DB_USER="seafile"
 DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 ADMIN_EMAIL="admin@localhost.local"
-ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
+ADMIN_PASS="helper-scripts"
 sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
@@ -194,7 +194,7 @@ $STD su - seafile -c "expect <<EOF
 spawn /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
     \"What is the email for the admin account\" {
-        send \"$ADMIN_EMAIL\r\"
+        send \"admin@localhost.local\r\"
         }
     }
 expect {
