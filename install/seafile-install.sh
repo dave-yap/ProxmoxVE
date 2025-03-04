@@ -212,6 +212,8 @@ expect {
 expect eof
 EOF"
 sleep 5
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh start || true"
+sleep 5
 $STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop || true"
 sleep 2
 $STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop || true"
