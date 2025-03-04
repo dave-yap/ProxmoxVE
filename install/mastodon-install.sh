@@ -130,8 +130,25 @@ cp -r mastodon-*/* /opt/mastodon
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
+mkdir -p /opt/mastodon/.yarn/patches
+cat > .yarn/patches/babel-plugin-lodash-npm-3.3.4-c7161075b6.patch << 'PATCH'
+diff --git a/lib/index.js b/lib/index.js
+index 3aabfaa..e4a60b5 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -90,6 +90,8 @@ module.exports = function (_ref) {
+                 // The lodash path will be either 'lodash' for ES modules
+                 // or 'lodash/foo' for CommonJS modules.
+                 var lodashPath = path.node.source.value;
++                if (lodashPath === 'lodash-es')
++                  lodashPath = 'lodash';
+                 var matches = void 0;
+ 
+                 if (lodashPath === 'lodash') {
+PATCH
 EOF
-$STD npm install -g yarn@1.22.19 --force
+#$STD npm install -g yarn@1.22.19 --force
+yarn set version 4.1.1
 $STD su - mastodon -c "cd /opt/mastodon && yes | yarn install"
 $STD su - mastodon -c "cd /opt/mastodon && . ~/.bashrc && expect <<EOF
 spawn env RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
