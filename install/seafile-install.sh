@@ -164,6 +164,8 @@ expect {
 }
 expect eof
 EOF"
+su - mastodon -c "/opt/seafile/seafile-server-latest/seahub.sh stop" || true
+su - mastodon -c "/opt/seafile/seafile-server-latest/seafile.sh stop" || true
 msg_ok "Installed Seafile"
 
 msg_info "Setting up Memcached"
@@ -186,6 +188,8 @@ msg_ok "Memcached Started"
 
 msg_info "Adjusting Conf files"
 sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
+echo -e "\nCSRF_TRUSTED_ORIGINS = ['http://$IP']" >> /opt/seafile/conf/seahub_settings.py
+echo "CSRF_COOKIE_SECURE = True" >> /opt/seafile/conf/seahub_settings.py
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
@@ -251,6 +255,16 @@ ln -s $STORAGE_DIR/seafile-data /opt/seafile/seafile-data
 EOF
 msg_ok "Bash Script for External Storage created"
 
+msg_info "Creating Domain access script"
+cat <<'EOF' >~/domain.sh
+#!/bin/bash
+domain=$1
+IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
+
+#Change the CORS to provided domain
+sed -i "0,/http://$IP/s/http://$IP/$1/" /opt/seafile/conf/seahub_settings.py
+EOF
+msg_ok "Bash Script for Domain access created"
 motd_ssh
 customize
 
