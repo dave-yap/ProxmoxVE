@@ -186,7 +186,7 @@ msg_ok "Memcached Started"
 
 msg_info "Adjusting Conf files"
 sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
-echo -e "\nFILE_SERVER_ROOT = "http://$IP:8082/seafhttp"" >> /opt/seafile/conf/seahub_settings.py
+echo -e "\nFILE_SERVER_ROOT = \"http://$IP:8082/seafhttp\"" >> /opt/seafile/conf/seahub_settings.py
 echo -e "\nCSRF_TRUSTED_ORIGINS = ['http://$IP:8000']" >> /opt/seafile/conf/seahub_settings.py
 msg_ok "Conf files adjusted"
 
@@ -212,11 +212,13 @@ expect {
 expect eof
 EOF"
 sleep 5
-$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh start || true"
-sleep 5
-$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop || true"
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start || true"
 sleep 2
-$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop || true"
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh start || true"
+sleep 5
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh stop || true"
+sleep 2
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh stop || true"
 msg_ok "Seafile setup"
 
 msg_info "Creating Services"
