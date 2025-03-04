@@ -40,7 +40,7 @@
             "type": "info"
         },
         {
-            "text": "Execute `~/domain.sh <HTTPS://YOUR_DOMAIN.COM_HERE>` to enable access to Seafile via your domain"
+            "text": "Execute `~/domain.sh <HTTPS://YOUR_DOMAIN.COM_HERE>` to enable access to Seafile via your domain",
             "type": "info"
         }
     ]
