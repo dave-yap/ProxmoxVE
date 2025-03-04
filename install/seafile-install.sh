@@ -211,8 +211,9 @@ expect {
     }
 expect eof
 EOF"
-su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop" || true
-su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop" || true
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh start"
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop"
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop"
 msg_ok "Seafile setup"
 
 msg_info "Creating Services"
