@@ -93,8 +93,8 @@ useradd seafile
 mkdir -p /home/seafile
 chown seafile: /home/seafile
 chown seafile: /opt/seafile
-su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
-su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
+$STD su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
+$STD su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
 $STD su - seafile -c "expect <<EOF
 spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
 expect {
@@ -188,7 +188,6 @@ msg_info "Adjusting Conf files"
 sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 echo -e "\nFILE_SERVER_ROOT = \"http://$IP:8082/seafhttp\"" >> /opt/seafile/conf/seahub_settings.py
 echo -e "\nCSRF_TRUSTED_ORIGINS = ['http://$IP:8000']" >> /opt/seafile/conf/seahub_settings.py
-echo -e "CSRF_COOKIE_SAMESITE = 'None'" >> /opt/seafile/conf/seahub_settings.py
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
@@ -265,7 +264,6 @@ IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 #Change the CORS to provided domain
 sed -i "s|http://$IP:8000|http://$1:8000|g" /opt/seafile/conf/seahub_settings.py
 sed -i "s|http://$IP:8082|http://$1:8082|g" /opt/seafile/conf/seahub_settings.py
-sed -i "s|Strict|None|g" /opt/seafile/conf/seahub_settings.py
 EOF
 msg_ok "Bash Script for Domain access created"
 motd_ssh
