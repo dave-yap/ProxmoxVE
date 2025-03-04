@@ -153,7 +153,7 @@ expect \"Send a test e-mail\" { send \"n\r\" }
 expect \"periodically check for important updates\" { send \"y\r\" }
 expect \"Save configuration\" { send \"y\r\" }
 expect \"Prepare the database now\" { send \"y\r\" }
-expect \"Compile the assets now\" { send \"y\r\" }
+expect \"Compile the assets now\" { send \"n\r\" }
 expect \"create an admin user\" { send \"n\r\" }
 expect EOF
 EOF"
