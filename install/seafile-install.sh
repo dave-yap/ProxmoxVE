@@ -164,8 +164,6 @@ expect {
 }
 expect eof
 EOF"
-su - mastodon -c "/opt/seafile/seafile-server-latest/seafile.sh start" || true
-su - mastodon -c "/opt/seafile/seafile-server-latest/seahub.sh start" || true
 su - mastodon -c "/opt/seafile/seafile-server-latest/seahub.sh stop" || true
 su - mastodon -c "/opt/seafile/seafile-server-latest/seafile.sh stop" || true
 msg_ok "Installed Seafile"
