@@ -160,7 +160,7 @@ EOF"
 msg_ok "Installed Mastodon"
 
 msg_info "Creating Services"
-cat <<EOF >/etc/systemd/system/mastodon-sidekiq.service
+cat <<'EOF' >/etc/systemd/system/mastodon-sidekiq.service
 [Unit]
 Description=mastodon-sidekiq
 After=network.target
@@ -215,7 +215,7 @@ ReadWritePaths=/opt/mastodon
 [Install]
 WantedBy=multi-user.target
 EOF
-cat <<EOF >/etc/systemd/system/mastodon-streaming.service
+cat <<'EOF' >/etc/systemd/system/mastodon-streaming.service
 [Unit]
 Description=mastodon-streaming
 After=network.target
@@ -229,7 +229,7 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 EOF
-cat <<EOF >/etc/systemd/system/mastodon-streaming@.service
+cat <<'EOF' >/etc/systemd/system/mastodon-streaming@.service
 [Unit]
 Description=mastodon-streaming on port %I
 After=network.target
@@ -285,7 +285,7 @@ ReadWritePaths=/opt/mastodon
 [Install]
 WantedBy=multi-user.target mastodon-streaming.service
 EOF
-cat <<EOF >/etc/systemd/system/mastodon-web.service
+cat <<'EOF' >/etc/systemd/system/mastodon-web.service
 [Unit]
 Description=mastodon-web
 After=network.target
