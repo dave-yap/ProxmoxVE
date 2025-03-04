@@ -188,8 +188,8 @@ msg_ok "Memcached Started"
 
 msg_info "Adjusting Conf files"
 sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
-echo -e "\nCSRF_TRUSTED_ORIGINS = ['http://$IP']" >> /opt/seafile/conf/seahub_settings.py
-echo "CSRF_COOKIE_SECURE = True" >> /opt/seafile/conf/seahub_settings.py
+echo -e "\nFILE_SERVER_ROOT = "http://$IP:8082/seafhttp"" >> /opt/seafile/conf/seahub_settings.py
+echo -e "\nCSRF_TRUSTED_ORIGINS = ['http://$IP:8000']" >> /opt/seafile/conf/seahub_settings.py
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
@@ -239,7 +239,7 @@ RestartSec=5s
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable -q seafile.service
+systemctl enable --now -q seafile.service
 msg_ok "Created Services"
 
 msg_info "Creating External Storage script"
@@ -262,7 +262,8 @@ domain=$1
 IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 
 #Change the CORS to provided domain
-sed -i "0,/http://$IP/s/http://$IP/$1/" /opt/seafile/conf/seahub_settings.py
+sed -i "0,/http://$IP:8000/s/http://$IP:8000/$1/" /opt/seafile/conf/seahub_settings.py
+sed -i "0,/http://$IP:8082/s/http://$IP:8082/$1/" /opt/seafile/conf/seahub_settings.py
 EOF
 msg_ok "Bash Script for Domain access created"
 motd_ssh
