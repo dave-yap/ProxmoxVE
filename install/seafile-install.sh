@@ -187,7 +187,9 @@ msg_ok "Memcached Started"
 msg_info "Adjusting Conf files"
 sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 echo -e "\nFILE_SERVER_ROOT = \"http://$IP:8082/seafhttp\"" >> /opt/seafile/conf/seahub_settings.py
-echo -e "\nCSRF_TRUSTED_ORIGINS = ['http://$IP:8000']" >> /opt/seafile/conf/seahub_settings.py
+echo -e "CSRF_TRUSTED_ORIGINS = ['*']" >> /opt/seafile/conf/seahub_settings.py
+echo -e "CSRF_COOKIE_SAMESITE = 'None'" >> /opt/seafile/conf/seahub_settings.py
+#echo -e "\nCSRF_TRUSTED_ORIGINS = ['http://$IP:8000']" >> /opt/seafile/conf/seahub_settings.py
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
@@ -211,14 +213,8 @@ expect {
     }
 expect eof
 EOF"
-sleep 5
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start || true"
-sleep 2
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh start || true"
-sleep 5
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh stop || true"
-sleep 2
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh stop || true"
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh stop"
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh stop"
 msg_ok "Seafile setup"
 
 msg_info "Creating Services"
@@ -268,8 +264,9 @@ domain=$1
 IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 
 #Change the CORS to provided domain
-sed -i "0,/http://$IP:8000/s/http://$IP:8000/$1/" /opt/seafile/conf/seahub_settings.py
-sed -i "0,/http://$IP:8082/s/http://$IP:8082/$1/" /opt/seafile/conf/seahub_settings.py
+sed -i "s|http://$IP:8000|http://$1:8000|g" /opt/seafile/conf/seahub_settings.py
+sed -i "s|http://$IP:8082|http://$1:8082|g" /opt/seafile/conf/seahub_settings.py
+sed -i "s|Strict|None|g" /opt/seafile/conf/seahub_settings.py
 EOF
 msg_ok "Bash Script for Domain access created"
 motd_ssh
