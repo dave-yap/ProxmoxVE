@@ -209,6 +209,7 @@ expect {
 }
 expect eof
 EOF"
+sleep 5
 $STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop"
 $STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop"
 msg_ok "Seafile setup"
