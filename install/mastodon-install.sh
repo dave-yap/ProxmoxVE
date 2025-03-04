@@ -130,18 +130,8 @@ cp -r mastodon-*/* /opt/mastodon
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
-mkdir -p /opt/mastodon/.yarn/patches
-cat > /opt/mastodon/.yarn/patches/babel-plugin-lodash-npm-3.3.4-c7161075b6.patch << 'PATCH'
-diff --git a/lib/index.js b/lib/index.js
-index 3aabfaa..3aabfaa 100644
---- a/lib/index.js
-+++ b/lib/index.js
-@@ -1,5 +1,5 @@
--// Original content
-+// Modified content
-PATCH
 EOF
-#$STD npm install -g yarn@1.22.19 --force
+$STD npm install -g yarn@1.22.19 --force
 $STD su - mastodon -c "cd /opt/mastodon && yes | yarn install"
 $STD su - mastodon -c "cd /opt/mastodon && . ~/.bashrc && expect <<EOF
 spawn env RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
@@ -167,6 +157,7 @@ expect \"Compile the assets now\" { send \"y\r\" }
 expect \"create an admin user\" { send \"n\r\" }
 expect EOF
 EOF"
+echo "$RELEASE" >/opt/${APPLICATION}_version.txt
 msg_ok "Installed Mastodon"
 
 msg_info "Creating Services"

@@ -30,7 +30,37 @@ function update_script() {
         exit
     fi
     RELEASE=$(curl -si https://github.com/mastodon/mastodon/releases/latest | grep location: | cut -d '/' -f 8 | tr -d '\r')
+    if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
+        msg_info "Stopping $APP"
+        systemctl stop mastodon-*
+        msg_ok "Stopped $APP"
+
+        msg_info "Updating $APP to ${RELEASE}"
+        $STD su - mastodon -c 'bash' << EOF
+        cd /tmp
+        wget -qc https://github.com/mastodon/mastodon/archive/refs/tags/$RELEASE.tar.gz -O - | tar -xz
+        cp -r mastodon-*/* /opt/mastodon
+        cd /opt/mastodon
+        RAILS_ENV=production bundle install
+        RAILS_ENV=production bundle exec rails db:migrate
+        RAILS_ENV=production bundle exec rails assets:precompile
+EOF
+        echo "${RELEASE}" >/opt/${APP}_version.txt
+        msg_ok "Updated $APP to ${RELEASE}"
+
+        msg_info "Starting $APP"
+        systemctl restart mastodon-sidekiq
+        systemctl reload mastodon-web
+        systemctl restart mastodon-streaming
+        msg_ok "Started $APP"
+
+        msg_info "Cleaning up"
+        rm -rf /tmp/mastodon-*
+        msg_ok "Cleanup Completed"
+        msg_ok "Update Successful"
+    else
         msg_ok "No update required. ${APP} is already at ${RELEASE}"
+    fi
     exit
 }
 
