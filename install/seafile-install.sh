@@ -193,7 +193,7 @@ msg_ok "Conf files adjusted"
 msg_info "Setting up Seafile" 
 $STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start"
 $STD su - seafile -c "expect <<EOF
-spawn bash /opt/seafile/seafile-server-latest/seahub.sh start-fastcgi
+spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
     \"email\" {
         send \"$ADMIN_EMAIL\r\"
@@ -211,8 +211,10 @@ expect {
     }
 expect eof
 EOF"
-$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop"
-$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop"
+sleep 5
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop || true"
+sleep 2
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop || true"
 msg_ok "Seafile setup"
 
 msg_info "Creating Services"
@@ -229,7 +231,7 @@ Group=seafile
 WorkingDirectory=/opt/seafile
 
 ExecStart=/opt/seafile/seafile-server-latest/seafile.sh start
-ExecStartPost=/opt/seafile/seafile-server-latest/seahub.sh start-fastcgi
+ExecStartPost=/opt/seafile/seafile-server-latest/seahub.sh start
 ExecStop=/opt/seafile/seafile-server-latest/seahub.sh stop
 ExecStop=/opt/seafile/seafile-server-latest/seafile.sh stop
 
