@@ -189,28 +189,28 @@ sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
-#$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh start"
-#$STD su - seafile -c "expect <<EOF
-#spawn /opt/seafile/seafile-server-latest/seahub.sh start
-#expect {
-#    \"What is the email for the admin account\" {
-#        send \"admin@localhost.local\r\"
-#        }
-#    }
-#expect {
-#    \"What is the password for the admin account\" {
-#        send \"helper-scripts\r\"
-#        }
-#    }
-#expect {
-#    \"Enter the password again:\" {
-#        send \"helper-scripts\r\"
-#    }
-#}
-#expect eof
-#EOF"
-#$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop"
-#$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop"
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh start"
+$STD su - seafile -c "expect <<EOF
+spawn /opt/seafile/seafile-server-latest/seahub.sh start
+expect {
+    \"email\" {
+        send \"admin@localhost.local\r\"
+        }
+    }
+expect {
+    \"password\" {
+        send \"helper-scripts\r\"
+        }
+    }
+expect {
+    \"password again\" {
+        send \"helper-scripts\r\"
+    }
+}
+expect eof
+EOF"
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seahub.sh stop"
+$STD su - seafile -c "/opt/seafile/seafile-server-latest/seafile.sh stop"
 msg_ok "Seafile setup"
 
 msg_info "Creating Services"
@@ -237,7 +237,7 @@ RestartSec=5s
 [Install]
 WantedBy=multi-user.target
 EOF
-#systemctl enable -q --now seafile.service
+systemctl enable -q --now seafile.service
 msg_ok "Created Services"
 
 msg_info "Creating External Storage script"
