@@ -164,8 +164,6 @@ expect {
 }
 expect eof
 EOF"
-su - mastodon -c "/opt/seafile/seafile-server-latest/seahub.sh stop" || true
-su - mastodon -c "/opt/seafile/seafile-server-latest/seafile.sh stop" || true
 msg_ok "Installed Seafile"
 
 msg_info "Setting up Memcached"
@@ -213,6 +211,8 @@ expect {
     }
 expect eof
 EOF"
+su - mastodon -c "/opt/seafile/seafile-server-latest/seahub.sh stop" || true
+su - mastodon -c "/opt/seafile/seafile-server-latest/seafile.sh stop" || true
 msg_ok "Seafile setup"
 
 msg_info "Creating Services"
@@ -239,7 +239,8 @@ RestartSec=5s
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable --now -q seafile.service
+systemctl enable -q seafile.service
+systemctl reload -q seafile.service
 msg_ok "Created Services"
 
 msg_info "Creating External Storage script"
