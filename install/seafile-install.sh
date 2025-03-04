@@ -269,7 +269,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-rm -rf seafile-server_11.0.13_x86-64.tar.gz
+su - seafile -c "rm -rf seafile*.tar.gz"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
