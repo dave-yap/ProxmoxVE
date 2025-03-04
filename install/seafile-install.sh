@@ -194,17 +194,17 @@ $STD su - seafile -c "expect <<EOF
 spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
     \"email\" {
-        send \"admin@localhost.local\r\"
+        send \"$ADMIN_EMAIL\r\"
         }
     }
 expect {
     \"password\" {
-        send \"helper-scripts\r\"
+        send \"$ADMIN_PASS\r\"
         }
     }
 expect {
     \"password again\" {
-        send \"helper-scripts\r\"
+        send \"$ADMIN_PASS\r\"
         }
     }
 expect eof
