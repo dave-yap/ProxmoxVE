@@ -209,8 +209,6 @@ expect {
     }
 expect eof
 EOF"
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh stop"
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh stop"
 msg_ok "Seafile setup"
 
 msg_info "Creating Services"
@@ -237,7 +235,7 @@ RestartSec=5s
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable -q --now seafile.service
+systemctl enable -q seafile.service
 msg_ok "Created Services"
 
 msg_info "Creating External Storage script"
