@@ -29,7 +29,7 @@ msg_ok "Installed Dependecies"
 
 msg_info "Installing Node.JS"
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 $STD apt-get update -y
 $STD apt-get install -y nodejs
 msg_ok "Installed Node.JS"
@@ -132,7 +132,7 @@ cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'developme
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
 EOF
 #$STD npm install -g yarn@1.22.19 --force
-yes | yarn set version stable
+#yes | yarn set version stable
 $STD su - mastodon -c "cd /opt/mastodon && yes | yarn install"
 $STD su - mastodon -c "cd /opt/mastodon && . ~/.bashrc && expect <<EOF
 spawn env RAILS_ENV=production /opt/mastodon/bin/rails mastodon:setup
