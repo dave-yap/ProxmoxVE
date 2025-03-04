@@ -1,0 +1,43 @@
+{
+    "name": "Mastodon",
+    "slug": "Mastodon",
+    "categories": [
+        0
+    ],
+    "date_created": "2025-03-04",
+    "type": "ct",
+    "updateable": true,
+    "privileged": false,
+    "interface_port": null,
+    "documentation": null,
+    "website": "https://joinmastodon.org/",
+    "logo": "https://joinmastodon.org/logos/logo-purple.svg",
+    "description": "Mastodon is a decentralized, open-source social media platform that allows users to create their own communities or "instances" to interact with others. It’s similar to Twitter in terms of functionality, but instead of one centralized network, Mastodon is made up of a federation of independently run servers, each with its own rules, guidelines, and features.",
+    "install_methods": [
+        {
+            "type": "default",
+            "script": "ct/mastodon.sh",
+            "resources": {
+                "cpu": 2,
+                "ram": 4096,
+                "hdd": 20,
+                "os": "debian",
+                "version": "12"
+            }
+        }
+    ],
+    "default_credentials": {
+        "username": null,
+        "password": null
+    },
+    "notes": [
+        {
+            "text": "Application credentials: `cat ~/mastodon.creds`",
+            "type": "info"
+        },
+        {
+            "text": "A semi-automatic nginx setup script for your domain has been created; to use it, run `bash ~/nginx-setup.sh <YOUR_DOMAIN.COM_HERE>",
+            "type": "info"
+        }
+    ]
+}
