@@ -345,7 +345,7 @@ systemctl enable -q mastodon-web mastodon-sidekiq mastodon-streaming
 msg_ok "Created Services"
 
 msg_info "Create nginx-setup.sh"
-cat <<EOF >~/nginx-setup.sh
+cat <<'EOF' >~/nginx-setup.sh
 if [ -z "$1" ]; then
     echo "Error: Please provide a domain name"
     echo "Usage: $0 domain.com"
