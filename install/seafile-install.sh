@@ -188,8 +188,7 @@ msg_info "Adjusting Conf files"
 sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
 sed -i "0,/SERVICE_URL = \"http:\/\/$IP\"/s/SERVICE_URL = \"http:\/\/$IP\"/SERVICE_URL = \"http:\/\/$IP:8000\/\"/" /opt/seafile/conf/seahub_settings.py
 echo -e "\nFILE_SERVER_ROOT = \"http://$IP:8082/seafhttp\"" >> /opt/seafile/conf/seahub_settings.py
-echo -e "\nALLOWED_HOSTS = ['0.0.0.0']" >> /opt/seafile/conf/seahub_settings.py
-echo -e "CSRF_TRUSTED_ORIGINS = ['http://$IP:8000']" >> /opt/seafile/conf/seahub_settings.py
+echo -e "CSRF_TRUSTED_ORIGINS = ['*']" >> /opt/seafile/conf/seahub_settings.py
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
@@ -268,7 +267,6 @@ DOMAIN_NOSCHEME=$(echo $DOMAIN | sed 's|^https://||')
 #Change the CORS to provided domain
 sed -i "s|CSRF_TRUSTED_ORIGINS = ['http://$IP:8000']|CSRF_TRUSTED_ORIGINS = ['$DOMAIN']|g" /opt/seafile/conf/seahub_settings.py
 sed -i "s|FILE_SERVER_ROOT = \"http://$IP:8082/seafhttp\"|FILE_SERVER_ROOT = \"$DOMAIN/seafhttp\"|g" /opt/seafile/conf/seahub_settings.py
-sed -i "s|ALLOWED_HOSTS = ['0.0.0.0']|ALLOWED_HOSTS = ['.$DOMAIN_NOSCHEME']|g" /opt/seafile/conf/seahub_settings.py
 EOF
 chmod +x ~/domain.sh
 msg_ok "Bash Script for Domain access created"
