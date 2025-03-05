@@ -130,6 +130,7 @@ cp -r mastodon-*/* /opt/mastodon
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config deployment 'true'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle config without 'development test'
 cd /opt/mastodon && /home/mastodon/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN)
+mkdir -p /opt/mastodon/.yarn/patches
 EOF
 #$STD npm install -g yarn@1.22.19 --force
 #yes | yarn set version stable
