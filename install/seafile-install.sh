@@ -277,7 +277,7 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-su - seafile -c "rm -rf seafile*.tar.gz"
+rm -rf /home/seafile/seafile*.tar.gz
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
