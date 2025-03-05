@@ -186,7 +186,7 @@ msg_ok "Memcached Started"
 
 msg_info "Adjusting Conf files"
 sed -i "0,/127.0.0.1/s/127.0.0.1/0.0.0.0/" /opt/seafile/conf/gunicorn.conf.py
-sed -i "0|SERVICE_URL = "http://$IP"|s|SERVICE_URL = "http://$IP:8000/"|" /opt/seafile/conf/seahub_settings.py
+sed -i "0,/SERVICE_URL = \"http:\/\/$IP\"/s/SERVICE_URL = \"http:\/\/$IP\"/SERVICE_URL = \"http:\/\/$IP:8000\/\"/" /opt/seafile/conf/seahub_settings.py
 echo -e "\nFILE_SERVER_ROOT = \"http://$IP:8082/seafhttp\"" >> /opt/seafile/conf/seahub_settings.py
 echo -e "\nALLOWED_HOSTS = ['0.0.0.0']" >> /opt/seafile/conf/seahub_settings.py
 echo -e "CSRF_TRUSTED_ORIGINS = ['http://$IP:8000']" >> /opt/seafile/conf/seahub_settings.py
