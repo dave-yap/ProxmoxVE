@@ -344,8 +344,8 @@ systemctl -q daemon-reload
 systemctl enable -q mastodon-web mastodon-sidekiq mastodon-streaming
 msg_ok "Created Services"
 
-msg_info "Create nginx-setup.sh"
-cat <<'EOF' >~/nginx-setup.sh
+msg_info "Create domain-setup.sh"
+cat <<'EOF' >~/domain-setup.sh
 if [ -z "$1" ]; then
     echo "Error: Please provide a domain name"
     echo "Usage: $0 domain.com"
@@ -361,16 +361,23 @@ sed -i "s,example.com,$1,g" /etc/nginx/sites-enabled/mastodon
 sed -i "s|# ssl_certificate\s*/etc/letsencrypt/live/example.com/fullchain.pem;|ssl_certificate     /etc/letsencrypt/live/$1/fullchain.pem;|" /etc/nginx/sites-enabled/mastodon
 sed -i "s|# ssl_certificate\s*/etc/letsencrypt/live/example.com/privkey.pem;|ssl_certificate     /etc/letsencrypt/live/$1/privkey.pem;|" /etc/nginx/sites-enabled/mastodon
 
+sed -i "s|LOCAL_DOMAIN=localhost|LOCAL_DOMAIN=$1|" /opt/mastodon/.env.production
 chmod o+x /opt/mastodon
 
 systemctl restart nginx
 EOF
 chmod +x ~/nginx-setup.sh
-msg_ok "Bash script for semi-automating nginx setup"
+msg_ok "Bash script for semi-automating domain setup"
 
 msg_info "Starting Mastodon"
 systemctl start mastodon-web mastodon-sidekiq mastodon-streaming
 msg_ok "Mastodon started"
+
+
+msg_info "Adjust .env file and restart"
+echo -e "BIND=$IP" >> /opt/mastodon/.env.production
+systemctl restart mastodon-web mastodon-sidekiq mastodon-streaming
+msg_ok ".env file adjusted and Mastodon restarted"
 
 motd_ssh
 customize
