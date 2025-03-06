@@ -375,8 +375,8 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
-su - mastodon -c "rm -rf ~/ruby* ~/rbenv* ~/mastodon*"
-su - mastodon -c "rm -rf ~/*.tar.gz"
+rm -rf /home/mastodon/ruby* /home/mastodon/rbenv* /home/mastodon/mastodon*"
+rm -rf /home/mastodon/*.tar.gz"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
