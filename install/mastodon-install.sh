@@ -365,6 +365,7 @@ chmod o+x /opt/mastodon
 
 systemctl restart nginx
 EOF
+chmod +x ~/nginx-setup.sh
 msg_ok "Bash script for semi-automating nginx setup"
 
 msg_info "Starting Mastodon"
