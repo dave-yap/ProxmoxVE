@@ -369,7 +369,7 @@ chmod +x ~/nginx-setup.sh
 msg_ok "Bash script for semi-automating nginx setup"
 
 msg_info "Starting Mastodon"
-systemctl start mastodon-*
+systemctl start mastodon-web mastodon-sidekiq mastodon-streaming
 msg_ok "Mastodon started"
 
 motd_ssh
