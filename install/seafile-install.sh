@@ -190,6 +190,7 @@ sed -i "0,/SERVICE_URL = \"http:\/\/$IP\"/s/SERVICE_URL = \"http:\/\/$IP\"/SERVI
 echo -e "\nFILE_SERVER_ROOT = \"http://$IP:8082\"" >> /opt/seafile/conf/seahub_settings.py
 echo -e "CSRF_TRUSTED_ORIGINS = [\"http://$IP/\"]" >> /opt/seafile/conf/seahub_settings.py
 echo -e "ALLOWED_HOSTS = [\"$IP\"]" >> /opt/seafile/conf/seahub_settings.py
+echo -e "CSRF_TRUSTED_ORIGINS = ['http://$IP/']" >> /opt/seafile/conf/seahub_settings.py
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
