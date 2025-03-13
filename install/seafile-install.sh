@@ -266,10 +266,12 @@ IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 DOMAIN_NOSCHEME=$(echo $DOMAIN | sed 's|^https://||')
 
 #Change the CORS to provided domain
-sed -i "s|SERVICE_URL = \"http://$IP\"|SERVICE_URL - \"$DOMAIN\"|g" /opt/seafile/conf/seahub_settings.py
-sed -i "s|CSRF_TRUSTED_ORIGINS = ['http://$IP:8000/']|CSRF_TRUSTED_ORIGINS = ['$DOMAIN']|g" /opt/seafile/conf/seahub_settings.py
+sed -i "s|SERVICE_URL = \"http://$IP:8000\"|SERVICE_URL - \"$DOMAIN\"|g" /opt/seafile/conf/seahub_settings.py
+sed -i "s|CSRF_TRUSTED_ORIGINS = \[\'http://$IP/\'\]|CSRF_TRUSTED_ORIGINS = \[\'$DOMAIN/\'\]|g" /opt/seafile/conf/seahub_settings.py
 sed -i "s|FILE_SERVER_ROOT = \"http://$IP:8082\"|FILE_SERVER_ROOT = \"$DOMAIN/seafhttp\"|g" /opt/seafile/conf/seahub_settings.py
-sed -i "s|ALLOWED_HOSTS = [\'$IP\']|ALLOWED_HOSTS = [\'\.$DOMAIN_NOSCHEME\']|g" /opt/seafile/conf/seahub_settings.py
+sed -i "s|ALLOWED_HOSTS = \[\'$IP\'\]|ALLOWED_HOSTS = \[\'\.$DOMAIN_NOSCHEME\'\]|g" /opt/seafile/conf/seahub_settings.py
+
+systemctl restart seafile
 EOF
 chmod +x ~/domain.sh
 msg_ok "Bash Script for Domain access created"
