@@ -16,9 +16,35 @@ All LXC instances created using this repository come pre-installed with Midnight
 
 ## 2025-03-13
 
+### 🆕 New Scripts
+
+  - NPMplus [@MickLesk](https://github.com/MickLesk) ([#3051](https://github.com/community-scripts/ProxmoxVE/pull/3051))
+
 ### 🚀 Updated Scripts
 
-  - Update Vaultwarden Source [@MickLesk](https://github.com/MickLesk) ([#3036](https://github.com/community-scripts/ProxmoxVE/pull/3036))
+  - #### 🐞 Bug Fixes
+
+    - OpenWebUI check if there are stashed changes before poping [@tremor021](https://github.com/tremor021) ([#3064](https://github.com/community-scripts/ProxmoxVE/pull/3064))
+    - Update Fluid Calendar for v1.2.0 [@vhsdream](https://github.com/vhsdream) ([#3053](https://github.com/community-scripts/ProxmoxVE/pull/3053))
+
+### 🧰 Maintenance
+
+  - #### 💾 Core
+
+    - alpine-Install (core) add timezone (tz) check [@MickLesk](https://github.com/MickLesk) ([#3057](https://github.com/community-scripts/ProxmoxVE/pull/3057))
+
+  - #### 📂 Github
+
+    - New Workflow: Close Issues in DEV Repo when new Script is merged [@michelroegl-brunner](https://github.com/michelroegl-brunner) ([#3042](https://github.com/community-scripts/ProxmoxVE/pull/3042))
+
+### 🌐 Website
+
+  - Bump @babel/runtime from 7.26.0 to 7.26.10 in /frontend [@dependabot[bot]](https://github.com/dependabot[bot]) ([#3044](https://github.com/community-scripts/ProxmoxVE/pull/3044))
+
+  - #### 📝 Script Information
+
+    - Update Vaultwarden Source [@MickLesk](https://github.com/MickLesk) ([#3036](https://github.com/community-scripts/ProxmoxVE/pull/3036))
+    - Website: Fix Alpine "undefined" Link [@MickLesk](https://github.com/MickLesk) ([#3048](https://github.com/community-scripts/ProxmoxVE/pull/3048))
 
 ## 2025-03-12
 
