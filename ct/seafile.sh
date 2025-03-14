@@ -80,19 +80,18 @@ function update_script() {
         SEAFILE_SERVER_PROTOCOL=$(grep "SERVICE_URL =" /opt/seafile/conf/seahub_settings.py | sed -E 's/SERVICE_URL = "(.*)"/\1/' |  grep -o "^[^:]\+")
         SEAFILE_SERVER_HOSTNAME=$(grep "SERVICE_URL =" /opt/seafile/conf/seahub_settings.py | sed -E 's/SERVICE_URL = "(.*)"/\1/' | sed -e 's|^[^:]\+://||' -e 's|/.*$||')
         JWT_PRIVATE_KEY=$(grep "JWT_PRIVATE_KEY:" ~/seafile.creds | cut -d ":" -f2 | tr -d ' ')
-        cat <<EOF >>/opt/seafile/conf/.env
-        TIME_ZONE=UTC
-        JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
-        SEAFILE_SERVER_PROTOCOL=$SEAFILE_SERVER_PROTOCOL
-        SEAFILE_SERVER_HOSTNAME=$SEAFILE_SERVER_HOSTNAME
-        SEAFILE_MYSQL_DB_HOST=127.0.0.1 # your MySQL host
-        SEAFILE_MYSQL_DB_PORT=3306
-        SEAFILE_MYSQL_DB_USER=${DB_USER}
-        SEAFILE_MYSQL_DB_PASSWORD=${DB_PASS}
-        SEAFILE_MYSQL_DB_CCNET_DB_NAME=${CCNET_DB}
-        SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=${SEAFILE_DB}
-        SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=${SEAHUB_DB}
-        EOF
+        echo "TIME_ZONE=UTC" > /opt/seafile/conf/.env
+        echo "JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}" >> /opt/seafile/conf/.env
+        echo "SEAFILE_SERVER_PROTOCOL=$SEAFILE_SERVER_PROTOCOL" >> /opt/seafile/conf/.env
+        echo "SEAFILE_SERVER_HOSTNAME=$SEAFILE_SERVER_HOSTNAME" >> /opt/seafile/conf/.env
+        echo "SEAFILE_MYSQL_DB_HOST=127.0.0.1" >> /opt/seafile/conf/.env
+        echo "SEAFILE_MYSQL_DB_PORT=3306" >> /opt/seafile/conf/.env
+        echo "SEAFILE_MYSQL_DB_USER=${DB_USER}" >> /opt/seafile/conf/.env
+        echo "SEAFILE_MYSQL_DB_PASSWORD=${DB_PASS}" >> /opt/seafile/conf/.env
+        echo "SEAFILE_MYSQL_DB_CCNET_DB_NAME=${CCNET_DB}" >> /opt/seafile/conf/.env
+        echo "SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=${SEAFILE_DB}" >> /opt/seafile/conf/.env
+        echo "SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=${SEAHUB_DB}" >> /opt/seafile/conf/.env
+        echo "${RELEASE}" > /opt/${APP}_version.txt
         msg_ok "Updated $APP to ${RELEASE}"
 
         msg_info "Starting $APP"
