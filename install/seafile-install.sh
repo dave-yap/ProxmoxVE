@@ -285,7 +285,14 @@ cat <<'EOF' >~/domain.sh
 DOMAIN=$1
 IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 DOMAIN_NOSCHEME=$(echo $DOMAIN | sed 's|^https://||')
-SCHEME=$(echo $DOMAIN | grep -o "^[^:]\+://")
+SCHEME=$(echo $DOMAIN | grep -o "^[^:]\+")
+
+if [[ ! $DOMAIN =~ ^https?:// ]]; then
+    echo "Error: Domain must include http:// or https://"
+    echo "Usage: $0 <FULL_URL_WITH_HTTPS>"
+    echo "Example: $0 https://seafile.example.com"
+    exit 1
+fi
 
 sed -i "s|SERVICE_URL = \"http://$IP:8000\"|SERVICE_URL = \"$DOMAIN\"|g" /opt/seafile/conf/seahub_settings.py
 sed -i "s|CSRF_TRUSTED_ORIGINS = \[\"http://$IP/\"\]|CSRF_TRUSTED_ORIGINS = \[\"$DOMAIN/\"\]|g" /opt/seafile/conf/seahub_settings.py
