@@ -98,8 +98,7 @@ useradd seafile
 mkdir -p /home/seafile
 chown seafile: /home/seafile
 chown seafile: /opt/seafile
-RELEASE=$(curl -Ls "https://www.seafile.com/en/download/" | grep -oP 'seafile-server_\K[
-0-9]+\.[0-9]+\.[0-9]+(?=_.*\.tar\.gz)' | head -1)
+RELEASE=$(curl -Ls "https://www.seafile.com/en/download/" | grep -oP 'seafile-server_\K[0-9]+\.[0-9]+\.[0-9]+(?=_.*\.tar\.gz)' | head -1)
 $STD su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_${RELEASE}_x86-64.tar.gz"
 $STD su - seafile -c "tar -xzf seafile-server_${RELEASE}_x86-64.tar.gz -C /opt/seafile/"
 $STD su - seafile -c "expect <<EOF
@@ -295,6 +294,7 @@ sed -i "s|ALLOWED_HOSTS = \[\"$IP\"\]|ALLOWED_HOSTS = \[\"\.$DOMAIN_NOSCHEME\"\]
 
 sed -i "s|SEAFILE_SERVER_PROTOCOL=http|SEAFILE_SERVER_PROTOCOL=$SCHEME|g" /opt/seafile/conf/.env
 sed -i "s|SEAFILE_SERVER_HOSTNAME=$IP|SEAFILE_SERVER_HOSTNAME=$DOMAIN_NOSCHEME|g" /opt/seafile/conf/.env
+
 systemctl restart seafile
 echo "Seafile server restarted! Access it at $DOMAIN."
 EOF
