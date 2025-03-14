@@ -25,11 +25,11 @@ function update_script() {
     header_info
     check_container_storage
     check_container_resources
-    RELEASE=$(curl -Ls "https://www.seafile.com/en/download/" | grep -oP 'seafile-server_\K[0-9]+\.[0-9]+\.[0-9]+(?=_.*\.tar\.gz)' | head -1)
     if [[ ! -f /etc/systemd/system/seafile.service ]]; then
         msg_error "No ${APP} Installation Found!"
         exit
     fi
+    RELEASE=$(curl -Ls "https://www.seafile.com/en/download/" | grep -oP 'seafile-server_\K[0-9]+\.[0-9]+\.[0-9]+(?=_.*\.tar\.gz)' | head -1)
     if [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt | grep -oP '\d+\.\d+\.\d+')" ]] || [[ ! -f /opt/${APP}_version.txt ]]; then
         msg_info "Stopping $APP"
         systemctl stop seafile
