@@ -18,7 +18,9 @@ $STD apt-get install -y \
     sudo \
     mc \
     wget \
-    expect
+    expect \
+    pwgen \
+    curl
 msg_ok "Installed Dependencies"
 
 msg_info "Installing MariaDB"
@@ -34,6 +36,7 @@ DB_USER="seafile"
 DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 ADMIN_EMAIL="admin@localhost.local"
 ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
+JWT_PRIVATE_KEY=$(pwgen -s 40 1)
 sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
@@ -50,6 +53,7 @@ sudo -u mysql mysql -s -e "GRANT ALL PRIVILEGES ON $SEAHUB_DB.* TO '$DB_USER'@lo
     echo "DB_PASS: $DB_PASS"
     echo "ADMIN_EMAIL: $ADMIN_EMAIL"
     echo "ADMIN_PASS: $ADMIN_PASS"
+    echo "JWT_PRIVATE_KEY: $JWT_PRIVATE_KEY"
 } >> ~/seafile.creds
 msg_ok "MariaDB setup for Seafile"
 
@@ -83,7 +87,8 @@ $STD pip3 install \
     pycryptodome \
     cffi \
     lxml \
-    python-ldap
+    python-ldap \
+    gevent
 msg_ok "Installed Seafile Python Dependecies"
 
 msg_info "Installing Seafile"
@@ -93,10 +98,12 @@ useradd seafile
 mkdir -p /home/seafile
 chown seafile: /home/seafile
 chown seafile: /opt/seafile
-$STD su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_11.0.13_x86-64.tar.gz"
-$STD su - seafile -c "tar -xzf seafile-server_11.0.13_x86-64.tar.gz -C /opt/seafile/"
+RELEASE=$(curl -Ls "https://www.seafile.com/en/download/" | grep -oP 'seafile-server_\K[
+0-9]+\.[0-9]+\.[0-9]+(?=_.*\.tar\.gz)' | head -1)
+$STD su - seafile -c "wget -qc https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_${RELEASE}_x86-64.tar.gz"
+$STD su - seafile -c "tar -xzf seafile-server_${RELEASE}_x86-64.tar.gz -C /opt/seafile/"
 $STD su - seafile -c "expect <<EOF
-spawn bash /opt/seafile/seafile-server-11.0.13/setup-seafile-mysql.sh
+spawn bash /opt/seafile/seafile-server-${RELEASE}/setup-seafile-mysql.sh
 expect {
     \"Press ENTER to continue\" {
         send \"\r\"
@@ -164,6 +171,7 @@ expect {
 }
 expect eof
 EOF"
+echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
 msg_ok "Installed Seafile"
 
 msg_info "Setting up Memcached"
@@ -190,6 +198,19 @@ sed -i "0,/SERVICE_URL = \"http:\/\/$IP\"/s/SERVICE_URL = \"http:\/\/$IP\"/SERVI
 echo -e "\nFILE_SERVER_ROOT = \"http://$IP:8082\"" >> /opt/seafile/conf/seahub_settings.py
 echo -e "CSRF_TRUSTED_ORIGINS = [\"http://$IP/\"]" >> /opt/seafile/conf/seahub_settings.py
 echo -e "ALLOWED_HOSTS = [\"$IP\"]" >> /opt/seafile/conf/seahub_settings.py
+cat <<EOF >>/opt/seafile/conf/.env
+        TIME_ZONE=UTC
+        JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+        SEAFILE_SERVER_PROTOCOL=http
+        SEAFILE_SERVER_HOSTNAME=$IP
+        SEAFILE_MYSQL_DB_HOST=127.0.0.1 # your MySQL host
+        SEAFILE_MYSQL_DB_PORT=3306
+        SEAFILE_MYSQL_DB_USER=${DB_USER}
+        SEAFILE_MYSQL_DB_PASSWORD=${DB_PASS}
+        SEAFILE_MYSQL_DB_CCNET_DB_NAME=${CCNET_DB}
+        SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=${SEAFILE_DB}
+        SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=${SEAHUB_DB}
+EOF
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
@@ -265,13 +286,15 @@ cat <<'EOF' >~/domain.sh
 DOMAIN=$1
 IP=$(ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 DOMAIN_NOSCHEME=$(echo $DOMAIN | sed 's|^https://||')
+SCHEME=$(echo $DOMAIN | grep -o "^[^:]\+://")
 
-#Change the CORS to provided domain
 sed -i "s|SERVICE_URL = \"http://$IP:8000\"|SERVICE_URL = \"$DOMAIN\"|g" /opt/seafile/conf/seahub_settings.py
 sed -i "s|CSRF_TRUSTED_ORIGINS = \[\"http://$IP/\"\]|CSRF_TRUSTED_ORIGINS = \[\"$DOMAIN/\"\]|g" /opt/seafile/conf/seahub_settings.py
 sed -i "s|FILE_SERVER_ROOT = \"http://$IP:8082\"|FILE_SERVER_ROOT = \"$DOMAIN/seafhttp\"|g" /opt/seafile/conf/seahub_settings.py
 sed -i "s|ALLOWED_HOSTS = \[\"$IP\"\]|ALLOWED_HOSTS = \[\"\.$DOMAIN_NOSCHEME\"\]|g" /opt/seafile/conf/seahub_settings.py
 
+sed -i "s|SEAFILE_SERVER_PROTOCOL=http|SEAFILE_SERVER_PROTOCOL=$SCHEME|g" /opt/seafile/conf/.env
+sed -i "s|SEAFILE_SERVER_HOSTNAME=$IP|SEAFILE_SERVER_HOSTNAME=$DOMAIN_NOSCHEME|g" /opt/seafile/conf/.env
 systemctl restart seafile
 echo "Seafile server restarted! Access it at $DOMAIN."
 EOF
