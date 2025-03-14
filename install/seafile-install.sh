@@ -210,6 +210,8 @@ SEAFILE_MYSQL_DB_CCNET_DB_NAME=${CCNET_DB}
 SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=${SEAFILE_DB}
 SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=${SEAHUB_DB}
 EOF
+chown seafile:seafile /opt/seafile/conf/.env
+chmod 600 /opt/seafile/conf/.env
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
