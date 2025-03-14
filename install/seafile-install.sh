@@ -36,7 +36,7 @@ DB_USER="seafile"
 DB_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
 ADMIN_EMAIL="admin@localhost.local"
 ADMIN_PASS=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-13)
-JWT_PRIVATE_KEY=$(pwgen -s 40 1)
+JWT_PRIVATE_KEY=$(pwgen -s 32 1)
 sudo -u mysql mysql -s -e "CREATE DATABASE $CCNET_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAFILE_DB CHARACTER SET utf8;"
 sudo -u mysql mysql -s -e "CREATE DATABASE $SEAHUB_DB CHARACTER SET utf8;"
@@ -215,7 +215,7 @@ EOF
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
-$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start"
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start" || true
 $STD su - seafile -c "expect <<EOF
 spawn bash /opt/seafile/seafile-server-latest/seahub.sh start
 expect {
