@@ -215,7 +215,7 @@ chmod 600 /opt/seafile/conf/.env
 msg_ok "Conf files adjusted"
 
 msg_info "Setting up Seafile" 
-$STD su - seafile -c "pkill -f seafile-controller" || true
+pkill -f seafile-controller || true
 $STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh start" || true
 sleep 2
 $STD su - seafile -c "expect <<EOF
