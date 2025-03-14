@@ -170,6 +170,8 @@ expect {
 }
 expect eof
 EOF"
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seahub.sh stop" || true
+$STD su - seafile -c "bash /opt/seafile/seafile-server-latest/seafile.sh stop" || true
 echo "${RELEASE}" >/opt/${APPLICATION}_version.txt
 msg_ok "Installed Seafile"
 
